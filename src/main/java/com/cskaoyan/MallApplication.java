@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-
+@MapperScanner(base)
 public class MallApplication {
 
     public static void main(String[] args) {
