@@ -1,15 +1,13 @@
-package com.cskaoyan.bean;
+package com.cskaoyan.bean.sys;
 
 import java.util.Date;
 
-public class Role {
+public class Permission {
     private Integer id;
 
-    private String name;
+    private Integer roleId;
 
-    private String desc;
-
-    private Boolean enabled;
+    private String permission;
 
     private Date addTime;
 
@@ -25,28 +23,20 @@ public class Role {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Integer getRoleId() {
+        return roleId;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getPermission() {
+        return permission;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc == null ? null : desc.trim();
-    }
-
-    public Boolean getEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
+    public void setPermission(String permission) {
+        this.permission = permission == null ? null : permission.trim();
     }
 
     public Date getAddTime() {

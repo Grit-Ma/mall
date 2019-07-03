@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cskaoyan.mapper.AdminMapper">
-  <resultMap id="BaseResultMap" type="com.cskaoyan.bean.Admin">
+<mapper namespace="com.cskaoyan.mapper.sys.StorageMapper">
+  <resultMap id="BaseResultMap" type="com.cskaoyan.bean.sys.Storage">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="username" jdbcType="VARCHAR" property="username" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="last_login_ip" jdbcType="VARCHAR" property="lastLoginIp" />
-    <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
-    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="size" jdbcType="INTEGER" property="size" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="deleted" jdbcType="BIT" property="deleted" />
-    <result column="role_ids" jdbcType="VARCHAR" property="roleIds" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,17 +71,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, username, password, last_login_ip, last_login_time, avatar, add_time, update_time, 
-    deleted, role_ids
+    id, key, name, type, size, url, add_time, update_time, deleted
   </sql>
-  <select id="selectByExample" parameterType="com.cskaoyan.bean.AdminExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.cskaoyan.bean.sys.StorageExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     'true' as QUERYID,
     <include refid="Base_Column_List" />
-    from cskaoyan_mall_admin
+    from cskaoyan_mall_storage
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -93,49 +91,47 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 'true' as QUERYID,
     <include refid="Base_Column_List" />
-    from cskaoyan_mall_admin
+    from cskaoyan_mall_storage
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from cskaoyan_mall_admin
+    delete from cskaoyan_mall_storage
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.cskaoyan.bean.AdminExample">
-    delete from cskaoyan_mall_admin
+  <delete id="deleteByExample" parameterType="com.cskaoyan.bean.sys.StorageExample">
+    delete from cskaoyan_mall_storage
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.cskaoyan.bean.Admin">
-    insert into cskaoyan_mall_admin (id, username, password, 
-      last_login_ip, last_login_time, avatar, 
-      add_time, update_time, deleted, 
-      role_ids)
-    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{lastLoginIp,jdbcType=VARCHAR}, #{lastLoginTime,jdbcType=TIMESTAMP}, #{avatar,jdbcType=VARCHAR}, 
-      #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}, 
-      #{roleIds,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="com.cskaoyan.bean.sys.Storage">
+    insert into cskaoyan_mall_storage (id, key, name, 
+      type, size, url, add_time, 
+      update_time, deleted)
+    values (#{id,jdbcType=INTEGER}, #{key,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.cskaoyan.bean.Admin">
-    insert into cskaoyan_mall_admin
+  <insert id="insertSelective" parameterType="com.cskaoyan.bean.sys.Storage">
+    insert into cskaoyan_mall_storage
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="username != null">
-        username,
+      <if test="key != null">
+        key,
       </if>
-      <if test="password != null">
-        password,
+      <if test="name != null">
+        name,
       </if>
-      <if test="lastLoginIp != null">
-        last_login_ip,
+      <if test="type != null">
+        type,
       </if>
-      <if test="lastLoginTime != null">
-        last_login_time,
+      <if test="size != null">
+        size,
       </if>
-      <if test="avatar != null">
-        avatar,
+      <if test="url != null">
+        url,
       </if>
       <if test="addTime != null">
         add_time,
@@ -146,28 +142,25 @@
       <if test="deleted != null">
         deleted,
       </if>
-      <if test="roleIds != null">
-        role_ids,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="username != null">
-        #{username,jdbcType=VARCHAR},
+      <if test="key != null">
+        #{key,jdbcType=VARCHAR},
       </if>
-      <if test="password != null">
-        #{password,jdbcType=VARCHAR},
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
       </if>
-      <if test="lastLoginIp != null">
-        #{lastLoginIp,jdbcType=VARCHAR},
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
       </if>
-      <if test="lastLoginTime != null">
-        #{lastLoginTime,jdbcType=TIMESTAMP},
+      <if test="size != null">
+        #{size,jdbcType=INTEGER},
       </if>
-      <if test="avatar != null">
-        #{avatar,jdbcType=VARCHAR},
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
       </if>
       <if test="addTime != null">
         #{addTime,jdbcType=TIMESTAMP},
@@ -178,37 +171,34 @@
       <if test="deleted != null">
         #{deleted,jdbcType=BIT},
       </if>
-      <if test="roleIds != null">
-        #{roleIds,jdbcType=VARCHAR},
-      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.cskaoyan.bean.AdminExample" resultType="java.lang.Long">
-    select count(*) from cskaoyan_mall_admin
+  <select id="countByExample" parameterType="com.cskaoyan.bean.sys.StorageExample" resultType="java.lang.Long">
+    select count(*) from cskaoyan_mall_storage
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update cskaoyan_mall_admin
+    update cskaoyan_mall_storage
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.username != null">
-        username = #{record.username,jdbcType=VARCHAR},
+      <if test="record.key != null">
+        key = #{record.key,jdbcType=VARCHAR},
       </if>
-      <if test="record.password != null">
-        password = #{record.password,jdbcType=VARCHAR},
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.lastLoginIp != null">
-        last_login_ip = #{record.lastLoginIp,jdbcType=VARCHAR},
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
       </if>
-      <if test="record.lastLoginTime != null">
-        last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
+      <if test="record.size != null">
+        size = #{record.size,jdbcType=INTEGER},
       </if>
-      <if test="record.avatar != null">
-        avatar = #{record.avatar,jdbcType=VARCHAR},
+      <if test="record.url != null">
+        url = #{record.url,jdbcType=VARCHAR},
       </if>
       <if test="record.addTime != null">
         add_time = #{record.addTime,jdbcType=TIMESTAMP},
@@ -219,47 +209,43 @@
       <if test="record.deleted != null">
         deleted = #{record.deleted,jdbcType=BIT},
       </if>
-      <if test="record.roleIds != null">
-        role_ids = #{record.roleIds,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update cskaoyan_mall_admin
+    update cskaoyan_mall_storage
     set id = #{record.id,jdbcType=INTEGER},
-      username = #{record.username,jdbcType=VARCHAR},
-      password = #{record.password,jdbcType=VARCHAR},
-      last_login_ip = #{record.lastLoginIp,jdbcType=VARCHAR},
-      last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
-      avatar = #{record.avatar,jdbcType=VARCHAR},
+      key = #{record.key,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      size = #{record.size,jdbcType=INTEGER},
+      url = #{record.url,jdbcType=VARCHAR},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      deleted = #{record.deleted,jdbcType=BIT},
-      role_ids = #{record.roleIds,jdbcType=VARCHAR}
+      deleted = #{record.deleted,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cskaoyan.bean.Admin">
-    update cskaoyan_mall_admin
+  <update id="updateByPrimaryKeySelective" parameterType="com.cskaoyan.bean.sys.Storage">
+    update cskaoyan_mall_storage
     <set>
-      <if test="username != null">
-        username = #{username,jdbcType=VARCHAR},
+      <if test="key != null">
+        key = #{key,jdbcType=VARCHAR},
       </if>
-      <if test="password != null">
-        password = #{password,jdbcType=VARCHAR},
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="lastLoginIp != null">
-        last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
       </if>
-      <if test="lastLoginTime != null">
-        last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      <if test="size != null">
+        size = #{size,jdbcType=INTEGER},
       </if>
-      <if test="avatar != null">
-        avatar = #{avatar,jdbcType=VARCHAR},
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
       </if>
       <if test="addTime != null">
         add_time = #{addTime,jdbcType=TIMESTAMP},
@@ -270,23 +256,19 @@
       <if test="deleted != null">
         deleted = #{deleted,jdbcType=BIT},
       </if>
-      <if test="roleIds != null">
-        role_ids = #{roleIds,jdbcType=VARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cskaoyan.bean.Admin">
-    update cskaoyan_mall_admin
-    set username = #{username,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
-      last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
-      avatar = #{avatar,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.cskaoyan.bean.sys.Storage">
+    update cskaoyan_mall_storage
+    set key = #{key,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      size = #{size,jdbcType=INTEGER},
+      url = #{url,jdbcType=VARCHAR},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      deleted = #{deleted,jdbcType=BIT},
-      role_ids = #{roleIds,jdbcType=VARCHAR}
+      deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
