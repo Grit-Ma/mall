@@ -1,6 +1,11 @@
 spring:
   profiles:
     active: xfor
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+
 ---
 spring:
   profiles: xfor
