@@ -2,14 +2,17 @@ package com.cskaoyan.service.sys;
 
 
 import com.cskaoyan.bean.sys.Admin;
-import com.cskaoyan.mapper.sys.AdminMapper;
-import com.cskaoyan.vo.QueryData;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.cskaoyan.bean.vo.PageData;
 
-import java.util.List;
 
 
 public interface AdminService {
 
-    QueryData<Admin> selectAll(int page, int limit);
+    public PageData selectAll(int page, int limit);
+
+    public int addAdmin(Admin admin);
+
+    public PageData fuzzyQueryByName(int page,int limit,String username);
+
+    int updateByPrimaryKey(Admin record);
 }

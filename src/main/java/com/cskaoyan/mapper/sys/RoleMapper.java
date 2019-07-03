@@ -1,5 +1,6 @@
 package com.cskaoyan.mapper.sys;
 
+import com.cskaoyan.bean.sys.Label;
 import com.cskaoyan.bean.sys.Role;
 import com.cskaoyan.bean.sys.RoleExample;
 import java.util.List;
@@ -7,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 public interface RoleMapper {
 
-    List<Role> selectAllRoleOptions();
+    List<Label> selectAllRoleOptions();
 
     long countByExample(RoleExample example);
 

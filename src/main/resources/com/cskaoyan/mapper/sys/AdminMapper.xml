@@ -82,6 +82,13 @@
     from cskaoyan_mall_admin
   </select>
 
+<!--根据admin的用户名模糊查询-->
+  <select id="fuzzyQueryByName" resultMap="BaseResultMap">
+    select id,username,avatar,roleIds
+    from cskaoyan_mall_admin
+    where username like concat('%',#{username},'%')
+  </select>
+
   <select id="selectByExample" parameterType="com.cskaoyan.bean.sys.AdminExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

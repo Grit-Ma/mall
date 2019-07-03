@@ -9,6 +9,8 @@ public interface AdminMapper {
 
     List<Admin> selectAll();
 
+    List<Admin> fuzzyQueryByName(@Param("username") String username);
+
     long countByExample(AdminExample example);
 
     int deleteByExample(AdminExample example);
