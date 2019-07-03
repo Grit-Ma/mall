@@ -1,5 +1,13 @@
+spring:
+  profiles:
+    active: xfor
+---
+spring:
+  profiles: xfor
+
 datasource:
   username: root
   password: 123456
   driver-class-name: com.mysql.jdbc.Driver
-  url: jdbc:mysql://localhost:3306/mall
+  url: jdbc:mysql://localhost:3306/project3
+---
