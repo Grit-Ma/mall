@@ -6,6 +6,9 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface AdminMapper {
+
+    List<Admin> selectAll();
+
     long countByExample(AdminExample example);
 
     int deleteByExample(AdminExample example);

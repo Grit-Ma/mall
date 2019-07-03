@@ -75,6 +75,13 @@
     id, username, password, last_login_ip, last_login_time, avatar, add_time, update_time, 
     deleted, role_ids
   </sql>
+
+<!-- 查找所有的admin数据 -->
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id,username,avatar,roleIds
+    from cskaoyan_mall_admin
+  </select>
+
   <select id="selectByExample" parameterType="com.cskaoyan.bean.sys.AdminExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

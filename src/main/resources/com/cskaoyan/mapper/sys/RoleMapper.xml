@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cskaoyan.mapper.sys.RoleMapper">
+
   <resultMap id="BaseResultMap" type="com.cskaoyan.bean.sys.Role">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
@@ -71,6 +72,15 @@
   <sql id="Base_Column_List">
     id, name, desc, enabled, add_time, update_time, deleted
   </sql>
+
+
+  <!-- 查找所有的role数据 -->
+  <select id="selectAllRoleOptions" resultType="com.cskaoyan.bean.sys.Label">
+    select id as value,username as label
+    from cskaoyan_mall_role
+  </select>
+
+
   <select id="selectByExample" parameterType="com.cskaoyan.bean.sys.RoleExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
