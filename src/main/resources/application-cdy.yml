@@ -5,4 +5,4 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/mall
 server:
-  port: 8088
+  port: 8080

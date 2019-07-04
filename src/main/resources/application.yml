@@ -8,6 +8,13 @@ pagehelper:
 server:
   servlet:
     context-path: /admin
+
+myoss:
+  bucket: cskaoyan
+  endpoint: oss-cn-beijing.aliyuncs.com
+  access-key: LTAI8EgTxlc4QQZr
+  secret: RBDvSGZOR8DaUJxlLrW4Ed46RVnAkR
+
 ---
 spring:
   profiles: xfor
@@ -16,9 +23,3 @@ spring:
    password: 123456
    driver-class-name: com.mysql.jdbc.Driver
    url: jdbc:mysql://localhost:3306/mall?CharacterEncoding=utf-8
-
-myoss:
-   bucket: project-mall.oss-cn-beijing.aliyuncs.com
-   endpoint: oss-cn-beijing.aliyuncs.com
-   accesskey: LTAIxnp89MtwEeiY
-   secret: jLXWqpMRiADW0deKzKn3kft8u1hfxq

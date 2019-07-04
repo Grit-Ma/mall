@@ -66,12 +66,12 @@ public class MyOssClient {
         this.secret = secret;
     }
 
-    public Storage FileUpLoad(MultipartFile myfile) throws IOException {
+    public Storage fileUpLoad(MultipartFile file) throws IOException {
         //获取需要上传的文件的信息
-        InputStream inputStream = myfile.getInputStream();
-        String contentType = myfile.getContentType();
-        long size = myfile.getSize();
-        String originalFilename = myfile.getOriginalFilename();
+        String contentType = file.getContentType();
+        long size = file.getSize();
+        String originalFilename = file.getOriginalFilename();
+        InputStream inputStream = file.getInputStream();
 
         //设置文件上传的大小和类型
         ObjectMetadata objectMetadata = new ObjectMetadata();
@@ -80,7 +80,7 @@ public class MyOssClient {
 
         //生成一个随机的文件名
         String uuid = UUID.randomUUID().toString().replaceAll("-","");
-        PutObjectRequest putObjectRequest = new PutObjectRequest(bucket,uuid,inputStream,objectMetadata);
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucket,uuid+originalFilename,inputStream,objectMetadata);
 
         //ossclient
         OSSClient ossClient = new OSSClient(endpoint, accesskey, secret);
@@ -90,10 +90,12 @@ public class MyOssClient {
         Storage storage = new Storage();
         storage.setSize(new Long(size).intValue());
         storage.setAddTime(new Date());
+        storage.setUpdateTime(new Date());
         storage.setName(originalFilename);
         storage.setType(contentType);
-        storage.setUrl(putObjectRequest.getInputStream().toString());//????????
-        storage.setKey(uuid);
+        storage.setUrl("http://"+bucket+"."+endpoint+"/"+uuid+originalFilename);
+        storage.setKey(uuid+originalFilename);
+        storage.setDeleted(false);
         return storage;
     }
 

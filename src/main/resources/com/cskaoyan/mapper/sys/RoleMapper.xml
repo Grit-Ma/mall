@@ -70,14 +70,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, desc, enabled, add_time, update_time, deleted
+    id, `name`, `desc`, enabled, add_time, update_time, deleted
   </sql>
 
 
   <!-- 查找所有的role数据 -->
   <select id="selectAllRoleOptions" resultType="com.cskaoyan.bean.sys.Label">
-    select id as value,username as label
+    select id as `value`,`name` as label
     from cskaoyan_mall_role
+    where deleted=0
   </select>
 
 
