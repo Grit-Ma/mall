@@ -241,4 +241,8 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectAll" resultType="com.cskaoyan.bean.SearchHistory">
+    select * from cskaoyan_mall_search_history
+  </select>
 </mapper>

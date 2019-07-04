@@ -102,10 +102,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.cskaoyan.bean.Footprint">
-    insert into cskaoyan_mall_footprint (id, user_id, goods_id, 
+    insert into cskaoyan_mall_footprint (id, user_id, goods_id,
       add_time, update_time, deleted
       )
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER},
       #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}
       )
   </insert>
@@ -187,11 +187,11 @@
   <update id="updateByExample" parameterType="map">
     update cskaoyan_mall_footprint
     set id = #{record.id,jdbcType=INTEGER},
-      user_id = #{record.userId,jdbcType=INTEGER},
-      goods_id = #{record.goodsId,jdbcType=INTEGER},
-      add_time = #{record.addTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      deleted = #{record.deleted,jdbcType=BIT}
+    user_id = #{record.userId,jdbcType=INTEGER},
+    goods_id = #{record.goodsId,jdbcType=INTEGER},
+    add_time = #{record.addTime,jdbcType=TIMESTAMP},
+    update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+    deleted = #{record.deleted,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -226,4 +226,30 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select  id,
+            user_id,
+            goods_id,
+            add_time,
+            update_time
+            from cskaoyan_mall_footprint
+  </select>
+
+  <select id="selectBysearch" resultMap="BaseResultMap">
+    select  id,
+            user_id,
+            goods_id,
+            add_time
+            from cskaoyan_mall_footprint
+    <where>
+      <if test="userId != null">
+          user_id = #{userId},
+      </if>
+      <if test="goodsId != null">
+          goods_id = #{goodsId}
+      </if>
+    </where>
+  </select>
 </mapper>

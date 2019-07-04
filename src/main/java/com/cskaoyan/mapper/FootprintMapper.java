@@ -27,4 +27,8 @@ public interface FootprintMapper {
     int updateByPrimaryKeySelective(Footprint record);
 
     int updateByPrimaryKey(Footprint record);
+
+    List<Footprint> selectAll();
+
+    List<Footprint> selectBysearch(@Param("userId")Integer userId, @Param("goodsId")Integer goodsId);
 }
