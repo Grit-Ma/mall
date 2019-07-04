@@ -1,12 +1,13 @@
 spring:
   profiles:
-<<<<<<< HEAD
     active: xfor
 pagehelper:
   helperDialect: mysql
   reasonable: true
   supportMethodsArguments: true
-
+server:
+  servlet:
+    context-path: /admin
 ---
 spring:
   profiles: xfor
@@ -16,7 +17,3 @@ spring:
     username: root
     password: 123456
 ---
-
-=======
-    active: cdy
->>>>>>> 167d0960ca32dc2d12d607a9ac0382d2514a4697
