@@ -2,7 +2,7 @@ package com.cskaoyan.service.config.impl;
 
 import com.cskaoyan.bean.System;
 import com.cskaoyan.bean.SystemExample;
-import com.cskaoyan.mapper.SystemMapper;
+import com.cskaoyan.mapper.config.SystemMapper;
 import com.cskaoyan.service.config.ConfigService;
 import org.springframework.stereotype.Service;
 

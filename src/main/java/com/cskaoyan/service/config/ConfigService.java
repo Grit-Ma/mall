@@ -1,8 +1,5 @@
 package com.cskaoyan.service.config;
-
-import com.cskaoyan.bean.System;
-
-import java.util.List;
+;
 import java.util.Map;
 
 public interface ConfigService {

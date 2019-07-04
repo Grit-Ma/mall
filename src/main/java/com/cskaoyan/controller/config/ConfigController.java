@@ -10,7 +10,7 @@ import java.util.Map;
 @RestController
 public class ConfigController {
     @Autowired
-    ConfigService configService;
+    private ConfigService configService;
 
     @GetMapping("config/mall")
     public ResponseVO listMall() {
