@@ -1,5 +1,6 @@
 spring:
   profiles:
+<<<<<<< HEAD
     active: xfor
 pagehelper:
   helperDialect: mysql
@@ -16,3 +17,6 @@ spring:
     password: 123456
 ---
 
+=======
+    active: cdy
+>>>>>>> 167d0960ca32dc2d12d607a9ac0382d2514a4697
