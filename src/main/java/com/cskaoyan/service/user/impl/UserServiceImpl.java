@@ -2,7 +2,7 @@ package com.cskaoyan.service.user.impl;
 
 import com.cskaoyan.bean.User;
 import com.cskaoyan.bean.UserExample;
-import com.cskaoyan.bean.vo.ResponseVO2;
+import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.mapper.UserMapper;
 import com.cskaoyan.service.user.UserService;
 import com.github.pagehelper.PageHelper;
@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
 
     @Override
-    public ResponseVO2 getUser(int page, int limit, String username, String mobile, String sort, String order) {
+    public PageData getUser(int page, int limit, String username, String mobile, String sort, String order) {
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
         if ("".equals(username) && "".equals(mobile)) {
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
         long l = userMapper.countByExample(userExample);
         PageHelper.startPage(page, limit, sort + " " + order);
         List<User> userList = userMapper.selectByExample(userExample);
-        return new ResponseVO2(l, userList);
+        return new PageData(userList, l);
     }
 
 }

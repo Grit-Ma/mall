@@ -9,19 +9,10 @@ pagehelper:
 ---
 spring:
   profiles: xfor
-<<<<<<< HEAD
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/project3
     username: root
     password: 123456
-=======
-
-  datasource:
-   username: root
-   password: 123456
-   driver-class-name: com.mysql.jdbc.Driver
-   url: jdbc:mysql://localhost:3306/mall?CharacterEncoding=utf-8
->>>>>>> 228f0668c4ad8bca9e13349da837647425b22d10
 ---
 

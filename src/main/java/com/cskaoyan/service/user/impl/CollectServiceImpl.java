@@ -2,7 +2,7 @@ package com.cskaoyan.service.user.impl;
 
 import com.cskaoyan.bean.Collect;
 import com.cskaoyan.bean.CollectExample;
-import com.cskaoyan.bean.vo.ResponseVO2;
+import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.mapper.CollectMapper;
 import com.cskaoyan.service.user.CollectService;
 import com.github.pagehelper.PageHelper;
@@ -17,7 +17,7 @@ public class CollectServiceImpl implements CollectService {
     CollectMapper collectMapper;
 
     @Override
-    public ResponseVO2 getCollect(int page, int limit, String userId, String valueId, String sort, String order) {
+    public PageData getCollect(int page, int limit, String userId, String valueId, String sort, String order) {
         CollectExample collectExample = new CollectExample();
         CollectExample.Criteria criteria = collectExample.createCriteria();
         if ("".equals(userId) && "".equals(valueId)) {
@@ -32,6 +32,6 @@ public class CollectServiceImpl implements CollectService {
         long l = collectMapper.countByExample(collectExample);
         PageHelper.startPage(page, limit, sort + " " + order);
         List<Collect> collectList = collectMapper.selectByExample(collectExample);
-        return new ResponseVO2(l, collectList);
+        return new PageData(collectList, l);
     }
 }

@@ -2,7 +2,7 @@ package com.cskaoyan.service.user.impl;
 
 import com.cskaoyan.bean.Address;
 import com.cskaoyan.bean.AddressExample;
-import com.cskaoyan.bean.vo.ResponseVO2;
+import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.mapper.AddressMapper;
 import com.cskaoyan.service.user.AddressService;
 import com.github.pagehelper.PageHelper;
@@ -17,7 +17,7 @@ public class AddressServiceImpl implements AddressService {
     AddressMapper addressMapper;
 
     @Override
-    public ResponseVO2 getAddress(int page, int limit, String name, String userId, String sort, String order) {
+    public PageData getAddress(int page, int limit, String name, String userId, String sort, String order) {
         AddressExample addressExample = new AddressExample();
         AddressExample.Criteria criteria = addressExample.createCriteria();
         if ("".equals(name) && "".equals(userId)) {
@@ -32,6 +32,6 @@ public class AddressServiceImpl implements AddressService {
         long l = addressMapper.countByExample(addressExample);
         PageHelper.startPage(page, limit, sort + " " + order);
         List<Address> addressList = addressMapper.selectByExample(addressExample);
-        return new ResponseVO2(l, addressList);
+        return new PageData(addressList, l);
     }
 }

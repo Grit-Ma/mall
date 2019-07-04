@@ -1,7 +1,7 @@
 package com.cskaoyan.service.user;
 
-import com.cskaoyan.bean.vo.ResponseVO2;
+import com.cskaoyan.bean.vo.PageData;
 
 public interface AddressService {
-    ResponseVO2 getAddress(int page, int limit, String name, String userId, String sort, String order);
+    PageData getAddress(int page, int limit, String name, String userId, String sort, String order);
 }

@@ -1,7 +1,7 @@
 package com.cskaoyan.service.user;
 
-import com.cskaoyan.bean.vo.ResponseVO2;
+import com.cskaoyan.bean.vo.PageData;
 
 public interface CollectService {
-    ResponseVO2 getCollect(int page, int limit, String userId, String valueId, String sort, String order);
+    PageData getCollect(int page, int limit, String userId, String valueId, String sort, String order);
 }
