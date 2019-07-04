@@ -1,21 +1,92 @@
 package com.cskaoyan.controller.config;
 
 import com.cskaoyan.bean.vo.ResponseVO;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import com.cskaoyan.service.config.ConfigService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.Map;
+
+@RestController
 public class ConfigController {
+    @Autowired
+    ConfigService configService;
 
-    //config/mall
-    @RequestMapping("config/mall")
-    @ResponseBody
-    public ResponseVO mall(){
-        ResponseVO<Object> vo = new ResponseVO<>();
-        vo.setErrno(0);
+    @GetMapping("config/mall")
+    public ResponseVO listMall() {
+        ResponseVO vo = new ResponseVO();
+        Map<String, Object> data = configService.listMall();
         vo.setErrmsg("成功");
-        vo.setData("8620b982-4c6c-4363-80f5-76d105b8e3dc");
+        vo.setData(data);
         return vo;
     }
+
+
+    @PostMapping("/config/mall")
+    public ResponseVO updateMall(@RequestBody Map<String, Object> data) {
+        ResponseVO vo = new ResponseVO();
+        configService.updateConfig(data);
+        vo.setErrno(0);
+        vo.setErrmsg("成功");
+        return vo;
+    }
+
+    @GetMapping("config/express")
+    public ResponseVO listExpress() {
+        ResponseVO vo = new ResponseVO();
+        Map<String, Object> data = configService.listExpress();
+        vo.setErrmsg("成功");
+        vo.setData(data);
+        return vo;
+    }
+
+
+    @PostMapping("/config/express")
+    public ResponseVO updateExpress(@RequestBody Map<String, Object> data) {
+        ResponseVO vo = new ResponseVO();
+        configService.updateConfig(data);
+        vo.setErrno(0);
+        vo.setErrmsg("成功");
+        return vo;
+    }
+
+    @GetMapping("config/order")
+    public ResponseVO listOrder() {
+        ResponseVO vo = new ResponseVO();
+        Map<String, Object> data = configService.listOrder();
+        vo.setErrmsg("成功");
+        vo.setData(data);
+        return vo;
+    }
+
+
+    @PostMapping("/config/order")
+    public ResponseVO updateOrder(@RequestBody Map<String, Object> data) {
+        ResponseVO vo = new ResponseVO();
+        configService.updateConfig(data);
+        vo.setErrno(0);
+        vo.setErrmsg("成功");
+        return vo;
+    }
+
+    @GetMapping("config/wx")
+    public ResponseVO listWx() {
+        ResponseVO vo = new ResponseVO();
+        Map<String, Object> data = configService.listWx();
+        vo.setErrmsg("成功");
+        vo.setData(data);
+        return vo;
+    }
+
+
+    @PostMapping("/config/wx")
+    public ResponseVO updateWx(@RequestBody Map<String, Object> data) {
+        ResponseVO vo = new ResponseVO();
+        configService.updateConfig(data);
+        vo.setErrno(0);
+        vo.setErrmsg("成功");
+        return vo;
+    }
+
+
 }
