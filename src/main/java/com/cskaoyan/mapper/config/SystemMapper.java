@@ -1,4 +1,4 @@
-package com.cskaoyan.mapper;
+package com.cskaoyan.mapper.config;
 
 import com.cskaoyan.bean.System;
 import com.cskaoyan.bean.SystemExample;

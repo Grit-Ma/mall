@@ -1,5 +1,7 @@
 package com.cskaoyan.bean.sys;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Storage {
@@ -15,11 +17,15 @@ public class Storage {
 
     private String url;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date addTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateTime;
 
     private Boolean deleted;
+
+
 
     public Integer getId() {
         return id;
