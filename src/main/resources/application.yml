@@ -17,3 +17,7 @@ datasource:
   url: jdbc:mysql://localhost:3306/project3
 ---
 
+server:
+     port: 8080
+
+---

@@ -28,4 +28,14 @@ public class ResponseVO<T> {
     public void setErrmsg(String errmsg) {
         this.errmsg = errmsg;
     }
+
+
+    public ResponseVO() {
+    }
+
+    public ResponseVO(int errno, T data, String errmsg) {
+        this.errno = errno;
+        this.data = data;
+        this.errmsg = errmsg;
+    }
 }
