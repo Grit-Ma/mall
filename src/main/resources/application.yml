@@ -1,15 +1,16 @@
 spring:
   profiles:
-    active: xfor
+    active: cdy
 pagehelper:
   helperDialect: mysql
   reasonable: true
   supportMethodsArguments: true
-
+server:
+  servlet:
+    context-path: /admin
 ---
 spring:
   profiles: xfor
-
   datasource:
    username: root
    password: 123456
@@ -21,5 +22,3 @@ myoss:
    endpoint: oss-cn-beijing.aliyuncs.com
    accesskey: LTAIxnp89MtwEeiY
    secret: jLXWqpMRiADW0deKzKn3kft8u1hfxq
----
-
