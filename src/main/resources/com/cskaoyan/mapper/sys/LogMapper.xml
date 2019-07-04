@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cskaoyan.mapper.PermissionMapper">
-  <resultMap id="BaseResultMap" type="com.cskaoyan.bean.Permission">
+<mapper namespace="com.cskaoyan.mapper.sys.LogMapper">
+  <resultMap id="BaseResultMap" type="com.cskaoyan.bean.sys.Log">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="role_id" jdbcType="INTEGER" property="roleId" />
-    <result column="permission" jdbcType="VARCHAR" property="permission" />
+    <result column="admin" jdbcType="VARCHAR" property="admin" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="action" jdbcType="VARCHAR" property="action" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="result" jdbcType="VARCHAR" property="result" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="deleted" jdbcType="BIT" property="deleted" />
@@ -68,16 +73,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, role_id, permission, add_time, update_time, deleted
+    id, admin, ip, type, action, status, result, comment, add_time, update_time, deleted
   </sql>
-  <select id="selectByExample" parameterType="com.cskaoyan.bean.PermissionExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.cskaoyan.bean.sys.LogExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     'true' as QUERYID,
     <include refid="Base_Column_List" />
-    from cskaoyan_mall_permission
+    from cskaoyan_mall_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,38 +93,55 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 'true' as QUERYID,
     <include refid="Base_Column_List" />
-    from cskaoyan_mall_permission
+    from cskaoyan_mall_log
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from cskaoyan_mall_permission
+    delete from cskaoyan_mall_log
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.cskaoyan.bean.PermissionExample">
-    delete from cskaoyan_mall_permission
+  <delete id="deleteByExample" parameterType="com.cskaoyan.bean.sys.LogExample">
+    delete from cskaoyan_mall_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.cskaoyan.bean.Permission">
-    insert into cskaoyan_mall_permission (id, role_id, permission, 
-      add_time, update_time, deleted
-      )
-    values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{permission,jdbcType=VARCHAR}, 
-      #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}
-      )
+  <insert id="insert" parameterType="com.cskaoyan.bean.sys.Log">
+    insert into cskaoyan_mall_log (id, admin, ip, 
+      type, action, status, result, 
+      comment, add_time, update_time, 
+      deleted)
+    values (#{id,jdbcType=INTEGER}, #{admin,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, 
+      #{type,jdbcType=INTEGER}, #{action,jdbcType=VARCHAR}, #{status,jdbcType=BIT}, #{result,jdbcType=VARCHAR}, 
+      #{comment,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{deleted,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.cskaoyan.bean.Permission">
-    insert into cskaoyan_mall_permission
+  <insert id="insertSelective" parameterType="com.cskaoyan.bean.sys.Log">
+    insert into cskaoyan_mall_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="roleId != null">
-        role_id,
+      <if test="admin != null">
+        admin,
       </if>
-      <if test="permission != null">
-        permission,
+      <if test="ip != null">
+        ip,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="action != null">
+        action,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="result != null">
+        result,
+      </if>
+      <if test="comment != null">
+        comment,
       </if>
       <if test="addTime != null">
         add_time,
@@ -135,11 +157,26 @@
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="roleId != null">
-        #{roleId,jdbcType=INTEGER},
+      <if test="admin != null">
+        #{admin,jdbcType=VARCHAR},
       </if>
-      <if test="permission != null">
-        #{permission,jdbcType=VARCHAR},
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="action != null">
+        #{action,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="result != null">
+        #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=VARCHAR},
       </if>
       <if test="addTime != null">
         #{addTime,jdbcType=TIMESTAMP},
@@ -152,23 +189,38 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.cskaoyan.bean.PermissionExample" resultType="java.lang.Long">
-    select count(*) from cskaoyan_mall_permission
+  <select id="countByExample" parameterType="com.cskaoyan.bean.sys.LogExample" resultType="java.lang.Long">
+    select count(*) from cskaoyan_mall_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update cskaoyan_mall_permission
+    update cskaoyan_mall_log
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.roleId != null">
-        role_id = #{record.roleId,jdbcType=INTEGER},
+      <if test="record.admin != null">
+        admin = #{record.admin,jdbcType=VARCHAR},
       </if>
-      <if test="record.permission != null">
-        permission = #{record.permission,jdbcType=VARCHAR},
+      <if test="record.ip != null">
+        ip = #{record.ip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.action != null">
+        action = #{record.action,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=BIT},
+      </if>
+      <if test="record.result != null">
+        result = #{record.result,jdbcType=VARCHAR},
+      </if>
+      <if test="record.comment != null">
+        comment = #{record.comment,jdbcType=VARCHAR},
       </if>
       <if test="record.addTime != null">
         add_time = #{record.addTime,jdbcType=TIMESTAMP},
@@ -185,10 +237,15 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update cskaoyan_mall_permission
+    update cskaoyan_mall_log
     set id = #{record.id,jdbcType=INTEGER},
-      role_id = #{record.roleId,jdbcType=INTEGER},
-      permission = #{record.permission,jdbcType=VARCHAR},
+      admin = #{record.admin,jdbcType=VARCHAR},
+      ip = #{record.ip,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=INTEGER},
+      action = #{record.action,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=BIT},
+      result = #{record.result,jdbcType=VARCHAR},
+      comment = #{record.comment,jdbcType=VARCHAR},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       deleted = #{record.deleted,jdbcType=BIT}
@@ -196,14 +253,29 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.cskaoyan.bean.Permission">
-    update cskaoyan_mall_permission
+  <update id="updateByPrimaryKeySelective" parameterType="com.cskaoyan.bean.sys.Log">
+    update cskaoyan_mall_log
     <set>
-      <if test="roleId != null">
-        role_id = #{roleId,jdbcType=INTEGER},
+      <if test="admin != null">
+        admin = #{admin,jdbcType=VARCHAR},
       </if>
-      <if test="permission != null">
-        permission = #{permission,jdbcType=VARCHAR},
+      <if test="ip != null">
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="action != null">
+        action = #{action,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=BIT},
+      </if>
+      <if test="result != null">
+        result = #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        comment = #{comment,jdbcType=VARCHAR},
       </if>
       <if test="addTime != null">
         add_time = #{addTime,jdbcType=TIMESTAMP},
@@ -217,10 +289,15 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.cskaoyan.bean.Permission">
-    update cskaoyan_mall_permission
-    set role_id = #{roleId,jdbcType=INTEGER},
-      permission = #{permission,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.cskaoyan.bean.sys.Log">
+    update cskaoyan_mall_log
+    set admin = #{admin,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      action = #{action,jdbcType=VARCHAR},
+      status = #{status,jdbcType=BIT},
+      result = #{result,jdbcType=VARCHAR},
+      comment = #{comment,jdbcType=VARCHAR},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       deleted = #{deleted,jdbcType=BIT}
