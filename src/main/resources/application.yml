@@ -15,5 +15,11 @@ spring:
    password: 123456
    driver-class-name: com.mysql.jdbc.Driver
    url: jdbc:mysql://localhost:3306/mall?CharacterEncoding=utf-8
+
+myoss:
+   bucket: project-mall.oss-cn-beijing.aliyuncs.com
+   endpoint: oss-cn-beijing.aliyuncs.com
+   accesskey: LTAIxnp89MtwEeiY
+   secret: jLXWqpMRiADW0deKzKn3kft8u1hfxq
 ---
 
