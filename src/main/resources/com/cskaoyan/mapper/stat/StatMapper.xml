@@ -6,7 +6,7 @@
             substr(add_time,1,10) as day,
             count(distinct id) as users
         from
-            litemall_user
+            cskaoyan_mall_user
         group by
             substr(add_time,1,10)
     </select>
@@ -18,7 +18,7 @@
             sum(actual_price) as amount,
             round(sum(actual_price)/count(distinct user_id),2) as pcr
         from
-            litemall_order
+            cskaoyan_mall_order
         where
             order_status in(401,402)
         group by
@@ -31,7 +31,7 @@
             sum(number) as products,
             sum(number*price) as amount
         from
-            litemall_order_goods
+            cskaoyan_mall_order_goods
         group by
             substr(add_time,1, 10)
     </select>
