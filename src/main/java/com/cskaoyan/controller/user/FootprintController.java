@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller()
-@RequestMapping("admin")
+@RequestMapping("footprint")
 public class FootprintController {
 
     @Autowired
     FootprintService userService;
 
     //会员足迹List+模糊查询
-    @RequestMapping("footprint/list")
+    @RequestMapping("list")
     @ResponseBody
     public ResponseVO userFootprint(int page, int limit, String sort, String order, Integer userId, Integer goodsId){
         ResponseVO responseVO = new ResponseVO();

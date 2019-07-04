@@ -30,4 +30,7 @@ public interface SearchHistoryMapper {
 
 
     List<SearchHistory> selectAll();
+
+    List<SearchHistory> selectByUserIdKeyword(@Param("userId") int userid, @Param("keyword") String keyword);
+
 }

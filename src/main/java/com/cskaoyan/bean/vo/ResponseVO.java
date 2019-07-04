@@ -39,12 +39,4 @@ public class ResponseVO<T> {
     }
 
 
-    public ResponseVO() {
-    }
-
-    public ResponseVO(int errno, T data, String errmsg) {
-        this.errno = errno;
-        this.data = data;
-        this.errmsg = errmsg;
-    }
 }

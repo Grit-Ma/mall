@@ -245,10 +245,10 @@
             from cskaoyan_mall_footprint
     <where>
       <if test="userId != null">
-          user_id = #{userId},
+          user_id = #{userId}
       </if>
       <if test="goodsId != null">
-          goods_id = #{goodsId}
+          and goods_id = #{goodsId}
       </if>
     </where>
   </select>

@@ -32,7 +32,17 @@ public class FootprintServiceImpl implements FootprintService {
     @Override
     public PageData footprintSearch(int page, int limit, String sort, String order, Integer userId, Integer goodsId) {
         PageHelper.startPage(page,limit);
-        List<Footprint> footprintList = footprintMapper.selectBysearch(userId, goodsId);
+
+        //List<Footprint> footprintList = footprintMapper.selectBysearch(userId, goodsId);
+        FootprintExample example = new FootprintExample();
+        FootprintExample.Criteria criteria = example.createCriteria();
+        if (userId != null){
+            criteria.andUserIdEqualTo(userId);
+        }
+        if (goodsId != null){
+            criteria.andGoodsIdEqualTo(goodsId);
+        }
+        List<Footprint> footprintList = footprintMapper.selectByExample(example);
         PageInfo pageinfo = new PageInfo(footprintList);
         return new PageData(pageinfo.getList(),pageinfo.getTotal());
     }
