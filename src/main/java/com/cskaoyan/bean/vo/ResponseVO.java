@@ -5,6 +5,15 @@ public class ResponseVO<T> {
     T data;
     String errmsg;
 
+    public ResponseVO() {
+    }
+
+    public ResponseVO(int errno, T data, String errmsg) {
+        this.errno = errno;
+        this.data = data;
+        this.errmsg = errmsg;
+    }
+
     public int getErrno() {
         return errno;
     }

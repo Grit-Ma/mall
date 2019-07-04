@@ -6,17 +6,20 @@ import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.service.sys.AdminService;
 import com.cskaoyan.service.sys.RoleService;
 import com.cskaoyan.tool.WrapTool;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 
 @Controller
+@Api(tags = "sysAdminTags",value = "AdminValue")
 public class AdminController {
 
     @Autowired
@@ -47,7 +50,7 @@ public class AdminController {
 
     @RequestMapping("admin/admin/create")
     @ResponseBody
-    public ResponseVO<Admin> createAdmin(@Validated Admin admin, BindingResult bindingResult) {
+    public ResponseVO<Admin> createAdmin(@Validated @RequestBody Admin admin, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
 //            responseVo.setErrorNo(1);
 //            FieldError fieldError = bindingResult.getFieldError();
@@ -72,7 +75,7 @@ public class AdminController {
 
     @RequestMapping("admin/admin/update")
     @ResponseBody
-    public ResponseVO<Admin> updateAdmin(@Validated Admin admin, BindingResult bindingResult) {
+    public ResponseVO<Admin> updateAdmin(@Validated @RequestBody Admin admin, BindingResult bindingResult) {
         int i = adminService.updateByPrimaryKey(admin);
         if (i == 1) {
             return WrapTool.setResponseSuccess(admin);
