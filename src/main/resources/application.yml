@@ -4,11 +4,10 @@ spring:
 ---
 spring:
   profiles: xfor
-
-datasource:
-  username: root
-  password: 123456
-  driver-class-name: com.mysql.jdbc.Driver
-  url: jdbc:mysql://localhost:3306/project3
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/project3
+    username: root
+    password: 123456
 ---
 
