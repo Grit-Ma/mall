@@ -1,6 +1,6 @@
 package com.cskaoyan.controller;
 
-import com.cskaoyan.bean.vo.ResponseVO;
+import com.cskaoyan.vo.ResponseVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 @Controller
 public class HelloController {
     //admin/auth/login   模拟登录
-    @RequestMapping("admin/auth/login")
+    @RequestMapping("auth/login")
     @ResponseBody
     public ResponseVO hello(){
         ResponseVO<Object> vo = new ResponseVO<>();
@@ -20,7 +20,7 @@ public class HelloController {
         vo.setData("8620b982-4c6c-4363-80f5-76d105b8e3dc");
         return vo;
     }
-    @RequestMapping("admin/auth/info")
+    @RequestMapping("auth/info")
     @ResponseBody
     public ResponseVO hello2(){
         ResponseVO<Object> vo = new ResponseVO<>();

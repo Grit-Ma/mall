@@ -1,4 +1,4 @@
-package com.cskaoyan.bean.vo;
+package com.cskaoyan.vo;
 
 public class ResponseVO<T> {
     int errno;
