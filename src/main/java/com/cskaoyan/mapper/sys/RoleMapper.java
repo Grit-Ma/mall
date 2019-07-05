@@ -1,12 +1,15 @@
 package com.cskaoyan.mapper.sys;
 
 import com.cskaoyan.bean.sys.Label;
+import com.cskaoyan.bean.sys.Log;
 import com.cskaoyan.bean.sys.Role;
 import com.cskaoyan.bean.sys.RoleExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface RoleMapper {
+
+    List<Log> fuzzyQueryByName(@Param("name") String name,@Param("sort") String sort, @Param("order") String order);
 
     List<Label> selectAllRoleOptions();
 

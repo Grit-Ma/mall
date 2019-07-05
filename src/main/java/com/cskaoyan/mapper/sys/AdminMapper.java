@@ -9,7 +9,7 @@ public interface AdminMapper {
 
     List<Admin> selectAll();
 
-    List<Admin> fuzzyQueryByName(@Param("username") String username);
+    List<Admin> fuzzyQueryByName(@Param("username") String username,@Param("sort") String sort, @Param("order") String order);
 
     long countByExample(AdminExample example);
 

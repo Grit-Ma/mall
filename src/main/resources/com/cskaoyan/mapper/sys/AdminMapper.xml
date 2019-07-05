@@ -92,10 +92,16 @@
   </select>
 
 <!--根据admin的用户名模糊查询-->
-  <select id="fuzzyQueryByName" resultMap="QueryResultMap">
+  <select id="fuzzyQueryByName" resultMap="BaseResultMap">
     select id,username,avatar,role_ids
     from cskaoyan_mall_admin
     where deleted=0 and username like concat('%',#{username},'%')
+    <if test="sort!=null and sort!=''">
+      order by #{sort}
+    </if>
+    <if test="order!=null and order!=''">
+      #{order}
+    </if>
   </select>
 
   <select id="selectByExample" parameterType="com.cskaoyan.bean.sys.AdminExample" resultMap="BaseResultMap">
@@ -130,16 +136,22 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.cskaoyan.bean.sys.Admin">
-    insert into cskaoyan_mall_admin (id, username, password, 
+    <selectKey resultType="_int" keyProperty="id" order="AFTER">
+      select last_insert_id()
+    </selectKey>
+    insert into cskaoyan_mall_admin ( username, password,
       last_login_ip, last_login_time, avatar, 
       add_time, update_time, deleted, 
       role_ids)
-    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
       #{lastLoginIp,jdbcType=VARCHAR}, #{lastLoginTime,jdbcType=TIMESTAMP}, #{avatar,jdbcType=VARCHAR}, 
       #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}, 
       #{roleIds,typeHandler=com.cskaoyan.mybatis.IntArrayStringTypeHandler})
   </insert>
   <insert id="insertSelective" parameterType="com.cskaoyan.bean.sys.Admin">
+    <selectKey resultType="_int" keyProperty="id" order="AFTER">
+      select last_insert_id()
+    </selectKey>
     insert into cskaoyan_mall_admin
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

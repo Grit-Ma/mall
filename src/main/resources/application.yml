@@ -3,7 +3,7 @@ spring:
     active: mzy
 ---
 myoss:
-   bucket: project-mall.oss-cn-beijing.aliyuncs.com
+   bucket: project-mall
    endpoint: oss-cn-beijing.aliyuncs.com
    accesskey: LTAIxnp89MtwEeiY
    secret: jLXWqpMRiADW0deKzKn3kft8u1hfxq
