@@ -42,6 +42,11 @@ public class IntArrayStringTypeHandler implements TypeHandler<int[]> {
     }
 
     public int[] transString(String s){
+        //注意判空！
+        if("".equals(s)||s==null){
+            int[] ints =new int[0];
+            return ints;
+        }
         String substring = s.substring(1, s.length() - 1); //去除头尾的【】
         String[] split = substring.split(",");
         int[] ints = new int[split.length];
