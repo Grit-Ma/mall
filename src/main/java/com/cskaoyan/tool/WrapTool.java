@@ -6,15 +6,16 @@ import com.cskaoyan.bean.vo.ResponseVO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class WrapTool {
-    public static ResponseVO setResponseSuccess(Object pageData){
-        ResponseVO pageDataResponseVO = new ResponseVO<>();
-        pageDataResponseVO.setData(pageData);
-        pageDataResponseVO.setErrmsg("成功");
-        pageDataResponseVO.setErrno(0);
-        return pageDataResponseVO;
+    public static HashMap setResponseSuccess(Object pageData){
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("data",pageData);
+        map.put("errmsg","成功");
+        map.put("errno",0);
+        return map;
     }
 
     public static PageData setPageData(int page, int limit,List list){
@@ -26,11 +27,11 @@ public class WrapTool {
         return pageData;
     }
 
-    public static ResponseVO setResponseFailure(int errno,String errmsg){
-        ResponseVO pageDataResponseVO = new ResponseVO<>();
-        pageDataResponseVO.setErrmsg(errmsg);
-        pageDataResponseVO.setErrno(errno);
-        return pageDataResponseVO;
+    public static HashMap setResponseFailure(int errno,String errmsg){
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("errmsg","成功");
+        map.put("errno",0);
+        return map;
     }
 
 

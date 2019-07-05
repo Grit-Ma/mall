@@ -19,13 +19,8 @@ public class RoleServiceImpl implements RoleService {
 
 
     @Override
-    public PageData selectAllRoleOptions(int page, int limit) {
-        PageHelper.startPage(page,limit);
+    public List<Label> selectAllRoleOptions() {
         List<Label> roles = roleMapper.selectAllRoleOptions();
-        PageInfo<Label> pageInfo = new PageInfo<>(roles);
-        PageData<Object> pageData = new PageData<>();
-        pageData.setTotal(roles.size());
-        pageData.setItems(pageInfo.getList());
-        return pageData;
+        return roles;
     }
 }

@@ -13,6 +13,14 @@
     <result column="deleted" jdbcType="BIT" property="deleted" />
     <result column="role_ids" typeHandler="com.cskaoyan.mybatis.IntArrayStringTypeHandler" property="roleIds" />
   </resultMap>
+
+  <resultMap id="QueryResultMap" type="com.cskaoyan.bean.sys.QueryAdmin">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="role_ids" typeHandler="com.cskaoyan.mybatis.IntArrayStringTypeHandler" property="roleIds" />
+  </resultMap>
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -77,16 +85,17 @@
   </sql>
 
 <!-- 查找所有的admin数据 -->
-  <select id="selectAll" resultMap="BaseResultMap">
+  <select id="selectAll" resultMap="QueryResultMap">
     select id,username,avatar,role_ids
     from cskaoyan_mall_admin
+    where deleted=0
   </select>
 
 <!--根据admin的用户名模糊查询-->
-  <select id="fuzzyQueryByName" resultMap="BaseResultMap">
+  <select id="fuzzyQueryByName" resultMap="QueryResultMap">
     select id,username,avatar,role_ids
     from cskaoyan_mall_admin
-    where username like concat('%',#{username},'%')
+    where deleted=0 and username like concat('%',#{username},'%')
   </select>
 
   <select id="selectByExample" parameterType="com.cskaoyan.bean.sys.AdminExample" resultMap="BaseResultMap">
