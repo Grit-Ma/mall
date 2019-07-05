@@ -1,6 +1,8 @@
 package com.cskaoyan.service.promotion;
 
+import com.cskaoyan.bean.Coupon;
 import com.cskaoyan.bean.vo.PageData;
+import com.cskaoyan.bean.vo.ResponseVO;
 
 /**
  * created by ZengWei
@@ -8,5 +10,12 @@ import com.cskaoyan.bean.vo.PageData;
  */
 public interface CouponService {
 
-    PageData getCouponListData(int page, int limit, String sort, String order);
+    PageData getCouponListData(int page, int limit, String sort, String order, String name, Short type, Short status);
+
+    ResponseVO updateCoupon(Coupon coupon);
+
+    ResponseVO deleteCoupon(Coupon coupon);
+
+    ResponseVO insertCoupon(Coupon coupon);
+
 }

@@ -54,10 +54,10 @@ public class AdServiceImpl implements AdService {
         ResponseVO vo = new ResponseVO();
         try{
             adMapper.deleteByPrimaryKey(ad.getId());
-            vo.setErrmsg("修改成功");
+            vo.setErrmsg("删除成功");
             vo.setErrno(0);
         }catch (Exception e){
-            vo.setErrmsg("修改失败:"+e.getMessage());
+            vo.setErrmsg("删除失败:"+e.getMessage());
             vo.setErrno(1);
         }
         return vo;
@@ -68,7 +68,7 @@ public class AdServiceImpl implements AdService {
         PageHelper.startPage(page,limit);
         AdExample example = new AdExample();
         example.setOrderByClause(sort+" "+order);
-        example.createCriteria().andNameLike(name);
+        example.createCriteria().andNameLike("%"+name+"%");
         List<Ad> ads = adMapper.selectByExample(example);
         PageInfo<Ad> pageinfo = new PageInfo(ads);
         return new PageData(pageinfo.getList(),pageinfo.getTotal());
@@ -79,7 +79,7 @@ public class AdServiceImpl implements AdService {
         PageHelper.startPage(page,limit);
         AdExample example = new AdExample();
         example.setOrderByClause(sort+" "+order);
-        example.createCriteria().andContentLike(content);
+        example.createCriteria().andContentLike("%"+content+"%");
         List<Ad> ads = adMapper.selectByExample(example);
         PageInfo<Ad> pageinfo = new PageInfo(ads);
         return new PageData(pageinfo.getList(),pageinfo.getTotal());
@@ -90,10 +90,24 @@ public class AdServiceImpl implements AdService {
         PageHelper.startPage(page,limit);
         AdExample example = new AdExample();
         example.setOrderByClause(sort+" "+order);
-        example.createCriteria().andNameLike(name);
-        example.createCriteria().andContentLike(content);
+        example.createCriteria().andNameLike("%"+name+"%");
+        example.createCriteria().andContentLike("%"+content+"%");
         List<Ad> ads = adMapper.selectByExample(example);
         PageInfo<Ad> pageinfo = new PageInfo(ads);
         return new PageData(pageinfo.getList(),pageinfo.getTotal());
+    }
+
+    @Override
+    public ResponseVO insertAd(Ad ad) {
+        ResponseVO vo = new ResponseVO();
+        try{
+            adMapper.insert(ad);
+            vo.setErrmsg("添加成功");
+            vo.setErrno(0);
+        }catch (Exception e){
+            vo.setErrmsg("添加失败:"+e.getMessage());
+            vo.setErrno(1);
+        }
+        return vo;
     }
 }

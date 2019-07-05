@@ -12,6 +12,7 @@ import com.cskaoyan.bean.vo.ResponseVO;
 public interface AdService {
     PageData getAdListData(int page, int limit, String sort, String order);
 
+    ResponseVO insertAd(Ad ad);
 
     ResponseVO updateAd(Ad ad);
 

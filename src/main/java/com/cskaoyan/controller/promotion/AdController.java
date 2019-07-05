@@ -60,4 +60,12 @@ public class AdController {
         vo = adService.deleteAd(ad);
         return vo;
     }
+
+    @PostMapping("ad/create")
+    @ResponseBody
+    public ResponseVO insert(@RequestBody Ad ad) {
+        ResponseVO vo = new ResponseVO();
+        vo = adService.insertAd(ad);
+        return vo;
+    }
 }
