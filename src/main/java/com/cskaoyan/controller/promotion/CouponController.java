@@ -19,7 +19,7 @@ public class CouponController {
     @Autowired
     CouponService couponService;
 
-    @RequestMapping("admin/coupon/list")
+    @RequestMapping("coupon/list")
     @ResponseBody
     public ResponseVO list(int page, int limit, String sort, String order) {
         ResponseVO vo = new ResponseVO();

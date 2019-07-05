@@ -1,7 +1,7 @@
 package com.cskaoyan.service.promotion.Impl;
 
 import com.cskaoyan.bean.Ad;
-import com.cskaoyan.bean.AdExample;
+
 import com.cskaoyan.bean.Coupon;
 import com.cskaoyan.bean.CouponExample;
 import com.cskaoyan.bean.vo.PageData;
@@ -29,8 +29,8 @@ public class CouponServiceImpl implements CouponService {
         PageHelper.startPage(page,limit);
         CouponExample example = new CouponExample();
         example.setOrderByClause(sort+" "+order);
-        List<Coupon> ads = couponMapper.selectByExample(example);
-        PageInfo<Ad> pageinfo = new PageInfo(ads);
+        List<Coupon> coupons = couponMapper.selectByExample(example);
+        PageInfo<Coupon> pageinfo = new PageInfo(coupons);
         return new PageData(pageinfo.getList(),pageinfo.getTotal());
     }
 }
