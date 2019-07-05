@@ -92,10 +92,10 @@ public class GoodServiceImpl implements GoodService {
 
     private List getCategoriesIds(Integer categoryId) {
         //只可用于两级分类
-        HashMap map = categoryMapper.getCategoryIds(categoryId);
+//        HashMap map = categoryMapper.getCategoryIds(categoryId);
         ArrayList<Integer> list = new ArrayList<>();
-        list.add((Integer) map.get("ida"));
-        list.add((Integer) map.get("idb"));
+//        list.add((Integer) map.get("ida"));
+//        list.add((Integer) map.get("idb"));
         return list;
     }
 
