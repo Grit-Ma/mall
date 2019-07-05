@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.System;
 import java.security.InvalidParameterException;
 import java.util.*;
 
@@ -114,6 +113,64 @@ public class GoodServiceImpl implements GoodService {
         updateProducts(goodsInfo.getProducts(),goodsId);
         updateSpecifications(goodsInfo.getSpecifications(),goodsId);
         return 0;
+    }
+
+    @Override
+    public void delete(Goods goods) {
+        goods.setDeleted(true);
+        goodsMapper.updateByPrimaryKey(goods);
+    }
+
+    @Override
+    public void delete(Comment comment) {
+        comment.setDeleted(true);
+        commentMapper.updateByPrimaryKey(comment);
+    }
+
+    @Override
+    @Transactional
+    public void create(GoodsInfo goodsInfo) {
+        int goodsId = createGoods(goodsInfo.getGoods());
+        createAttributes(goodsInfo.getAttributes(),goodsId);
+        createProducts(goodsInfo.getProducts(),goodsId);
+        createSpecifications(goodsInfo.getSpecifications(),goodsId);
+    }
+
+    @Override
+    public int check(GoodsInfo goodsInfo) {
+        List<GoodsAttribute> attributes = goodsInfo.getAttributes();
+        for(GoodsAttribute attribute : attributes){
+            if(attribute.getValue() == null) {
+                return 401;
+            }
+        }
+        return 0;
+    }
+
+    private void createSpecifications(List<GoodsSpecification> specifications, int goodsId) {
+        for(GoodsSpecification specification : specifications){
+            specification.setGoodsId(goodsId);
+            goodsSpecificationMapper.insert(specification);
+        }
+    }
+
+    private void createProducts(List<GoodsProduct> products, int goodsId) {
+        for(GoodsProduct product : products){
+            product.setGoodsId(goodsId);
+            goodsProductMapper.insert(product);
+        }
+    }
+
+    private int createGoods(Goods goods) {
+        goodsMapper.insert(goods);
+        return goods.getId();
+    }
+
+    private void createAttributes(List<GoodsAttribute> attributes, int goodsId) {
+        for(GoodsAttribute goodsAttribute : attributes){
+            goodsAttribute.setGoodsId(goodsId);
+            goodsAttributeMapper.insert(goodsAttribute);
+        }
     }
 
     private void updateSpecifications(List<GoodsSpecification> goodsSpecifications, Integer goodsId) {

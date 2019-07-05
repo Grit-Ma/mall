@@ -39,4 +39,5 @@ public class GoodsInfo {
     public void setSpecifications(List<GoodsSpecification> specifications) {
         this.specifications = specifications;
     }
+
 }

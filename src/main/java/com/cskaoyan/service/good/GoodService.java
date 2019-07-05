@@ -1,5 +1,7 @@
 package com.cskaoyan.service.good;
 
+import com.cskaoyan.bean.Comment;
+import com.cskaoyan.bean.Goods;
 import com.cskaoyan.bean.GoodsInfo;
 import com.cskaoyan.bean.vo.CatAndBrandVo;
 import com.cskaoyan.bean.vo.PageData;
@@ -18,4 +20,12 @@ public interface GoodService {
     CatAndBrandVo getCatAndBrand();
 
     int update(GoodsInfo map);
+
+    void delete(Goods goods);
+
+    void delete(Comment comment);
+
+    void create(GoodsInfo goodsInfo);
+
+    int check(GoodsInfo goodsInfo);
 }

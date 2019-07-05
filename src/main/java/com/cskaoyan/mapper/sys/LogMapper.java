@@ -6,6 +6,9 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface LogMapper {
+
+    List<Log> fuzzyQueryByName(@Param("name") String name,@Param("sort") String sort, @Param("order") String order);
+
     long countByExample(LogExample example);
 
     int deleteByExample(LogExample example);

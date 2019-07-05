@@ -1,8 +1,6 @@
 package com.cskaoyan.bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonView;
 
 import java.math.BigDecimal;
 import java.util.Date;

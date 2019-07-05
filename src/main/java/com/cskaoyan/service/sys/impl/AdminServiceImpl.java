@@ -8,13 +8,19 @@ import com.cskaoyan.tool.WrapTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class AdminServiceImpl implements AdminService {
     @Autowired
     AdminMapper adminMapper;
+
+    @Override
+    public int delete(Admin admin){
+        admin.setDeleted(true);
+        return adminMapper.updateByPrimaryKeySelective(admin);
+    }
 
     @Override
     public PageData selectAll(int page, int limit) {
@@ -28,20 +34,39 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public PageData fuzzyQueryByName(int page,int limit,String username) {
-        List<Admin> admins = adminMapper.fuzzyQueryByName(username);
+    public PageData fuzzyQueryByName(int page, int limit,String username,String sort,String order) {
+        List<Admin> admins = adminMapper.fuzzyQueryByName(username,sort,order);
         return WrapTool.setPageData(page,limit,admins);
     }
 
     @Override
     public int updateByPrimaryKey(Admin record) {
-        record.setUpdateTime(new Date());
         return adminMapper.updateByPrimaryKeySelective(record);
     }
 
     @Override
     public Admin selectAdmin(Admin admin){
         return adminMapper.selectByPrimaryKey(admin.getId());
+    }
+
+    @Override
+    public void updateRoleIds(Integer roleId) {
+        List<Admin> admins = adminMapper.fuzzyQueryByName("",null,null);
+        for (Admin admin:admins) {
+            int[] roleIds = admin.getRoleIds();
+            ArrayList<Integer> ints = new ArrayList<>();
+            for(int i:roleIds){
+                if(i!=roleId){
+                    ints.add(i);
+                }
+            }
+            int[] ints1 = new int[ints.size()];
+            for (int i = 0; i < ints.size(); i++) {
+                ints1[i]=ints.get(i);
+            }
+            admin.setRoleIds(ints1);
+            adminMapper.updateByPrimaryKeySelective(admin);
+        }
     }
 
 

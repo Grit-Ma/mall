@@ -27,4 +27,6 @@ public interface StorageMapper {
     int updateByPrimaryKeySelective(Storage record);
 
     int updateByPrimaryKey(Storage record);
+
+    List<Storage> fuzzyQuery(@Param("key") String key, @Param("name") String name, @Param("sort") String sort, @Param("order") String order);
 }

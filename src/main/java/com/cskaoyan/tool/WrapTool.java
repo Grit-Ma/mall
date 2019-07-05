@@ -27,10 +27,16 @@ public class WrapTool {
         return pageData;
     }
 
-    public static HashMap setResponseFailure(int errno,String errmsg){
+    public static HashMap setResponseSuccessWithNoData(){
         HashMap<Object, Object> map = new HashMap<>();
         map.put("errmsg","成功");
         map.put("errno",0);
+        return map;
+    }
+    public static HashMap setResponseFailure(int errno,String errmsg){
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("errmsg",errmsg);
+        map.put("errno",errno);
         return map;
     }
 
