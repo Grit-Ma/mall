@@ -8,7 +8,7 @@
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="has_picture" jdbcType="BIT" property="hasPicture" />
-    <result column="pic_urls" jdbcType="VARCHAR" property="picUrls" />
+    <result column="pic_urls" typeHandler="com.cskaoyan.mybatis.StringArrayStringTypeHandler" property="picUrls" />
     <result column="star" jdbcType="SMALLINT" property="star" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -73,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, value_id, type, content, user_id, has_picture, pic_urls, star, add_time, update_time, 
+    id, value_id, `type`, content, user_id, has_picture, pic_urls, star, add_time, update_time,
     deleted
   </sql>
   <select id="selectByExample" parameterType="com.cskaoyan.bean.CommentExample" resultMap="BaseResultMap">
@@ -114,8 +114,8 @@
       update_time, deleted)
     values (#{id,jdbcType=INTEGER}, #{valueId,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, 
       #{content,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{hasPicture,jdbcType=BIT}, 
-      #{picUrls,jdbcType=VARCHAR}, #{star,jdbcType=SMALLINT}, #{addTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT})
+      #{picUrls,typeHandler=com.cskaoyan.mybatis.StringArrayStringTypeHandler}, #{star,jdbcType=SMALLINT}, now(),
+      now(), 0)
   </insert>
   <insert id="insertSelective" parameterType="com.cskaoyan.bean.Comment">
     insert into cskaoyan_mall_comment
@@ -144,15 +144,9 @@
       <if test="star != null">
         star,
       </if>
-      <if test="addTime != null">
         add_time,
-      </if>
-      <if test="updateTime != null">
         update_time,
-      </if>
-      <if test="deleted != null">
         deleted,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -174,20 +168,14 @@
         #{hasPicture,jdbcType=BIT},
       </if>
       <if test="picUrls != null">
-        #{picUrls,jdbcType=VARCHAR},
+        #{picUrls,typeHandler=com.cskaoyan.mybatis.StringArrayStringTypeHandler},
       </if>
       <if test="star != null">
         #{star,jdbcType=SMALLINT},
       </if>
-      <if test="addTime != null">
-        #{addTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="deleted != null">
-        #{deleted,jdbcType=BIT},
-      </if>
+        now(),
+        now(),
+       0,
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.cskaoyan.bean.CommentExample" resultType="java.lang.Long">
@@ -226,9 +214,7 @@
       <if test="record.addTime != null">
         add_time = #{record.addTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
+        update_time = now(),
       <if test="record.deleted != null">
         deleted = #{record.deleted,jdbcType=BIT},
       </if>
@@ -248,7 +234,7 @@
       pic_urls = #{record.picUrls,jdbcType=VARCHAR},
       star = #{record.star,jdbcType=SMALLINT},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_time = now(),
       deleted = #{record.deleted,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -273,7 +259,7 @@
         has_picture = #{hasPicture,jdbcType=BIT},
       </if>
       <if test="picUrls != null">
-        pic_urls = #{picUrls,jdbcType=VARCHAR},
+        pic_urls = #{picUrls,typeHandler=com.cskaoyan.mybatis.StringArrayStringTypeHandler},
       </if>
       <if test="star != null">
         star = #{star,jdbcType=SMALLINT},
@@ -281,9 +267,7 @@
       <if test="addTime != null">
         add_time = #{addTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
+        update_time = now(),
       <if test="deleted != null">
         deleted = #{deleted,jdbcType=BIT},
       </if>
@@ -297,10 +281,10 @@
       content = #{content,jdbcType=VARCHAR},
       user_id = #{userId,jdbcType=INTEGER},
       has_picture = #{hasPicture,jdbcType=BIT},
-      pic_urls = #{picUrls,jdbcType=VARCHAR},
+      pic_urls = #{picUrls,typeHandler=com.cskaoyan.mybatis.StringArrayStringTypeHandler},
       star = #{star,jdbcType=SMALLINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_time = now(),
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
