@@ -111,7 +111,7 @@
       )
     values (#{id,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{specifications,typeHandler=com.cskaoyan.mybatis.StringArrayStringTypeHandler},
       #{price,jdbcType=DECIMAL}, #{number,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, 
-      #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}
+      now(), now(), 0
       )
   </insert>
   <insert id="insertSelective" parameterType="com.cskaoyan.bean.GoodsProduct">
@@ -135,15 +135,9 @@
       <if test="url != null">
         url,
       </if>
-      <if test="addTime != null">
         add_time,
-      </if>
-      <if test="updateTime != null">
         update_time,
-      </if>
-      <if test="deleted != null">
         deleted,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -164,15 +158,9 @@
       <if test="url != null">
         #{url,jdbcType=VARCHAR},
       </if>
-      <if test="addTime != null">
-        #{addTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="deleted != null">
-        #{deleted,jdbcType=BIT},
-      </if>
+        now(),
+        now(),
+        0,
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.cskaoyan.bean.GoodsProductExample" resultType="java.lang.Long">
@@ -205,9 +193,7 @@
       <if test="record.addTime != null">
         add_time = #{record.addTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
+        update_time = now(),
       <if test="record.deleted != null">
         deleted = #{record.deleted,jdbcType=BIT},
       </if>
@@ -225,7 +211,7 @@
       number = #{record.number,jdbcType=INTEGER},
       url = #{record.url,jdbcType=VARCHAR},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_time = now(),
       deleted = #{record.deleted,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -252,9 +238,7 @@
       <if test="addTime != null">
         add_time = #{addTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
+        update_time = now(),
       <if test="deleted != null">
         deleted = #{deleted,jdbcType=BIT},
       </if>
@@ -269,7 +253,7 @@
       number = #{number,jdbcType=INTEGER},
       url = #{url,jdbcType=VARCHAR},
       add_time = #{addTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_time = now(),
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>

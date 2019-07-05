@@ -14,10 +14,13 @@ public class StringArrayStringTypeHandler implements TypeHandler<String[]> {
         StringBuffer sb = new StringBuffer();
         sb.append("[");
         for(String string : strings){
-            sb.append(string).append(",");
+            sb.append('"').append(string).append("\", ");
         }
-        String sub = sb.substring(0, sb.length() - 1);
-        sb.append("]");
+        String sub = sb.toString();
+        if(strings.length > 0){
+            sub = sb.substring(0, sb.length() - 2);
+        }
+        sub += "]";
         preparedStatement.setString(index,sub);
     }
 
@@ -43,9 +46,14 @@ public class StringArrayStringTypeHandler implements TypeHandler<String[]> {
 
     public String[] transString(String s){
         if(s == null || "[]".equals(s)){
-            return new String[1];
+            return new String[0];
         }
-        String substring = s.substring(2, s.length() - 2); //去除头尾的【】
+        String substring = "";
+        try {
+            substring = s.substring(2, s.length() - 2); //去除头尾的【】
+        }catch (StringIndexOutOfBoundsException e){
+            return new String[0];
+        }
         String[] split = substring.split("\", \"");
         return split;
     }
