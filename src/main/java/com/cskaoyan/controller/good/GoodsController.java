@@ -1,5 +1,7 @@
 package com.cskaoyan.controller.good;
 
+import com.cskaoyan.bean.Comment;
+import com.cskaoyan.bean.Goods;
 import com.cskaoyan.bean.GoodsInfo;
 import com.cskaoyan.bean.vo.CatAndBrandVo;
 import com.cskaoyan.bean.vo.PageData;
@@ -40,12 +42,44 @@ public class GoodsController {
         return vo;
     }
 
+    @RequestMapping("admin/goods/delete")
+    @ResponseBody
+    public ResponseVO delete(@RequestBody Goods goods){
+        ResponseVO<Object> vo = new ResponseVO<>();
+        goodService.delete(goods);
+        vo.setErrmsg("成功");
+        return vo;
+    }
+
     @RequestMapping("admin/goods/update")
     @ResponseBody
     public ResponseVO update(@RequestBody GoodsInfo goodsInfo){
         ResponseVO<Object> vo = new ResponseVO<>();
-        goodService.update(goodsInfo);
-        vo.setErrmsg("成功");
+        int errno = goodService.check(goodsInfo);
+        String errmsg = "成功";
+        if(errno == 401){
+            errmsg = "参数不对";
+        }else {
+            goodService.update(goodsInfo);
+        }
+        vo.setErrmsg(errmsg);
+        vo.setErrno(errno);
+        return vo;
+    }
+
+    @RequestMapping("admin/goods/create")
+    @ResponseBody
+    public ResponseVO create(@RequestBody GoodsInfo goodsInfo){
+        ResponseVO<Object> vo = new ResponseVO<>();
+        int errno = goodService.check(goodsInfo);
+        String errmsg = "成功";
+        if(errno == 401){
+            errmsg = "参数不对";
+        }else {
+            goodService.create(goodsInfo);
+        }
+        vo.setErrmsg(errmsg);
+        vo.setErrno(errno);
         return vo;
     }
 
@@ -71,6 +105,24 @@ public class GoodsController {
             vo.setErrno(402);
             vo.setErrmsg("参数值不对");
         }
+        return vo;
+    }
+
+    @RequestMapping("admin/comment/delete")
+    @ResponseBody
+    public ResponseVO delete(@RequestBody Comment comment){
+        ResponseVO vo = new ResponseVO();
+        goodService.delete(comment);
+        return vo;
+    }
+
+    @RequestMapping("admin/order/reply")
+    @ResponseBody
+    public ResponseVO reply(int commentId ,String content){
+        ResponseVO vo = new ResponseVO();
+        //缺少商品评论回复表
+        vo.setErrmsg("订单商品已回复");
+        vo.setErrno(622);
         return vo;
     }
 

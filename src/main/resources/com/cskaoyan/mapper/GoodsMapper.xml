@@ -142,7 +142,10 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.cskaoyan.bean.Goods">
+  <insert id="insert" parameterType="com.cskaoyan.bean.Goods"  useGeneratedKeys="true">
+    <selectKey resultType="_int" keyProperty="id" order="AFTER">
+      select last_insert_id()
+    </selectKey>
     insert into cskaoyan_mall_goods (id, goods_sn, name, 
       category_id, brand_id, gallery, 
       keywords, brief, is_on_sale, 
@@ -155,10 +158,13 @@
       #{keywords,jdbcType=VARCHAR}, #{brief,jdbcType=VARCHAR}, #{isOnSale,jdbcType=BIT}, 
       #{sortOrder,jdbcType=SMALLINT}, #{picUrl,jdbcType=VARCHAR}, #{shareUrl,jdbcType=VARCHAR}, 
       #{isNew,jdbcType=BIT}, #{isHot,jdbcType=BIT}, #{unit,jdbcType=VARCHAR}, #{counterPrice,jdbcType=DECIMAL}, 
-      #{retailPrice,jdbcType=DECIMAL}, #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{deleted,jdbcType=BIT}, #{detail,jdbcType=LONGVARCHAR})
+      #{retailPrice,jdbcType=DECIMAL}, now(), now(),
+      0, #{detail,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.cskaoyan.bean.Goods">
+  <insert id="insertSelective" parameterType="com.cskaoyan.bean.Goods" useGeneratedKeys="true">
+    <selectKey resultType="_int" keyProperty="id" order="AFTER" >
+      select last_insert_id()
+    </selectKey>
     insert into cskaoyan_mall_goods
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -212,15 +218,9 @@
       <if test="retailPrice != null">
         retail_price,
       </if>
-      <if test="addTime != null">
         add_time,
-      </if>
-      <if test="updateTime != null">
         update_time,
-      </if>
-      <if test="deleted != null">
         deleted,
-      </if>
       <if test="detail != null">
         detail,
       </if>
@@ -277,15 +277,9 @@
       <if test="retailPrice != null">
         #{retailPrice,jdbcType=DECIMAL},
       </if>
-      <if test="addTime != null">
-        #{addTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="deleted != null">
-        #{deleted,jdbcType=BIT},
-      </if>
+        now(),
+        now(),
+        0,
       <if test="detail != null">
         #{detail,jdbcType=LONGVARCHAR},
       </if>
@@ -354,9 +348,7 @@
       <if test="record.addTime != null">
         add_time = #{record.addTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
+        update_time = now(),
       <if test="record.deleted != null">
         deleted = #{record.deleted,jdbcType=BIT},
       </if>
@@ -388,7 +380,7 @@
       counter_price = #{record.counterPrice,jdbcType=DECIMAL},
       retail_price = #{record.retailPrice,jdbcType=DECIMAL},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_time = now(),
       deleted = #{record.deleted,jdbcType=BIT},
       detail = #{record.detail,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
@@ -414,9 +406,9 @@
       unit = #{record.unit,jdbcType=VARCHAR},
       counter_price = #{record.counterPrice,jdbcType=DECIMAL},
       retail_price = #{record.retailPrice,jdbcType=DECIMAL},
-      add_time = #{record.addTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      deleted = #{record.deleted,jdbcType=BIT}
+      add_time = now(),
+      update_time = now(),
+      deleted = 0
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -475,9 +467,7 @@
       <if test="addTime != null">
         add_time = #{addTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
+        update_time = now(),
       <if test="deleted != null">
         deleted = #{deleted,jdbcType=BIT},
       </if>
@@ -506,7 +496,7 @@
       counter_price = #{counterPrice,jdbcType=DECIMAL},
       retail_price = #{retailPrice,jdbcType=DECIMAL},
       add_time = #{addTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_time = now(),
       deleted = #{deleted,jdbcType=BIT},
       detail = #{detail,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
@@ -530,7 +520,7 @@
       counter_price = #{counterPrice,jdbcType=DECIMAL},
       retail_price = #{retailPrice,jdbcType=DECIMAL},
       add_time = #{addTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_time = now(),
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
