@@ -12,13 +12,17 @@ public class IntArrayStringTypeHandler implements TypeHandler<int[]> {
 
     @Override
     public void setParameter(PreparedStatement preparedStatement, int index, int[] role_ids, JdbcType jdbcType) throws SQLException {
-        StringBuffer sb = new StringBuffer();
-        sb.append("[");
-        for(int value:role_ids){
-            sb.append(value).append(",");
+        if (role_ids == null || role_ids.length==0) {
+            preparedStatement.setString(index, "");
+        } else {
+            StringBuffer sb = new StringBuffer();
+            sb.append("[");
+            for (int value : role_ids) {
+                sb.append(value).append(",");
+            }
+            String sub = sb.substring(0, sb.length() - 1);
+            preparedStatement.setString(index, sub + "]");
         }
-        String sub = sb.substring(0, sb.length() - 1);
-        preparedStatement.setString(index,sub+"]");
     }
 
     @Override
@@ -41,17 +45,19 @@ public class IntArrayStringTypeHandler implements TypeHandler<int[]> {
         return ints;
     }
 
-    public int[] transString(String s){
+    public int[] transString(String s) {
         //注意判空！
-        if("".equals(s)||s==null){
-            int[] ints =new int[0];
+        int[] ints = new int[0];
+        if ("".equals(s) || s == null) {
             return ints;
         }
         String substring = s.substring(1, s.length() - 1); //去除头尾的【】
+        if(substring==null||"".equals(substring))
+            return ints;
         String[] split = substring.split(",");
-        int[] ints = new int[split.length];
-        for (int i = 0; i <split.length ; i++) {
-            ints[i]=Integer.parseInt(split[i]);
+        ints = new int[split.length];
+        for (int i = 0; i < split.length; i++) {
+            ints[i] = Integer.parseInt(split[i]);
         }
         return ints;
     }

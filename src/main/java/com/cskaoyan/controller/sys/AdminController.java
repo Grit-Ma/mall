@@ -1,7 +1,6 @@
 package com.cskaoyan.controller.sys;
 
 import com.cskaoyan.bean.sys.Admin;
-import com.cskaoyan.bean.sys.Label;
 import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.service.sys.AdminService;
 import com.cskaoyan.service.sys.RoleService;
@@ -33,23 +32,16 @@ public class AdminController {
 
     @RequestMapping("admin/list")
     @ResponseBody
-    public HashMap queryAdmin(@RequestParam("page") int page, @RequestParam("limit")int limit, String username) {
-        PageData pageData = new PageData();
+    public HashMap queryAdmin(@RequestParam("page") int page, @RequestParam("limit")int limit, String username,String sort,String order) {
+        PageData pageData;
         if (username != null) {
-            pageData = adminService.fuzzyQueryByName(page, limit, username);
+            pageData = adminService.fuzzyQueryByName(page, limit, username,sort,order);
         } else {
             pageData = adminService.selectAll(page, limit);
         }
         return WrapTool.setResponseSuccess(pageData);
     }
 
-
-    @RequestMapping("role/options")
-    @ResponseBody
-    public HashMap queryRoles() {
-        List<Label> labels = roleService.selectAllRoleOptions();
-        return WrapTool.setResponseSuccess(labels);
-    }
 
 
     @RequestMapping("admin/create")
@@ -69,11 +61,14 @@ public class AdminController {
                 WrapTool.setResponseFailure(601, defaultMessage);
             }
         }
+        admin.setAddTime(new Date());
+        admin.setUpdateTime(new Date());
+        admin.setDeleted(false);
         int i = adminService.addAdmin(admin);
         if (i == 1) {
             return WrapTool.setResponseSuccess(admin);
         } else {
-            return WrapTool.setResponseFailure(400, "添加失败！");
+            return WrapTool.setResponseFailure(1, "添加失败！");
         }
     }
 
@@ -87,12 +82,25 @@ public class AdminController {
 //                WrapTool.setResponseFailure(601, defaultMessage);
 //            }
 //        }
+        admin.setUpdateTime(new Date());
         int i = adminService.updateByPrimaryKey(admin);
         if (i == 1) {
             return WrapTool.setResponseSuccess(admin);
         }else {
-            return WrapTool.setResponseFailure(400,"编辑失败！");
+            return WrapTool.setResponseFailure(2,"更新失败！");
         }
     }
+
+    @RequestMapping("/admin/delete")
+    @ResponseBody
+    public HashMap deleteAdmin(@RequestBody Admin admin) {
+        int i = adminService.delete(admin);
+        if (i == 1) {
+            return WrapTool.setResponseSuccessWithNoData();
+        }else {
+            return WrapTool.setResponseFailure(3,"删除失败！");
+        }
+    }
+
 
 }

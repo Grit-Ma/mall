@@ -92,10 +92,16 @@
   </select>
 
 <!--根据admin的用户名模糊查询-->
-  <select id="fuzzyQueryByName" resultMap="QueryResultMap">
+  <select id="fuzzyQueryByName" resultMap="BaseResultMap">
     select id,username,avatar,role_ids
     from cskaoyan_mall_admin
     where deleted=0 and username like concat('%',#{username},'%')
+    <if test="sort!=null and sort!=''">
+      order by #{sort}
+    </if>
+    <if test="order!=null and order!=''">
+      #{order}
+    </if>
   </select>
 
   <select id="selectByExample" parameterType="com.cskaoyan.bean.sys.AdminExample" resultMap="BaseResultMap">
