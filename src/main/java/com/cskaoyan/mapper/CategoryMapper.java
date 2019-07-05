@@ -2,6 +2,8 @@ package com.cskaoyan.mapper;
 
 import com.cskaoyan.bean.Category;
 import com.cskaoyan.bean.CategoryExample;
+
+import java.util.HashMap;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,4 +29,6 @@ public interface CategoryMapper {
     int updateByPrimaryKeySelective(Category record);
 
     int updateByPrimaryKey(Category record);
+
+    HashMap getCategoryIds(Integer categoryId);
 }
