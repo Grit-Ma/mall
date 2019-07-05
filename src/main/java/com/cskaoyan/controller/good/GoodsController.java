@@ -20,7 +20,7 @@ public class GoodsController {
     @Autowired
     GoodService goodService;
 
-    @RequestMapping("admin/goods/list")
+    @RequestMapping("goods/list")
     @ResponseBody
     public ResponseVO list(int page,int limit,String sort,String order,
                            @RequestParam(value="goodsSn",defaultValue="")String goodsSn,
@@ -32,7 +32,7 @@ public class GoodsController {
         return vo;
     }
 
-    @RequestMapping("admin/goods/detail")
+    @RequestMapping("goods/detail")
     @ResponseBody
     public ResponseVO details(@RequestParam("id")int id){
         ResponseVO vo = new ResponseVO();
@@ -42,7 +42,7 @@ public class GoodsController {
         return vo;
     }
 
-    @RequestMapping("admin/goods/delete")
+    @RequestMapping("goods/delete")
     @ResponseBody
     public ResponseVO delete(@RequestBody Goods goods){
         ResponseVO<Object> vo = new ResponseVO<>();
@@ -51,7 +51,7 @@ public class GoodsController {
         return vo;
     }
 
-    @RequestMapping("admin/goods/update")
+    @RequestMapping("goods/update")
     @ResponseBody
     public ResponseVO update(@RequestBody GoodsInfo goodsInfo){
         ResponseVO<Object> vo = new ResponseVO<>();
@@ -67,7 +67,7 @@ public class GoodsController {
         return vo;
     }
 
-    @RequestMapping("admin/goods/create")
+    @RequestMapping("goods/create")
     @ResponseBody
     public ResponseVO create(@RequestBody GoodsInfo goodsInfo){
         ResponseVO<Object> vo = new ResponseVO<>();
@@ -83,7 +83,7 @@ public class GoodsController {
         return vo;
     }
 
-    @RequestMapping("admin/goods/catAndBrand")
+    @RequestMapping("goods/catAndBrand")
     @ResponseBody
     public ResponseVO catAndBrand(){
         ResponseVO vo = new ResponseVO();
@@ -93,7 +93,7 @@ public class GoodsController {
         return vo;
     }
 
-    @RequestMapping("admin/comment/list")
+    @RequestMapping("comment/list")
     @ResponseBody
     public ResponseVO commentList(int page,int limit,String sort,String order,String userId,String valueId){
         ResponseVO vo = new ResponseVO();
@@ -108,7 +108,7 @@ public class GoodsController {
         return vo;
     }
 
-    @RequestMapping("admin/comment/delete")
+    @RequestMapping("comment/delete")
     @ResponseBody
     public ResponseVO delete(@RequestBody Comment comment){
         ResponseVO vo = new ResponseVO();
@@ -116,7 +116,7 @@ public class GoodsController {
         return vo;
     }
 
-    @RequestMapping("admin/order/reply")
+    @RequestMapping("order/reply")
     @ResponseBody
     public ResponseVO reply(int commentId ,String content){
         ResponseVO vo = new ResponseVO();
