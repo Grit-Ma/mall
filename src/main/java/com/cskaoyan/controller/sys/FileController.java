@@ -2,6 +2,7 @@ package com.cskaoyan.controller.sys;
 
 import com.cskaoyan.bean.oss.MyOssClient;
 import com.cskaoyan.bean.sys.Storage;
+import com.cskaoyan.bean.sys.UpStorage;
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.service.sys.StorageService;
 import com.cskaoyan.tool.WrapTool;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Date;
+import java.util.HashMap;
 
 @Controller
 public class FileController {
@@ -23,13 +24,13 @@ public class FileController {
     StorageService storageService;
 
 
-    @RequestMapping("admin/storage/create")
+    @RequestMapping("storage/create")
     @ResponseBody
-    public ResponseVO fileUpload(MultipartFile myfile) throws IOException {
-        Storage storage = myOssClient.FileUpLoad(myfile);
+    public HashMap fileUpload(MultipartFile file) throws IOException {
+        Storage storage = myOssClient.fileUpLoad(file);
         int i =storageService.insertStorage(storage);
         if(i==1){
-            return WrapTool.setResponseSuccess(storage);
+            return WrapTool.setResponseSuccess(new UpStorage(storage.getId(),storage.getKey(),storage.getName(),storage.getType(),storage.getSize(),storage.getUrl(),storage.getAddTime(),storage.getUpdateTime()));
         }else {
             return  WrapTool.setResponseFailure(1,"上传添加失败！");
         }

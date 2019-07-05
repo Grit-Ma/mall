@@ -18,8 +18,7 @@ public class IntArrayStringTypeHandler implements TypeHandler<int[]> {
             sb.append(value).append(",");
         }
         String sub = sb.substring(0, sb.length() - 1);
-        sb.append("]");
-        preparedStatement.setString(index,sub);
+        preparedStatement.setString(index,sub+"]");
     }
 
     @Override

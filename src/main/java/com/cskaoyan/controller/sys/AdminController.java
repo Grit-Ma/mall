@@ -1,8 +1,8 @@
 package com.cskaoyan.controller.sys;
 
 import com.cskaoyan.bean.sys.Admin;
+import com.cskaoyan.bean.sys.Label;
 import com.cskaoyan.bean.vo.PageData;
-import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.service.sys.AdminService;
 import com.cskaoyan.service.sys.RoleService;
 import com.cskaoyan.tool.WrapTool;
@@ -14,7 +14,11 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -27,9 +31,9 @@ public class AdminController {
     @Autowired
     RoleService roleService;
 
-    @RequestMapping("/admin/admin/list")
+    @RequestMapping("admin/list")
     @ResponseBody
-    public ResponseVO<PageData> queryAdmin(int page, int limit, String username) {
+    public HashMap queryAdmin(@RequestParam("page") int page, @RequestParam("limit")int limit, String username) {
         PageData pageData = new PageData();
         if (username != null) {
             pageData = adminService.fuzzyQueryByName(page, limit, username);
@@ -40,17 +44,17 @@ public class AdminController {
     }
 
 
-    @RequestMapping("/admin/role/options")
+    @RequestMapping("role/options")
     @ResponseBody
-    public ResponseVO<PageData> queryRoles(int page, int limit) {
-        PageData pageData = roleService.selectAllRoleOptions(page, limit);
-        return WrapTool.setResponseSuccess(pageData);
+    public HashMap queryRoles() {
+        List<Label> labels = roleService.selectAllRoleOptions();
+        return WrapTool.setResponseSuccess(labels);
     }
 
 
-    @RequestMapping("admin/admin/create")
+    @RequestMapping("admin/create")
     @ResponseBody
-    public ResponseVO<Admin> createAdmin(@Validated @RequestBody Admin admin, BindingResult bindingResult) {
+    public HashMap createAdmin(@Validated @RequestBody Admin admin, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
 //            responseVo.setErrorNo(1);
 //            FieldError fieldError = bindingResult.getFieldError();
@@ -73,9 +77,16 @@ public class AdminController {
         }
     }
 
-    @RequestMapping("admin/admin/update")
+    @RequestMapping("admin/update")
     @ResponseBody
-    public ResponseVO<Admin> updateAdmin(@Validated @RequestBody Admin admin, BindingResult bindingResult) {
+    public HashMap updateAdmin(@Validated @RequestBody Admin admin, BindingResult bindingResult) {
+//        if (bindingResult.hasErrors()) {
+//            List<ObjectError> allErrors = bindingResult.getAllErrors();
+//            for (ObjectError o : allErrors) {
+//                String defaultMessage = o.getDefaultMessage();
+//                WrapTool.setResponseFailure(601, defaultMessage);
+//            }
+//        }
         int i = adminService.updateByPrimaryKey(admin);
         if (i == 1) {
             return WrapTool.setResponseSuccess(admin);

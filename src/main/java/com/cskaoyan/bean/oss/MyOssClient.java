@@ -4,15 +4,12 @@ import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.cskaoyan.bean.sys.Storage;
-import io.swagger.models.auth.In;
-import org.apache.catalina.Store;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -66,12 +63,12 @@ public class MyOssClient {
         this.secret = secret;
     }
 
-    public Storage FileUpLoad(MultipartFile myfile) throws IOException {
+    public Storage fileUpLoad(MultipartFile file) throws IOException {
         //获取需要上传的文件的信息
-        InputStream inputStream = myfile.getInputStream();
-        String contentType = myfile.getContentType();
-        long size = myfile.getSize();
-        String originalFilename = myfile.getOriginalFilename();
+        String contentType = file.getContentType();
+        long size = file.getSize();
+        String originalFilename = file.getOriginalFilename();
+        InputStream inputStream = file.getInputStream();
 
         //设置文件上传的大小和类型
         ObjectMetadata objectMetadata = new ObjectMetadata();
@@ -90,10 +87,12 @@ public class MyOssClient {
         Storage storage = new Storage();
         storage.setSize(new Long(size).intValue());
         storage.setAddTime(new Date());
+        storage.setUpdateTime(new Date());
         storage.setName(originalFilename);
         storage.setType(contentType);
-        storage.setUrl(putObjectRequest.getInputStream().toString());//????????
-        storage.setKey(uuid);
+        storage.setUrl("http://"+bucket+"."+endpoint+"/"+uuid);
+        storage.setKey(uuid+originalFilename);
+        storage.setDeleted(false);
         return storage;
     }
 

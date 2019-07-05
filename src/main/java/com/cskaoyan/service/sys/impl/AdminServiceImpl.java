@@ -7,6 +7,8 @@ import com.cskaoyan.service.sys.AdminService;
 import com.cskaoyan.tool.WrapTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,7 +35,13 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public int updateByPrimaryKey(Admin record) {
-        return adminMapper.updateByPrimaryKey(record);
+        record.setUpdateTime(new Date());
+        return adminMapper.updateByPrimaryKeySelective(record);
+    }
+
+    @Override
+    public Admin selectAdmin(Admin admin){
+        return adminMapper.selectByPrimaryKey(admin.getId());
     }
 
 
