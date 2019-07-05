@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -88,7 +89,6 @@ public class AdminController {
 //        }
         int i = adminService.updateByPrimaryKey(admin);
         if (i == 1) {
-
             return WrapTool.setResponseSuccess(admin);
         }else {
             return WrapTool.setResponseFailure(400,"编辑失败！");

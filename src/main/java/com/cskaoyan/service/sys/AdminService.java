@@ -15,4 +15,6 @@ public interface AdminService {
     public PageData fuzzyQueryByName(int page,int limit,String username);
 
     int updateByPrimaryKey(Admin record);
+
+    Admin selectAdmin(Admin admin);
 }

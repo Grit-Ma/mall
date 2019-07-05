@@ -4,15 +4,12 @@ import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.cskaoyan.bean.sys.Storage;
-import io.swagger.models.auth.In;
-import org.apache.catalina.Store;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -80,7 +77,7 @@ public class MyOssClient {
 
         //生成一个随机的文件名
         String uuid = UUID.randomUUID().toString().replaceAll("-","");
-        PutObjectRequest putObjectRequest = new PutObjectRequest(bucket,uuid+originalFilename,inputStream,objectMetadata);
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucket,uuid,inputStream,objectMetadata);
 
         //ossclient
         OSSClient ossClient = new OSSClient(endpoint, accesskey, secret);
@@ -93,7 +90,7 @@ public class MyOssClient {
         storage.setUpdateTime(new Date());
         storage.setName(originalFilename);
         storage.setType(contentType);
-        storage.setUrl("http://"+bucket+"."+endpoint+"/"+uuid+originalFilename);
+        storage.setUrl("http://"+bucket+"."+endpoint+"/"+uuid);
         storage.setKey(uuid+originalFilename);
         storage.setDeleted(false);
         return storage;
