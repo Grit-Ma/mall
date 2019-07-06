@@ -2,10 +2,11 @@ package com.cskaoyan.mapper;
 
 import com.cskaoyan.bean.Category;
 import com.cskaoyan.bean.CategoryExample;
-
-import java.util.HashMap;
-import java.util.List;
+import com.cskaoyan.bean.mallmanage.category.CategoryL1;
+import com.cskaoyan.bean.mallmanage.category.CategoryList;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface CategoryMapper {
     long countByExample(CategoryExample example);
@@ -30,5 +31,9 @@ public interface CategoryMapper {
 
     int updateByPrimaryKey(Category record);
 
-    HashMap getCategoryIds(Integer categoryId);
+    List<CategoryList> selectCategoryList();
+
+    List<CategoryL1> selectCategoryL1();
+
+    int createCategory(@Param("category") Category category);
 }

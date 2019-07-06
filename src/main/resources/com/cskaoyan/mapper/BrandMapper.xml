@@ -71,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, `desc`, pic_url, sort_order, floor_price, add_time, update_time, deleted
+    id, name, `desc` , pic_url, sort_order, floor_price, add_time, update_time, deleted
   </sql>
   <select id="selectByExample" parameterType="com.cskaoyan.bean.BrandExample" resultMap="BaseResultMap">
     select
@@ -105,7 +105,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.cskaoyan.bean.Brand">
-    insert into cskaoyan_mall_brand (id, name, `desc`,
+    insert into cskaoyan_mall_brand (id, name, desc, 
       pic_url, sort_order, floor_price, 
       add_time, update_time, deleted
       )
@@ -124,7 +124,7 @@
         name,
       </if>
       <if test="desc != null">
-        `desc`,
+        desc,
       </if>
       <if test="picUrl != null">
         pic_url,
@@ -191,7 +191,7 @@
         name = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.desc != null">
-        `desc` = #{record.desc,jdbcType=VARCHAR},
+        desc = #{record.desc,jdbcType=VARCHAR},
       </if>
       <if test="record.picUrl != null">
         pic_url = #{record.picUrl,jdbcType=VARCHAR},
@@ -220,7 +220,7 @@
     update cskaoyan_mall_brand
     set id = #{record.id,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
-      `desc` = #{record.desc,jdbcType=VARCHAR},
+      desc = #{record.desc,jdbcType=VARCHAR},
       pic_url = #{record.picUrl,jdbcType=VARCHAR},
       sort_order = #{record.sortOrder,jdbcType=TINYINT},
       floor_price = #{record.floorPrice,jdbcType=DECIMAL},
@@ -273,4 +273,12 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+ <insert id="createBrand" useGeneratedKeys="true">
+   <selectKey resultType="_int" keyProperty="brand.id"  order="AFTER">
+        select last_insert_id()
+   </selectKey>
+   insert into cskaoyan_mall_brand (name,`desc`,pic_url,floor_price,add_time,update_time)
+   values(#{brand.name},#{brand.desc},#{brand.picUrl},#{brand.floorPrice},#{brand.addTime},#{brand.updateTime})
+ </insert>
 </mapper>
