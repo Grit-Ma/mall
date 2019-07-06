@@ -71,30 +71,18 @@ public class GoodServiceImpl implements GoodService {
 
     @Override
     public ProductVo getGoodById(int id) {
-        List goodsAttribute = getGoodsAttribute(id);
-        Goods goods = getGoods(id);
-        List categoriesIds = getCategoriesIds(goods.getCategoryId());
-        List<GoodsProduct> products = getProducts(id);
-        List<GoodsSpecification> goodsSpecifications = getSpecification(id);
-        ProductVo productVo = new ProductVo(goodsAttribute, categoriesIds, goods, products, goodsSpecifications);
+        GoodsInfo info = goodsMapper.getGoodsInfo(id);
+        List categoriesIds = getCategoriesIds(info.getGoods().getCategoryId());
+        ProductVo productVo = new ProductVo(info.getAttributes(), categoriesIds, info.getGoods(), info.getProducts(), info.getSpecifications());
         return productVo;
-    }
-
-    private List<GoodsSpecification> getSpecification(int id) {
-        GoodsSpecificationExample example = new GoodsSpecificationExample();
-        GoodsSpecificationExample.Criteria criteria = example.createCriteria();
-        criteria.andGoodsIdEqualTo(id);
-        criteria.andDeletedEqualTo(false);
-        List<GoodsSpecification> list = goodsSpecificationMapper.selectByExample(example);
-        return list;
     }
 
     private List getCategoriesIds(Integer categoryId) {
         //只可用于两级分类
-//        HashMap map = categoryMapper.getCategoryIds(categoryId);
+        HashMap map = categoryMapper.getCategoryIds(categoryId);
         ArrayList<Integer> list = new ArrayList<>();
-//        list.add((Integer) map.get("ida"));
-//        list.add((Integer) map.get("idb"));
+        list.add((Integer) map.get("ida"));
+        list.add((Integer) map.get("idb"));
         return list;
     }
 
@@ -269,30 +257,4 @@ public class GoodServiceImpl implements GoodService {
         return list;
     }
 
-    private List getGoodsAttribute(int goodsId){
-        GoodsAttributeExample gae = new GoodsAttributeExample();
-        GoodsAttributeExample.Criteria criteria = gae.createCriteria();
-        criteria.andGoodsIdEqualTo(goodsId);
-        criteria.andDeletedEqualTo(false);
-        List<GoodsAttribute> attributes = goodsAttributeMapper.selectByExample(gae);
-        return attributes;
-    }
-
-    private Goods getGoods(int goodsId){
-        GoodsExample example = new GoodsExample();
-        GoodsExample.Criteria criteria = example.createCriteria();
-        criteria.andIdEqualTo(goodsId);
-        criteria.andDeletedEqualTo(false);
-        List<Goods> goods = goodsMapper.selectByExample(example);
-        return goods.size() > 0 ? goods.get(0) : null;
-    }
-
-    private List<GoodsProduct> getProducts(int goodsId){
-        GoodsProductExample example = new GoodsProductExample();
-        GoodsProductExample.Criteria criteria = example.createCriteria();
-        criteria.andGoodsIdEqualTo(goodsId);
-        criteria.andDeletedEqualTo(false);
-        List<GoodsProduct> goodsProducts = goodsProductMapper.selectByExample(example);
-        return goodsProducts;
-    }
 }

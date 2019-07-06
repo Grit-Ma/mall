@@ -130,7 +130,7 @@
     ,
     <include refid="Blob_Column_List" />
     from cskaoyan_mall_goods
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER} and deleted = false
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from cskaoyan_mall_goods
@@ -524,4 +524,14 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <resultMap id="GoodsInfo" type="com.cskaoyan.bean.GoodsInfo">
+    <association property="goods" column="id" select="com.cskaoyan.mapper.GoodsMapper.selectByPrimaryKey"/>
+    <collection property="attributes" column="id" select="com.cskaoyan.mapper.GoodsAttributeMapper.selectNotDeletedByGoodsId"/>
+    <collection property="products" column="id" select="com.cskaoyan.mapper.GoodsProductMapper.selectNotDeletedByGoodsId"/>
+     <collection property="specifications" column="id" select="com.cskaoyan.mapper.GoodsSpecificationMapper.selectNotDeletedByGoodsId"/>
+  </resultMap>
+  <select id="getGoodsInfo" parameterType="int" resultMap="GoodsInfo">
+    select id from cskaoyan_mall_goods where id = #{id}
+  </select>
 </mapper>
