@@ -70,6 +70,14 @@
   <sql id="Base_Column_List">
     id, role_id, permission, add_time, update_time, deleted
   </sql>
+
+  <select id="selectPermissions" resultType="string">
+    select permission
+    from cskaoyan_mall_permission
+    where role_id=#{id}
+    and deleted=0
+  </select>
+
   <select id="selectByExample" parameterType="com.cskaoyan.bean.sys.PermissionExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

@@ -19,6 +19,17 @@ public class Permission {
 
     private Boolean deleted;
 
+    public Permission() {
+    }
+
+    public Permission(Integer roleId, String permission, Date addTime, Date updateTime, Boolean deleted) {
+        this.roleId = roleId;
+        this.permission = permission;
+        this.addTime = addTime;
+        this.updateTime = updateTime;
+        this.deleted = deleted;
+    }
+
     public Integer getId() {
         return id;
     }

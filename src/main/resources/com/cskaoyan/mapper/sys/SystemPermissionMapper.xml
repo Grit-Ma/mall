@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cskaoyan.mapper.sys.SystemPermissionMapper">
+    <resultMap id="BaseResultMap" type="com.cskaoyan.bean.sys.SystemPermission">
+        <result column="sid" jdbcType="VARCHAR" property="id"/>
+        <result column="slabel" jdbcType="VARCHAR" property="label"/>
+        <collection property="children" ofType="com.cskaoyan.bean.sys.TypePermission">
+            <result property="id" column="tid"/>
+            <result property="label" column="tlabel"/>
+            <collection property="children" ofType="com.cskaoyan.bean.sys.ItemPermission">
+                <result property="id" column="iid"/>
+                <result property="label" column="ilabel"/>
+                <result property="api" column="iapi"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+
+    <select id="queryAllSystemPermissions" resultMap="BaseResultMap">
+        select
+        s.id as sid,s.label as slabel,
+        t.permission_type_id as tid,t.permission_type_label as tlabel,
+        i.id as iid,i.label as ilabel,i.api as iapi
+        from cskaoyan_mall_systempermission s
+        left join cskaoyan_mall_typepermission t on s.sid=t.sid
+        left join cskaoyan_mall_itempermission i on i.tid=t.id
+    </select>
+</mapper>

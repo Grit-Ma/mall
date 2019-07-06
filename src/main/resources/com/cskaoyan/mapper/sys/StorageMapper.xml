@@ -89,11 +89,10 @@
         </if>
         <if test="sort!=null and sort!=''">
             order by #{sort}
+            <if test="order!=null and order!=''">
+                #{order}
+            </if>
         </if>
-        <if test="order!=null and order!=''">
-            #{order}
-        </if>
-
     </select>
 
 

@@ -98,9 +98,9 @@
     where deleted=0 and username like concat('%',#{username},'%')
     <if test="sort!=null and sort!=''">
       order by #{sort}
-    </if>
-    <if test="order!=null and order!=''">
-      #{order}
+      <if test="order!=null and order!=''">
+        #{order}
+      </if>
     </if>
   </select>
 

@@ -1,12 +1,11 @@
 package com.cskaoyan.controller.sys;
 
-import com.cskaoyan.bean.sys.Admin;
-import com.cskaoyan.bean.sys.Label;
-import com.cskaoyan.bean.sys.Log;
-import com.cskaoyan.bean.sys.Role;
+import com.cskaoyan.bean.sys.*;
 import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.service.sys.AdminService;
+import com.cskaoyan.service.sys.PermissionService;
 import com.cskaoyan.service.sys.RoleService;
+import com.cskaoyan.service.sys.SystemPermissionService;
 import com.cskaoyan.tool.WrapTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +26,10 @@ public class RoleController {
     RoleService roleService;
     @Autowired
     AdminService adminService;
+    @Autowired
+    PermissionService permissionService;
+    @Autowired
+    SystemPermissionService systemPermissionService;
 
     @RequestMapping("/role/list")
     @ResponseBody
@@ -86,9 +89,25 @@ public class RoleController {
     }
 
 
-//    @RequestMapping("/role/permissions")
-//    @ResponseBody
-//    public HashMap permissionsRole(int roleId){
-//
-//    }
+    @RequestMapping("role/permissions")
+    @ResponseBody
+    public HashMap permissionsToUpdate(@RequestBody UpdatePermission updatePermission){
+        int i = permissionService.updateRolePermissions(updatePermission.getRoleId(), updatePermission.getPermissions());
+        if(i==1){
+            return WrapTool.setResponseSuccessWithNoData();
+        }
+        return WrapTool.setResponseFailure(2,"更新失败！");
+    }
+
+    
+    @RequestMapping(value = "role/permissions",params = {"roleId"})
+    @ResponseBody
+    public HashMap permissionsRole(@RequestParam("roleId") int roleId){
+        List<String> assignedPermissions = permissionService.selectPermissions(roleId);
+        List<SystemPermission> systemPermissions = systemPermissionService.queryAllSystemPermissions();
+        PermissionData permissionData = new PermissionData();
+        permissionData.setAssignedPermissions(assignedPermissions);
+        permissionData.setSystemPermissions(systemPermissions);
+        return WrapTool.setResponseSuccess(permissionData);
+    }
 }

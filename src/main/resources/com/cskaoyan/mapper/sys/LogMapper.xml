@@ -86,9 +86,9 @@
     deleted=0
     <if test="sort!=null and sort!=''">
       order by #{sort}
-    </if>
-    <if test="order!=null and order!=''">
-      #{order}
+      <if test="order!=null and order!=''">
+        #{order}
+      </if>
     </if>
   </select>
 

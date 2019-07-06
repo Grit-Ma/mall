@@ -34,4 +34,6 @@ public interface RoleMapper {
     int updateByPrimaryKeySelective(Role record);
 
     int updateByPrimaryKey(Role record);
+
+    List<String> selectPermissions(@Param("id") int roleId);
 }
