@@ -21,7 +21,7 @@ public class AdController {
     @Autowired
     AdService adService;
 
-    @RequestMapping("admin/ad/list")
+    @RequestMapping("ad/list")
     @ResponseBody
     public ResponseVO list( int page, int limit, String sort, String order, String name, String content) {
         ResponseVO vo = new ResponseVO();
@@ -45,7 +45,7 @@ public class AdController {
         return vo;
     }
 
-    @PostMapping("admin/ad/update")
+    @PostMapping("ad/update")
     @ResponseBody
     public ResponseVO update(@RequestBody Ad ad) {
         ResponseVO vo = new ResponseVO();
@@ -53,11 +53,19 @@ public class AdController {
         return vo;
     }
 
-    @PostMapping("admin/ad/delete")
+    @PostMapping("ad/delete")
     @ResponseBody
     public ResponseVO delete(@RequestBody Ad ad) {
         ResponseVO vo = new ResponseVO();
         vo = adService.deleteAd(ad);
+        return vo;
+    }
+
+    @PostMapping("ad/create")
+    @ResponseBody
+    public ResponseVO insert(@RequestBody Ad ad) {
+        ResponseVO vo = new ResponseVO();
+        vo = adService.insertAd(ad);
         return vo;
     }
 }

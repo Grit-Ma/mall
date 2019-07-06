@@ -541,4 +541,67 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <resultMap id="OrderDetail" type="com.cskaoyan.bean.mallmanage.order.OrderDetail">
+    <collection property="user" ofType="com.cskaoyan.bean.User">
+      <result property="nickname" column="nickname"/>
+      <result property="avatar" column="avatar"/>
+    </collection>
+    <collection property="orderGoods" ofType="com.cskaoyan.bean.OrderGoods">
+      <id column="ordergoodsid" jdbcType="INTEGER" property="id" />
+      <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+      <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+      <result column="goods_sn" jdbcType="VARCHAR" property="goodsSn" />
+      <result column="product_id" jdbcType="INTEGER" property="productId" />
+      <result column="number" jdbcType="SMALLINT" property="number" />
+      <result column="price" jdbcType="DECIMAL" property="price" />
+      <result column="specifications" jdbcType="VARCHAR" property="specifications" />
+      <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+      <result column="comment" jdbcType="INTEGER" property="comment" />
+      <result column="ordergoodsaddtime" jdbcType="TIMESTAMP" property="addTime" />
+      <result column="orderupdatetime" jdbcType="TIMESTAMP" property="updateTime" />
+    </collection>
+    <collection property="order" ofType="com.cskaoyan.bean.Order">
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="user_id" jdbcType="INTEGER" property="userId" />
+      <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
+      <result column="order_status" jdbcType="SMALLINT" property="orderStatus" />
+      <result column="consignee" jdbcType="VARCHAR" property="consignee" />
+      <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+      <result column="address" jdbcType="VARCHAR" property="address" />
+      <result column="message" jdbcType="VARCHAR" property="message" />
+      <result column="goods_price" jdbcType="DECIMAL" property="goodsPrice" />
+      <result column="freight_price" jdbcType="DECIMAL" property="freightPrice" />
+      <result column="coupon_price" jdbcType="DECIMAL" property="couponPrice" />
+      <result column="integral_price" jdbcType="DECIMAL" property="integralPrice" />
+      <result column="groupon_price" jdbcType="DECIMAL" property="grouponPrice" />
+      <result column="order_price" jdbcType="DECIMAL" property="orderPrice" />
+      <result column="actual_price" jdbcType="DECIMAL" property="actualPrice" />
+      <result column="pay_id" jdbcType="VARCHAR" property="payId" />
+      <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+      <result column="ship_sn" jdbcType="VARCHAR" property="shipSn" />
+      <result column="ship_channel" jdbcType="VARCHAR" property="shipChannel" />
+      <result column="ship_time" jdbcType="TIMESTAMP" property="shipTime" />
+      <result column="confirm_time" jdbcType="TIMESTAMP" property="confirmTime" />
+      <result column="comments" jdbcType="SMALLINT" property="comments" />
+      <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+      <result column="ordergoodsaddtime" jdbcType="TIMESTAMP" property="addTime" />
+      <result column="ordergoodsupdatetime" jdbcType="TIMESTAMP" property="updateTime" />
+    </collection>
+  </resultMap>
+
+  <select id="selectOrderDetailById" resultMap="OrderDetail">
+        select
+        malluser.nickname,malluser.avatar,
+         mallorder.id, mallorder.user_id, mallorder.order_sn, mallorder.order_status, mallorder.consignee, mallorder.mobile, mallorder.address, mallorder.message, mallorder.goods_price, mallorder.
+            freight_price, mallorder.coupon_price, mallorder.integral_price, mallorder.groupon_price, mallorder.order_price, mallorder.actual_price, mallorder.
+            pay_id, mallorder.pay_time, mallorder.ship_sn, mallorder.ship_channel, mallorder.ship_time, mallorder.confirm_time, mallorder.comments, mallorder.end_time, mallorder.
+            add_time as orderaddtime, mallorder.update_time as orderupdatetime,
+        		 ordergoods.id as ordergoodsid  ,ordergoods.order_id ,ordergoods.goods_id ,ordergoods.goods_name ,ordergoods.goods_sn ,ordergoods.product_id ,ordergoods.number ,ordergoods.price ,ordergoods.			  specifications ,ordergoods.
+            pic_url ,ordergoods.comment ,ordergoods.add_time as ordergoodsaddtime ,ordergoods.update_time as ordergoodsupdatetime
+        from cskaoyan_mall_order as mallorder
+        LEFT JOIN cskaoyan_mall_user as malluser on mallorder.user_id = malluser.id
+        LEFT JOIN cskaoyan_mall_order_goods as ordergoods on ordergoods.order_id = mallorder.id
+        where mallorder.deleted = false and mallorder.id = #{id}
+  </select>
 </mapper>

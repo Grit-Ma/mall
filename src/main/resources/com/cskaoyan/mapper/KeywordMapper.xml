@@ -104,7 +104,10 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.cskaoyan.bean.Keyword">
+  <insert id="insert" parameterType="com.cskaoyan.bean.Keyword" useGeneratedKeys="true">
+    <selectKey resultType="_int" keyProperty="id" order="AFTER">
+      select last_insert_id()
+    </selectKey>
     insert into cskaoyan_mall_keyword (id, keyword, url, 
       is_hot, is_default, sort_order, 
       add_time, update_time, deleted

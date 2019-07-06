@@ -1,8 +1,3 @@
-pagehelper:
-  helperDialect: mysql
-  reasonable: true
-  supportMethodsArguments: true
-
 Spring:
   datasource:
     username: root
@@ -10,16 +5,18 @@ Spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/mall?useUnicode=true&characterEncoding=utf-8
 
-  http:
-    encoding:
-      charset: UTF-8
-      force: true
-      enabled: true
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
 
 server:
   port: 80
   servlet:
-    context-path: /
+    context-path: /admin
 
-  tomcat:
-    uri-encoding: UTF-8
+myoss:
+  bucket: project-mall
+  endpoint: oss-cn-beijing.aliyuncs.com
+  accesskey: LTAIxnp89MtwEeiY
+  secret: jLXWqpMRiADW0deKzKn3kft8u1hfxq

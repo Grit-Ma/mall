@@ -209,4 +209,35 @@
       code = #{code,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <resultMap id="regionMap" type="com.cskaoyan.bean.mallmanage.region.Province">
+    <result property="id" column="provinceid"/>
+    <result property="name" column="provincename"/>
+    <result property="type" column="provincetype"/>
+    <result property="code" column="provincecode"/>
+    <collection property="children" ofType="com.cskaoyan.bean.mallmanage.region.City">
+      <result property="id" column="cityid"/>
+      <result property="name" column="cityname"/>
+      <result property="type" column="citytype"/>
+      <result property="code" column="citycode"/>
+      <collection property="children" ofType="com.cskaoyan.bean.mallmanage.region.County">
+        <result property="id" column="countyid"/>
+        <result property="name" column="countyname"/>
+        <result property="type" column="countytype"/>
+        <result property="code" column="countycode"/>
+      </collection>
+    </collection>
+  </resultMap>
+
+  <select id="selectRegion" resultMap="regionMap">
+    select
+     province.id as provinceid,province.name as provincename ,province.type as provincetype,province.code as provincecode,
+     city.id as cityid,city.name as cityname ,city.type as citytype,city.code as citycode,
+     county.id as countyid,county.name as countyname ,county.type as countytype,county.code as countycode
+     from
+     cskaoyan_mall_region as province,cskaoyan_mall_region city,cskaoyan_mall_region as county
+     where
+     province.id = city.pid and
+     city.id = county.pid
+  </select>
 </mapper>
