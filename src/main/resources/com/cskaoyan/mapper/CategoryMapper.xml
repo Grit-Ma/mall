@@ -365,4 +365,11 @@
     insert into cskaoyan_mall_category (`desc`,icon_url,keywords,level,name,pic_url,pid,add_time,update_time)
     values(#{category.desc},#{category.iconUrl},#{category.keywords},#{category.level},#{category.name},#{category.picUrl},#{category.pid},#{category.addTime},#{category.updateTime})
   </insert>
+  <resultMap id="ids" type="map">
+    <id column="id" jdbcType="INTEGER" property="idb" />
+    <result column="pid" jdbcType="INTEGER" property="ida" />
+  </resultMap>
+  <select id="getCategoryIds" resultMap="ids">
+    select id,pid from cskaoyan_mall_category where id = #{categoryId}
+  </select>
 </mapper>

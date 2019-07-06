@@ -6,6 +6,7 @@ import com.cskaoyan.bean.mallmanage.category.CategoryL1;
 import com.cskaoyan.bean.mallmanage.category.CategoryList;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface CategoryMapper {
@@ -36,4 +37,6 @@ public interface CategoryMapper {
     List<CategoryL1> selectCategoryL1();
 
     int createCategory(@Param("category") Category category);
+
+    HashMap getCategoryIds(Integer categoryId);
 }
