@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.InvalidParameterException;
+import java.util.HashMap;
 
 
 @Controller
@@ -118,8 +119,10 @@ public class GoodsController {
 
     @RequestMapping("order/reply")
     @ResponseBody
-    public ResponseVO reply(int commentId ,String content){
+    public ResponseVO reply(@RequestBody HashMap<String,Object> map){
         ResponseVO vo = new ResponseVO();
+        int commentId = (int) map.get("commentId");
+        String content = ((String) map.get("content"));
         //缺少商品评论回复表
         vo.setErrmsg("订单商品已回复");
         vo.setErrno(622);

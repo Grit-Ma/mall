@@ -57,7 +57,7 @@ public class GoodServiceImpl implements GoodService {
                 throw new InvalidParameterException("参数错误：userId = "+ userId);
             }
         }
-        if(valueId != null){
+        if(valueId != null && !valueId.isEmpty()){
             try{
                 criteria.andValueIdEqualTo(Integer.valueOf(valueId));
             }catch (NumberFormatException e){
