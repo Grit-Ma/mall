@@ -28,7 +28,7 @@ public class PermissionServiceImpl implements PermissionService {
         PermissionExample example = new PermissionExample();
         example.createCriteria().andRoleIdEqualTo(roleId).andPermissionNotIn(permissions);
         Permission permission = new Permission();
-        permission.setDeleted(false);
+        permission.setDeleted(true);
         permission.setUpdateTime(new Date());
         permissionMapper.updateByExampleSelective(permission, example);
 

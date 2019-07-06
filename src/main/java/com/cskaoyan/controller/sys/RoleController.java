@@ -99,7 +99,7 @@ public class RoleController {
         return WrapTool.setResponseFailure(2,"更新失败！");
     }
 
-    
+
     @RequestMapping(value = "role/permissions",params = {"roleId"})
     @ResponseBody
     public HashMap permissionsRole(@RequestParam("roleId") int roleId){
