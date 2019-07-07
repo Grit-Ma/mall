@@ -28,21 +28,23 @@ public class RoleController {
     @Autowired
     SystemPermissionService systemPermissionService;
 
-//    @RequiresPermissions(value = "admin:role:list")
+    @RequiresPermissions(value = "admin:role:list")
     @GetMapping("/role/list")
-    public HashMap queryRolesList(@RequestParam("page") int page, @RequestParam("limit") int limit, String name, String sort, String order) {
+    public HashMap queryRolesList(@RequestParam(value = "page",defaultValue = "1")int page,
+                                  @RequestParam(value = "limit",defaultValue = "20")int limit,
+                                  String name, String sort, String order) {
         PageData pageData = roleService.fuzzyQueryByName(page, limit, name, sort, order);
         return WrapTool.setResponseSuccess(pageData);
     }
 
-//    @RequiresPermissions(value = "admin:role:read")
+    @RequiresPermissions(value = "admin:role:read")
     @GetMapping("role/options")
     public HashMap queryRoles() {
         List<Label> labels = roleService.selectAllRoleOptions();
         return WrapTool.setResponseSuccess(labels);
     }
 
-//    @RequiresPermissions(value = "admin:role:update")
+    @RequiresPermissions(value = "admin:role:update")
     @PostMapping("/role/update")
     public HashMap updateRoles(@RequestBody Role role) {
         role.setUpdateTime(new Date());
@@ -52,11 +54,11 @@ public class RoleController {
         } else if (i == 3) {
             return WrapTool.setResponseFailure(502, "系统内部错误");
         } else {
-            return WrapTool.setResponseFailure(2, "更新失败！");
+            return WrapTool.setResponseFailure(401, "参数不对");
         }
     }
 
-//    @RequiresPermissions(value = "admin:role:delete")
+    @RequiresPermissions(value = "admin:role:delete")
     @PostMapping("/role/delete")
     public HashMap deleteAdmin(@RequestBody Role role, BindingResult bindingResult) {
         int i = roleService.delete(role);
@@ -64,11 +66,11 @@ public class RoleController {
             adminService.updateRoleIds(role.getId());
             return WrapTool.setResponseSuccessWithNoData();
         } else {
-            return WrapTool.setResponseFailure(3, "删除失败！");
+            return WrapTool.setResponseFailure(401, "参数不对");
         }
     }
 
-//    @RequiresPermissions(value = "admin:role:create")
+    @RequiresPermissions(value = "admin:role:create")
     @PostMapping("role/create")
     public HashMap createRole(@RequestBody Role role) {
         role.setAddTime(new Date());
@@ -81,21 +83,21 @@ public class RoleController {
         } else if (i == 3) {
             return WrapTool.setResponseFailure(502, "系统内部错误");
         }
-        return WrapTool.setResponseFailure(1, "添加失败！");
+        return WrapTool.setResponseFailure(401, "参数不对");
     }
 
-//    @RequiresPermissions(value = "admin:role:permission:update")
+    @RequiresPermissions(value = "admin:role:permission:update")
     @PostMapping("role/permissions")
     public HashMap permissionsToUpdate(@RequestBody UpdatePermission updatePermission) {
         int i = permissionService.updateRolePermissions(updatePermission.getRoleId(), updatePermission.getPermissions());
         if (i == 1) {
             return WrapTool.setResponseSuccessWithNoData();
         }
-        return WrapTool.setResponseFailure(2, "更新失败！");
+        return WrapTool.setResponseFailure(401, "参数不对");
     }
 
 
-//    @RequiresPermissions(value = "admin:role:permission:get")
+    @RequiresPermissions(value = "admin:role:permission:get")
     @GetMapping("role/permissions")
     public HashMap permissionsRole(@RequestParam("roleId") int roleId) {
         List<String> assignedPermissions = permissionService.selectPermissions(roleId);

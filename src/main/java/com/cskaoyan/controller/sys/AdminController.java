@@ -29,9 +29,11 @@ public class AdminController {
     @Autowired
     RoleService roleService;
 
-//    @RequiresPermissions(value = "admin:admin:list")
+    @RequiresPermissions(value = "admin:admin:list")
     @GetMapping("admin/list")
-    public HashMap queryAdmin(@RequestParam("page") int page, @RequestParam("limit") int limit, String username, String sort, String order) {
+    public HashMap queryAdmin(@RequestParam(value = "page",defaultValue = "1") int page,
+                              @RequestParam(value = "limit",defaultValue = "20") int limit,
+                              String username, String sort, String order) {
         PageData pageData;
         if (username != null) {
             pageData = adminService.fuzzyQueryByName(page, limit, username, sort, order);
@@ -41,7 +43,7 @@ public class AdminController {
         return WrapTool.setResponseSuccess(pageData);
     }
 
-//    @RequiresPermissions(value = "admin:admin:create")
+    @RequiresPermissions(value = "admin:admin:create")
     @PostMapping("admin/create")
     public HashMap createAdmin(@Validated @RequestBody Admin admin) {
         //先进行验证
@@ -63,7 +65,7 @@ public class AdminController {
         return WrapTool.setResponseSuccess(admin);
     }
 
-//    @RequiresPermissions(value = "admin:admin:update")
+    @RequiresPermissions(value = "admin:admin:update")
     @PostMapping("admin/update")
     public HashMap updateAdmin(@Validated @RequestBody Admin admin) {
         HashMap notValid = validateAdmin(admin);
@@ -75,7 +77,7 @@ public class AdminController {
         return WrapTool.setResponseSuccess(admin);
     }
 
-//    @RequiresPermissions(value = "admin:admin:delete")
+    @RequiresPermissions(value = "admin:admin:delete")
     @PostMapping("/admin/delete")
     public HashMap deleteAdmin(@RequestBody Admin admin) {
         Integer anotherAdminId = admin.getId();
@@ -83,8 +85,8 @@ public class AdminController {
             return WrapTool.setResponseFailure(401, "参数不对");
         }
         // 管理员不能删除自身账号!!
-        Subject currentUser = SecurityUtils.getSubject();
-        Admin currentAdmin = (Admin) currentUser.getPrincipal();
+        Subject subject = SecurityUtils.getSubject();
+        Admin currentAdmin = (Admin) subject.getPrincipal();
         if (currentAdmin.getId().equals(anotherAdminId)) {
             return WrapTool.setResponseFailure(ADMIN_DELETE_NOT_ALLOWED, "管理员不能删除自己账号");
         }
@@ -92,6 +94,9 @@ public class AdminController {
         return WrapTool.setResponseSuccessWithNoData();
     }
 
+
+
+    //在创建和更新账户之前先完成验证
     public HashMap validateAdmin(Admin admin) {
         String name = admin.getUsername();
         if (StringUtils.isEmpty(name) || !RegexUtil.isUsername(name)) {

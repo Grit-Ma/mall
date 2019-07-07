@@ -15,9 +15,11 @@ public class LogController {
     @Autowired
     LogService logService;
 
-//    @RequiresPermissions(value = "admin:log:list")
+    @RequiresPermissions(value = "admin:log:list")
     @GetMapping("/log/list")
-    public HashMap queryAdmin(@RequestParam("page") int page, @RequestParam("limit")int limit, String name,String sort,String order) {
+    public HashMap queryAdmin(@RequestParam(value = "page",defaultValue = "1")int page,
+                              @RequestParam(value = "limit",defaultValue = "20")int limit,
+                              String name,String sort,String order) {
         PageData pageData = logService.fuzzyQueryByName(page, limit, name, sort, order);
         return WrapTool.setResponseSuccess(pageData);
     }
