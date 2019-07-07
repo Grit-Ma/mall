@@ -26,6 +26,15 @@ public class PermissionServiceImpl implements PermissionService {
     @Transactional
     public int updateRolePermissions(int roleId, List<String> permissions) {
         PermissionExample example = new PermissionExample();
+
+        //当获取的权限list是空
+        if(permissions==null||permissions.isEmpty()){
+            example.createCriteria().andRoleIdEqualTo(roleId);
+            permissionMapper.deleteByExample(example);
+            return 1;
+        }
+
+        example= new PermissionExample();
         example.createCriteria().andRoleIdEqualTo(roleId).andPermissionNotIn(permissions);
         Permission permission = new Permission();
         permission.setDeleted(true);
@@ -33,9 +42,9 @@ public class PermissionServiceImpl implements PermissionService {
         permissionMapper.updateByExampleSelective(permission, example);
 
         for(String s:permissions){
-            PermissionExample e = new PermissionExample();
-            e.createCriteria().andPermissionEqualTo(s).andRoleIdEqualTo(roleId);
-            List<Permission> permissions1 = permissionMapper.selectByExample(e);
+            example = new PermissionExample();
+            example.createCriteria().andPermissionEqualTo(s).andRoleIdEqualTo(roleId);
+            List<Permission> permissions1 = permissionMapper.selectByExample(example);
             if(permissions1.isEmpty()){
                 Permission p = new Permission(roleId, s, new Date(), new Date(), false);
                 permissionMapper.insertSelective(p);

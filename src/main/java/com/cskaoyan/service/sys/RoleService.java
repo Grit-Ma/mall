@@ -21,4 +21,5 @@ public interface RoleService {
 
     int createRole(Role role);
 
+    List<String> queryByIds(int[] roleIds);
 }

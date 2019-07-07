@@ -10,11 +10,8 @@ import java.util.Date;
 public class Admin {
     private Integer id;
 
-    @NotNull(message = "管理员名称不能为空！管理员名称不符合规定")
     private String username;
 
-    @NotEmpty
-    @Size(min = 6 ,message = "管理员密码长度不能小于6")
     private String password;
 
     private String lastLoginIp;

@@ -4,25 +4,24 @@ import com.cskaoyan.bean.sys.Admin;
 import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.service.sys.AdminService;
 import com.cskaoyan.service.sys.RoleService;
+import com.cskaoyan.tool.RegexUtil;
 import com.cskaoyan.tool.WrapTool;
 import io.swagger.annotations.Api;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
+import static com.cskaoyan.bean.ResponseFailureCode.*;
 
 
-@Controller
-@Api(tags = "sysAdminTags",value = "AdminValue")
+@RestController
+@Api(tags = "sysAdminTags", value = "AdminValue")
 public class AdminController {
 
     @Autowired
@@ -30,77 +29,81 @@ public class AdminController {
     @Autowired
     RoleService roleService;
 
-    @RequestMapping("admin/list")
-    @ResponseBody
-    public HashMap queryAdmin(@RequestParam("page") int page, @RequestParam("limit")int limit, String username,String sort,String order) {
+//    @RequiresPermissions(value = "admin:admin:list")
+    @GetMapping("admin/list")
+    public HashMap queryAdmin(@RequestParam("page") int page, @RequestParam("limit") int limit, String username, String sort, String order) {
         PageData pageData;
         if (username != null) {
-            pageData = adminService.fuzzyQueryByName(page, limit, username,sort,order);
+            pageData = adminService.fuzzyQueryByName(page, limit, username, sort, order);
         } else {
             pageData = adminService.selectAll(page, limit);
         }
         return WrapTool.setResponseSuccess(pageData);
     }
 
-
-
-    @RequestMapping("admin/create")
-    @ResponseBody
-    public HashMap createAdmin(@Validated @RequestBody Admin admin, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-//            responseVo.setErrorNo(1);
-//            FieldError fieldError = bindingResult.getFieldError();
-//            //校验通过的成员变量名
-//            String field = fieldError.getField();
-//            String defaultMessage = fieldError.getDefaultMessage();
-//            responseVo.setMessage(defaultMessage);
-//            return responseVo;
-            List<ObjectError> allErrors = bindingResult.getAllErrors();
-            for (ObjectError o : allErrors) {
-                String defaultMessage = o.getDefaultMessage();
-                WrapTool.setResponseFailure(601, defaultMessage);
-            }
+//    @RequiresPermissions(value = "admin:admin:create")
+    @PostMapping("admin/create")
+    public HashMap createAdmin(@Validated @RequestBody Admin admin) {
+        //先进行验证
+        HashMap notValid = validateAdmin(admin);
+        if (!notValid.isEmpty()) {
+            return notValid;
         }
         admin.setAddTime(new Date());
         admin.setUpdateTime(new Date());
         admin.setDeleted(false);
-        int i = adminService.addAdmin(admin);
-        if (i == 1) {
-            return WrapTool.setResponseSuccess(admin);
-        } else {
-            return WrapTool.setResponseFailure(1, "添加失败！");
-        }
+
+        //进行密码加密
+//        String password = admin.getPassword();
+//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//        String encodedPassword = encoder.encode(password);
+//        admin.setPassword(encodedPassword);
+
+        adminService.addAdmin(admin);
+        return WrapTool.setResponseSuccess(admin);
     }
 
-    @RequestMapping("admin/update")
-    @ResponseBody
-    public HashMap updateAdmin(@Validated @RequestBody Admin admin, BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            List<ObjectError> allErrors = bindingResult.getAllErrors();
-//            for (ObjectError o : allErrors) {
-//                String defaultMessage = o.getDefaultMessage();
-//                WrapTool.setResponseFailure(601, defaultMessage);
-//            }
-//        }
+//    @RequiresPermissions(value = "admin:admin:update")
+    @PostMapping("admin/update")
+    public HashMap updateAdmin(@Validated @RequestBody Admin admin) {
+        HashMap notValid = validateAdmin(admin);
+        if (!notValid.isEmpty()) {
+            return notValid;
+        }
         admin.setUpdateTime(new Date());
-        int i = adminService.updateByPrimaryKey(admin);
-        if (i == 1) {
-            return WrapTool.setResponseSuccess(admin);
-        }else {
-            return WrapTool.setResponseFailure(2,"更新失败！");
-        }
+        adminService.updateByPrimaryKey(admin);
+        return WrapTool.setResponseSuccess(admin);
     }
 
-    @RequestMapping("/admin/delete")
-    @ResponseBody
+//    @RequiresPermissions(value = "admin:admin:delete")
+    @PostMapping("/admin/delete")
     public HashMap deleteAdmin(@RequestBody Admin admin) {
-        int i = adminService.delete(admin);
-        if (i == 1) {
-            return WrapTool.setResponseSuccessWithNoData();
-        }else {
-            return WrapTool.setResponseFailure(3,"删除失败！");
+        Integer anotherAdminId = admin.getId();
+        if (anotherAdminId == null) {
+            return WrapTool.setResponseFailure(401, "参数不对");
         }
+        // 管理员不能删除自身账号!!
+        Subject currentUser = SecurityUtils.getSubject();
+        Admin currentAdmin = (Admin) currentUser.getPrincipal();
+        if (currentAdmin.getId().equals(anotherAdminId)) {
+            return WrapTool.setResponseFailure(ADMIN_DELETE_NOT_ALLOWED, "管理员不能删除自己账号");
+        }
+        adminService.delete(admin);
+        return WrapTool.setResponseSuccessWithNoData();
     }
 
+    public HashMap validateAdmin(Admin admin) {
+        String name = admin.getUsername();
+        if (StringUtils.isEmpty(name) || !RegexUtil.isUsername(name)) {
+            return WrapTool.setResponseFailure(ADMIN_INVALID_NAME, "管理员名称不符合规定");
+        }
+        String password = admin.getPassword();
+        if (StringUtils.isEmpty(password) || password.length() < 6) {
+            return WrapTool.setResponseFailure(ADMIN_INVALID_PASSWORD, "管理员密码长度不能小于6");
+        }
+        if (!adminService.adminNotExist(admin)) {
+            return WrapTool.setResponseFailure(ADMIN_NAME_EXIST, "管理员已经存在");
+        } else return new HashMap();
+    }
 
 }

@@ -8,6 +8,8 @@ import com.cskaoyan.tool.WrapTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -47,7 +49,7 @@ public class RoleServiceImpl implements RoleService {
             criteria.andIdNotEqualTo(role.getId());  //注意当仅仅更新操作，通过自身id判断相同名字的是不是自己
         }
         List<Role> roles = roleMapper.selectByExample(roleExample);
-        if(roles.isEmpty()){
+        if(roles.isEmpty()||roles==null){
             return true;
         }else return false;
     }
@@ -65,6 +67,16 @@ public class RoleServiceImpl implements RoleService {
         }else {
             return 3;
         }
+    }
+
+    //返回的是根据roleids，查找role名字的集合;用于shiro的realm中授权添加角色
+    @Override
+    public List<String> queryByIds(int[] roleIds) {
+        ArrayList<String> roles = new ArrayList<>();
+        for (int id:roleIds) {
+          roles.add(roleMapper.selectByPrimaryKey(id).getName());
+      }
+        return roles;
     }
 
 }

@@ -1,42 +1,75 @@
 package com.cskaoyan.controller;
 
-import com.cskaoyan.bean.vo.ResponseVO;
-import org.springframework.stereotype.Controller;
+import com.cskaoyan.bean.sys.Admin;
+import com.cskaoyan.bean.sys.LoginMessage;
+import com.cskaoyan.service.sys.AdminService;
+import com.cskaoyan.service.sys.PermissionService;
+import com.cskaoyan.service.sys.RoleService;
+import com.cskaoyan.tool.IpUtil;
+import com.cskaoyan.tool.WrapTool;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
-@Controller
+@RestController
 public class HelloController {
+    @Autowired
+    AdminService adminService;
+    @Autowired
+    RoleService roleService;
+    @Autowired
+    PermissionService permissionService;
     //admin/auth/login   模拟登录
     @RequestMapping("auth/login")
-    @ResponseBody
-    public ResponseVO hello(){
-        ResponseVO<Object> vo = new ResponseVO<>();
-        vo.setErrno(0);
-        vo.setErrmsg("成功");
-        vo.setData("8620b982-4c6c-4363-80f5-76d105b8e3dc");
-        return vo;
+    public HashMap hello(@RequestBody LoginMessage loginMessage, HttpServletRequest request){
+        Subject subject = SecurityUtils.getSubject();
+        try {
+            subject.login(new UsernamePasswordToken(loginMessage.getUsername(),loginMessage.getPassword()));
+            Admin admin=adminService.selectByName(loginMessage.getUsername());
+            admin.setLastLoginTime(new Date());
+            admin.setLastLoginIp(IpUtil.getIpAddr(request));
+            adminService.updateByPrimaryKey(admin);
+
+            Map<Object, Object> result = new HashMap<Object, Object>();
+            result.put("token", subject.getSession().getId());
+            return WrapTool.setResponseSuccess(result);
+        }catch (Exception e)
+        {
+            return WrapTool.setResponseFailure(404,"登陆错误");
+        }
     }
-    @RequestMapping("auth/info")
-    @ResponseBody
-    public ResponseVO hello2(){
-        ResponseVO<Object> vo = new ResponseVO<>();
-        vo.setErrno(0);
-        vo.setErrmsg("成功");
-        HashMap<String, Object> map = new HashMap<>();
-        ArrayList<Object> roles = new ArrayList<>();
-        roles.add("超级管理员");
-        ArrayList<Object> perms = new ArrayList<>();
-        perms.add("*");
-        map.put("roles",roles);
-        map.put("name","admin123");
-        map.put("perms",perms);
-        map.put("avatar","https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
-        vo.setData(map);
-        return vo;
+
+//    @RequiresAuthentication
+    @GetMapping("auth/info")
+    public HashMap hello2(String token){
+//        Subject subject = SecurityUtils.getSubject();
+//        Admin admin1 = (Admin) subject.getPrincipal();
+        Admin admin=adminService.selectByName("admin123");
+        Map<String, Object> data = new HashMap<>();
+        data.put("name", admin.getUsername());
+        data.put("avatar", admin.getAvatar());
+
+        int[] roleIds = admin.getRoleIds();
+        List<String> roles=roleService.queryByIds(roleIds); //注意得到的是role"名字"的集合
+
+//        //获得所有详细权限的list
+//        List<String> permissions = new ArrayList<>();
+//        for (int i = 0; i <roleIds.length ; i++) {
+//            List<String> selectPermissions = permissionService.selectPermissions(roleIds[i]);
+//            permissions.addAll(selectPermissions);
+//        }
+        data.put("roles", roles);
+        data.put("perms", "*");
+        return WrapTool.setResponseSuccess(data);
     }
 
 }

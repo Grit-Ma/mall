@@ -6,12 +6,10 @@ import com.cskaoyan.bean.sys.UpStorage;
 import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.service.sys.StorageService;
 import com.cskaoyan.tool.WrapTool;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -19,7 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-@Controller
+@RestController
 public class FileController {
 
     @Autowired
@@ -27,9 +25,8 @@ public class FileController {
     @Autowired
     StorageService storageService;
 
-
-    @RequestMapping("storage/create")
-    @ResponseBody
+//    @RequiresPermissions(value = "admin:storage:create")
+    @PostMapping("storage/create")
     public HashMap fileUpload(MultipartFile file) throws IOException {
         Storage storage = myOssClient.fileUpLoad(file);
         int i =storageService.insertStorage(storage);
@@ -40,16 +37,16 @@ public class FileController {
         }
     }
 
-    @RequestMapping("storage/list")
-    @ResponseBody
+//    @RequiresPermissions(value = "admin:storage:list")
+    @GetMapping("storage/list")
     public HashMap storeList(@RequestParam int page,@RequestParam int limit,String key,String name,String sort,String order){
         List<Storage> storages = storageService.fuzzyQuery(key, name, sort, order);
         PageData pageData = WrapTool.setPageData(page, limit, storages);
         return WrapTool.setResponseSuccess(pageData);
     }
 
-    @RequestMapping("storage/update")
-    @ResponseBody
+//    @RequiresPermissions(value = "admin:role:update")
+    @PostMapping("storage/update")
     public HashMap updateStorage(@RequestBody Storage storage){
         storage.setUpdateTime(new Date());
         int i = storageService.updateStorage(storage);
@@ -60,8 +57,8 @@ public class FileController {
         }
     }
 
-    @RequestMapping("storage/delete")
-    @ResponseBody
+//    @RequiresPermissions(value = "admin:storage:delete")
+    @PostMapping("storage/delete")
     public HashMap deleteStorage(@RequestBody Storage storage){
         storage.setDeleted(true);
         int i = storageService.updateStorage(storage);
