@@ -3,22 +3,27 @@ package com.cskaoyan.controller;
 import com.cskaoyan.bean.sys.Admin;
 import com.cskaoyan.bean.sys.LoginMessage;
 import com.cskaoyan.service.sys.AdminService;
+import com.cskaoyan.service.sys.LogService;
 import com.cskaoyan.service.sys.PermissionService;
 import com.cskaoyan.service.sys.RoleService;
 import com.cskaoyan.tool.IpUtil;
+import com.cskaoyan.tool.LogRecording;
 import com.cskaoyan.tool.WrapTool;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+
+import static com.cskaoyan.bean.LogType.ADMIN_LOGIN;
 
 @RestController
 public class HelloController {
@@ -27,49 +32,62 @@ public class HelloController {
     @Autowired
     RoleService roleService;
     @Autowired
+    LogService logService;
+    @Autowired
     PermissionService permissionService;
-    //admin/auth/login   模拟登录
+
     @RequestMapping("auth/login")
-    public HashMap hello(@RequestBody LoginMessage loginMessage, HttpServletRequest request){
+    public HashMap hello(@RequestBody LoginMessage loginMessage, HttpServletRequest request) {
         Subject subject = SecurityUtils.getSubject();
         try {
-            subject.login(new UsernamePasswordToken(loginMessage.getUsername(),loginMessage.getPassword()));
-            Admin admin=adminService.selectByName(loginMessage.getUsername());
-            admin.setLastLoginTime(new Date());
-            admin.setLastLoginIp(IpUtil.getIpAddr(request));
-            adminService.updateByPrimaryKey(admin);
-
-            Map<Object, Object> result = new HashMap<Object, Object>();
-            result.put("token", subject.getSession().getId());
-            return WrapTool.setResponseSuccess(result);
-        }catch (Exception e)
-        {
-            return WrapTool.setResponseFailure(404,"登陆错误");
+        subject.login(new UsernamePasswordToken(loginMessage.getUsername(), loginMessage.getPassword()));
+        //执行登陆一系列操作
+//            new LogRecording().loginAction(loginMessage, request);
+        loginAction(loginMessage, request);
+        return WrapTool.setResponseSuccess(subject.getSession().getId());
+        } catch (Exception e) {
+            return WrapTool.setResponseFailure(404, "登陆错误");
         }
     }
 
-//    @RequiresAuthentication
+
+    @RequiresAuthentication
     @GetMapping("auth/info")
-    public HashMap hello2(String token){
-//        Subject subject = SecurityUtils.getSubject();
-//        Admin admin1 = (Admin) subject.getPrincipal();
-        Admin admin=adminService.selectByName("admin123");
+    public HashMap hello2(String token) {
+        Subject subject = SecurityUtils.getSubject();
+        Admin admin = (Admin) subject.getPrincipal();
         Map<String, Object> data = new HashMap<>();
         data.put("name", admin.getUsername());
         data.put("avatar", admin.getAvatar());
 
         int[] roleIds = admin.getRoleIds();
-        List<String> roles=roleService.queryByIds(roleIds); //注意得到的是role"名字"的集合
+        List<String> roles = roleService.queryByIds(roleIds); //注意得到的是role"名字"的集合
 
-//        //获得所有详细权限的list
-//        List<String> permissions = new ArrayList<>();
-//        for (int i = 0; i <roleIds.length ; i++) {
-//            List<String> selectPermissions = permissionService.selectPermissions(roleIds[i]);
-//            permissions.addAll(selectPermissions);
-//        }
+        //获得所有详细权限的list
+        List<String> permissions = new ArrayList<>();
+        for (int i = 0; i < roleIds.length; i++) {
+            List<String> selectPermissions = permissionService.selectPermissions(roleIds[i]);
+            permissions.addAll(selectPermissions);
+        }
         data.put("roles", roles);
-        data.put("perms", "*");
+        data.put("perms", permissions);
         return WrapTool.setResponseSuccess(data);
+    }
+
+
+
+
+    @Transactional
+    public void loginAction(LoginMessage loginMessage, HttpServletRequest request) {
+        Admin admin = adminService.selectByName(loginMessage.getUsername());
+        admin.setLastLoginTime(new Date());
+        admin.setLastLoginIp(IpUtil.getIpAddr(request));
+        try {
+            adminService.updateByPrimaryKey(admin);
+            logService.addLog(admin, ADMIN_LOGIN, false);
+        } catch (Exception e) {
+            logService.addLog(admin, ADMIN_LOGIN, true);
+        }
     }
 
 }
