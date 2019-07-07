@@ -35,16 +35,17 @@ public class HelloController {
     LogService logService;
     @Autowired
     PermissionService permissionService;
+    @Autowired
+    LogRecording logRecording;
 
     @RequestMapping("auth/login")
     public HashMap hello(@RequestBody LoginMessage loginMessage, HttpServletRequest request) {
         Subject subject = SecurityUtils.getSubject();
         try {
-        subject.login(new UsernamePasswordToken(loginMessage.getUsername(), loginMessage.getPassword()));
-        //执行登陆一系列操作
-//            new LogRecording().loginAction(loginMessage, request);
-        loginAction(loginMessage, request);
-        return WrapTool.setResponseSuccess(subject.getSession().getId());
+            subject.login(new UsernamePasswordToken(loginMessage.getUsername(), loginMessage.getPassword()));
+            //执行登陆一系列操作
+            logRecording.loginAction(loginMessage, request);
+            return WrapTool.setResponseSuccess(subject.getSession().getId());
         } catch (Exception e) {
             return WrapTool.setResponseFailure(404, "登陆错误");
         }
@@ -72,22 +73,6 @@ public class HelloController {
         data.put("roles", roles);
         data.put("perms", permissions);
         return WrapTool.setResponseSuccess(data);
-    }
-
-
-
-
-    @Transactional
-    public void loginAction(LoginMessage loginMessage, HttpServletRequest request) {
-        Admin admin = adminService.selectByName(loginMessage.getUsername());
-        admin.setLastLoginTime(new Date());
-        admin.setLastLoginIp(IpUtil.getIpAddr(request));
-        try {
-            adminService.updateByPrimaryKey(admin);
-            logService.addLog(admin, ADMIN_LOGIN, false);
-        } catch (Exception e) {
-            logService.addLog(admin, ADMIN_LOGIN, true);
-        }
     }
 
 }
