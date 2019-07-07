@@ -11,6 +11,7 @@ import net.bytebuddy.implementation.bytecode.constant.IntegerConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,15 +23,15 @@ public class LogServiceImpl implements LogService {
     private String action(Integer type) {
         switch (type){
             case 1:return "登陆";
-            case 0:return "登出";
+            case 0:return "退出";
             default:return "其他";
         }
     }
 
     @Override
-    public int addLog(Admin admin, Integer adminLogin,boolean b) {
-        String action=action(adminLogin);
-        Log log = new Log(admin.getUsername(), admin.getLastLoginIp(), adminLogin, action, true,null,null,admin.getAddTime(),admin.getUpdateTime(),b );
+    public int addLog(Admin admin, Integer adminLog, boolean b) {
+        String action=action(adminLog);
+        Log log = new Log(admin.getUsername(), admin.getLastLoginIp(), adminLog, action, true,null,null,new Date(),new Date(),b );
         return logMapper.insert(log);
     }
 

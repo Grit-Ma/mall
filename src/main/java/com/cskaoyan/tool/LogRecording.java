@@ -4,6 +4,7 @@ import com.cskaoyan.bean.sys.Admin;
 import com.cskaoyan.bean.sys.LoginMessage;
 import com.cskaoyan.service.sys.AdminService;
 import com.cskaoyan.service.sys.LogService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 import static com.cskaoyan.bean.LogType.ADMIN_LOGIN;
+import static com.cskaoyan.bean.LogType.ADMIN_LOGOUT;
 
 @Component("logRecord")
 public class LogRecording {
@@ -20,8 +22,6 @@ public class LogRecording {
     AdminService adminService;
     @Autowired
     LogService logService;
-
-    public static LogRecording logRecording;
 
     @Transactional
     public void loginAction(LoginMessage loginMessage, HttpServletRequest request) {
@@ -36,4 +36,12 @@ public class LogRecording {
         }
     }
 
+    public void logoutAction() {
+        Admin admin = (Admin) SecurityUtils.getSubject().getPrincipal();
+        try {
+            logService.addLog(admin,ADMIN_LOGOUT,false);
+        }catch (Exception e){
+            logService.addLog(admin,ADMIN_LOGOUT,true);
+        }
+    }
 }

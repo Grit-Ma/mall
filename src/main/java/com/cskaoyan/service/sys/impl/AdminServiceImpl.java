@@ -94,6 +94,9 @@ public class AdminServiceImpl implements AdminService {
         AdminExample e = new AdminExample();
         e.createCriteria().andUsernameEqualTo(username);
         List<Admin> admins = adminMapper.selectByExample(e);
+        if(admins.isEmpty()||admins==null){
+            return null;
+        }
         return admins.get(0);
     }
 

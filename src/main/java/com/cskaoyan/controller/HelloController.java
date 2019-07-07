@@ -75,4 +75,13 @@ public class HelloController {
         return WrapTool.setResponseSuccess(data);
     }
 
+    @RequiresAuthentication
+    @PostMapping("auth/logout")
+    public HashMap logout(){
+        Subject subject = SecurityUtils.getSubject();
+        logRecording.logoutAction();
+        subject.logout();
+        return WrapTool.setResponseSuccessWithNoData();
+    }
+
 }
