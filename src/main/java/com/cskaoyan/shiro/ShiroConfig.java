@@ -29,6 +29,8 @@ public class ShiroConfig {
 		HashMap<String, String> filterMap = new HashMap<>();
 
 		filterMap.put("/admin/auth/login","anon");
+//		filterMap.put("/admin/auth/401","anon");
+		filterMap.put("/login","anon");
 		filterMap.put("/admin/logout","logout");
 		filterMap.put("/admin/**","authc");
 
