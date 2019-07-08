@@ -8,6 +8,7 @@ import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.bean.vo.ProductVo;
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.service.good.GoodService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,9 @@ public class GoodsController {
     @Autowired
     GoodService goodService;
 
+
     @RequestMapping("goods/list")
+    @RequiresPermissions(value = "admin:goods:list")
     @ResponseBody
     public ResponseVO list(int page,int limit,String sort,String order,
                            @RequestParam(value="goodsSn",defaultValue="")String goodsSn,
@@ -34,6 +37,7 @@ public class GoodsController {
     }
 
     @RequestMapping("goods/detail")
+    @RequiresPermissions("admin:goods:read")
     @ResponseBody
     public ResponseVO details(@RequestParam("id")int id){
         ResponseVO vo = new ResponseVO();
@@ -44,6 +48,7 @@ public class GoodsController {
     }
 
     @RequestMapping("goods/delete")
+    @RequiresPermissions("admin:goods:delete")
     @ResponseBody
     public ResponseVO delete(@RequestBody Goods goods){
         ResponseVO<Object> vo = new ResponseVO<>();
@@ -53,6 +58,7 @@ public class GoodsController {
     }
 
     @RequestMapping("goods/update")
+    @RequiresPermissions("admin:goods:update")
     @ResponseBody
     public ResponseVO update(@RequestBody GoodsInfo goodsInfo){
         ResponseVO<Object> vo = new ResponseVO<>();
@@ -69,6 +75,7 @@ public class GoodsController {
     }
 
     @RequestMapping("goods/create")
+    @RequiresPermissions("admin:goods:create")
     @ResponseBody
     public ResponseVO create(@RequestBody GoodsInfo goodsInfo){
         ResponseVO<Object> vo = new ResponseVO<>();
@@ -95,6 +102,7 @@ public class GoodsController {
     }
 
     @RequestMapping("comment/list")
+    @RequiresPermissions("admin:comment:list")
     @ResponseBody
     public ResponseVO commentList(int page,int limit,String sort,String order,String userId,String valueId){
         ResponseVO vo = new ResponseVO();
@@ -110,6 +118,7 @@ public class GoodsController {
     }
 
     @RequestMapping("comment/delete")
+    @RequiresPermissions("admin:comment:delete")
     @ResponseBody
     public ResponseVO delete(@RequestBody Comment comment){
         ResponseVO vo = new ResponseVO();
@@ -118,6 +127,7 @@ public class GoodsController {
     }
 
     @RequestMapping("order/reply")
+    @RequiresPermissions("admin:order:reply")
     @ResponseBody
     public ResponseVO reply(@RequestBody HashMap<String,Object> map){
         ResponseVO vo = new ResponseVO();
