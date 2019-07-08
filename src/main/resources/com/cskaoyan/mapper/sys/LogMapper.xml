@@ -84,11 +84,8 @@
       admin like concat('%',#{name},'%') and
     </if>
     deleted=0
-    <if test="sort!=null and sort!=''">
-      order by #{sort}
-      <if test="order!=null and order!=''">
-        #{order}
-      </if>
+    <if test="queryorder!=null and queryorder!=''">
+       order by ${queryorder}
     </if>
   </select>
 

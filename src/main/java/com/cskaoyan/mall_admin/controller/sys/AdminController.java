@@ -20,6 +20,7 @@ import static com.cskaoyan.bean.ResponseFailureCode.*;
 
 
 @RestController
+@RequestMapping("admin")
 @Api(tags = "sysAdminTags", value = "AdminValue")
 public class AdminController {
 

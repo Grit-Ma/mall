@@ -1,4 +1,4 @@
-package com.cskaoyan.mall_admin.controller.good;
+package com.cskaoyan.mall_admin.controller.goods;
 
 import com.cskaoyan.bean.Comment;
 import com.cskaoyan.bean.Goods;
@@ -7,7 +7,7 @@ import com.cskaoyan.bean.vo.CatAndBrandVo;
 import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.bean.vo.ProductVo;
 import com.cskaoyan.bean.vo.ResponseVO;
-import com.cskaoyan.mall_admin.service.good.GoodService;
+import com.cskaoyan.mall_admin.service.goods.GoodsService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,13 +18,14 @@ import java.util.HashMap;
 
 
 @Controller
+@RequestMapping("admin")
 public class GoodsController {
     @Autowired
-    GoodService goodService;
+    GoodsService goodService;
 
 
     @RequestMapping("goods/list")
-    @RequiresPermissions(value = "admin:goods:list")
+    //@RequiresPermissions(value = "admin:goods:list")
     @ResponseBody
     public ResponseVO list(int page,int limit,String sort,String order,
                            @RequestParam(value="goodsSn",defaultValue="")String goodsSn,

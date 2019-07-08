@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: zhe
+    active: cf
 ---
 myoss:
    bucket: project-mall

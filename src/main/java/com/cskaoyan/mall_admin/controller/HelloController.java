@@ -21,6 +21,7 @@ import java.util.*;
 
 
 @RestController
+@RequestMapping("admin")
 public class HelloController {
     @Autowired
     AdminService adminService;
@@ -36,15 +37,16 @@ public class HelloController {
     @RequestMapping("auth/login")
     public HashMap hello(@RequestBody LoginMessage loginMessage, HttpServletRequest request) {
         Subject subject = SecurityUtils.getSubject();
-//        try {
+        try {
         subject.login(new UsernamePasswordToken(loginMessage.getUsername(), loginMessage.getPassword()));
         //执行登陆一系列操作
         logRecording.loginAction(loginMessage, request);
         return WrapTool.setResponseSuccess(subject.getSession().getId());//返回token
-//        } catch (Exception e) {
-//            return WrapTool.setResponseFailure(401, "登陆错误");
-//        }
+        } catch (Exception e) {
+            return WrapTool.setResponseFailure(501, "登陆错误");
+        }
     }
+
 
     @RequiresAuthentication
     @GetMapping("auth/info")
@@ -94,4 +96,8 @@ public class HelloController {
         return vo;
     }
 
+//    @RequestMapping("auth/401")
+//    public HashMap log(){
+//        return WrapTool.setResponseFailure(501,"登陆错误");
+//    }
 }

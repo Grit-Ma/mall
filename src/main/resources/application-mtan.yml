@@ -14,9 +14,3 @@ server:
   port: 80
   servlet:
     context-path: /admin
-
-myoss:
-  bucket: project-mall
-  endpoint: oss-cn-beijing.aliyuncs.com
-  accesskey: LTAIxnp89MtwEeiY
-  secret: jLXWqpMRiADW0deKzKn3kft8u1hfxq

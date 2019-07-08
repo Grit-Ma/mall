@@ -32,32 +32,38 @@ public class MallRealm extends AuthorizingRealm {
 		//关注凭证（密码）
 		//执行验证的用户名
 		UsernamePasswordToken upToken = (UsernamePasswordToken) token;
-		String username = upToken.getUsername();
-		String password = new String(upToken.getPassword());
+		if(upToken==null||upToken.getPassword()==null||upToken.getUsername()==null) {
+			throw new UnknownAccountException("当前未认证！");
+		}else {
 
-		//去查询数据库中的密码
-		if (StringUtils.isEmpty(username)) {
-			throw new AccountException("用户名不能为空");
-		}
-		if (StringUtils.isEmpty(password)) {
-			throw new AccountException("密码不能为空");
-		}
-		Admin admin = adminService.selectByName(username);
-		if (admin==null) {
-			throw new UnknownAccountException("找不到用户（" + username + "）的帐号信息");
-		}
-		String passwordFromDb = admin.getPassword();
+			String username = upToken.getUsername();
+			String password = new String(upToken.getPassword());
 
-		//解密，判断两个密码是否匹配
+			//去查询数据库中的密码
+			if (StringUtils.isEmpty(username)) {
+				throw new AccountException("用户名不能为空");
+			}
+			if (StringUtils.isEmpty(password)) {
+				throw new AccountException("密码不能为空");
+			}
+			Admin admin = adminService.selectByName(username);
+			if (admin == null) {
+				throw new UnknownAccountException("找不到用户（" + username + "）的帐号信息");
+			}
+			String passwordFromDb = admin.getPassword();
+
+			//解密，判断两个密码是否匹配
 //		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-//		if (!encoder.matches(password, passwordFromDb)) {
-//			throw new UnknownAccountException("找不到用户（" + username + "）的帐号信息");
+//		if (!encoder.matches(password, passwordFromDb)) {w
+//			throw new UnknownAccountException("密码错误");
 //		}
-		if(!password.equals(passwordFromDb)){
-			throw new UnknownAccountException("找不到用户（" + username + "）的帐号信息");
+			if (!password.equals(passwordFromDb)) {
+				throw new UnknownAccountException("密码错误");
+			}
+			SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(admin, password, "mallrealm");
+			return info;
 		}
-		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(admin, password, "mallrealm");
-		return info;
+
 	}
 
 	//授权

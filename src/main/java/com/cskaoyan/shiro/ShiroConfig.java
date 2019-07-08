@@ -23,14 +23,16 @@ public class ShiroConfig {
 	public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager defaultWebSecurityManager){
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 		shiroFilterFactoryBean.setSecurityManager(defaultWebSecurityManager);
-		shiroFilterFactoryBean.setLoginUrl("/auth/login");
+		shiroFilterFactoryBean.setLoginUrl("/admin/auth/login");
 //		shiroFilterFactoryBean.setSuccessUrl("/dashboard"); //设置登陆成功页面
 
 		HashMap<String, String> filterMap = new HashMap<>();
 
-		filterMap.put("/auth/login","anon");
-		filterMap.put("/logout","logout");
-		filterMap.put("/**","authc");
+		filterMap.put("/admin/auth/login","anon");
+//		filterMap.put("/admin/auth/401","anon");
+		filterMap.put("/login","anon");
+		filterMap.put("/admin/logout","logout");
+		filterMap.put("/admin/**","authc");
 
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
 		return shiroFilterFactoryBean;
