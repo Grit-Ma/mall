@@ -4,6 +4,7 @@ import com.cskaoyan.bean.Brand;
 import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.service.mallManageService.BrandService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ public class BrandManufacturerController {
     //admin/brand/list?page=1&limit=20&id=&name=a&sort=add_time&order=desc
     @RequestMapping("brand/list")
     @ResponseBody
+    @RequiresPermissions(value = "admin:brand:list")
     public ResponseVO brandList(int page,int limit,String sort,String order,Integer id,String name){
         ResponseVO<Object> responseVO = new ResponseVO<>();
         PageData data = brandService.brandList(page,limit,sort,order,id,name);
@@ -31,6 +33,7 @@ public class BrandManufacturerController {
     //admin/brand/create
     @RequestMapping("brand/create")
     @ResponseBody
+    @RequiresPermissions(value = "admin:brand:create")
     public ResponseVO  brandCreate(@RequestBody Brand brand){
         ResponseVO<Object> responseVO = new ResponseVO<>();
         //brand.setPicUrl("123");
@@ -44,6 +47,7 @@ public class BrandManufacturerController {
     //admin/brand/update
     @RequestMapping("brand/update")
     @ResponseBody
+    @RequiresPermissions(value = "admin:brand:update")
     public ResponseVO  brandUpdate(@RequestBody Brand brand){
         ResponseVO<Object> responseVO = new ResponseVO<>();
         Brand data = brandService.updateBrand(brand);
@@ -56,6 +60,7 @@ public class BrandManufacturerController {
     //admin/brand/delete
     @RequestMapping("brand/delete")
     @ResponseBody
+    @RequiresPermissions(value = "admin:brand:delete")
     public ResponseVO deleteBrand(@RequestBody Brand brand){
         ResponseVO<Object> responseVO = new ResponseVO<>();
         int i = brandService.deleteBrand(brand);

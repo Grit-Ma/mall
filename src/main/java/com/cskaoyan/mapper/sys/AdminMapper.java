@@ -2,6 +2,8 @@ package com.cskaoyan.mapper.sys;
 
 import com.cskaoyan.bean.sys.Admin;
 import com.cskaoyan.bean.sys.AdminExample;
+
+import java.util.HashMap;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -32,4 +34,6 @@ public interface AdminMapper {
     int updateByPrimaryKeySelective(Admin record);
 
     int updateByPrimaryKey(Admin record);
+
+    HashMap getDashBoard();
 }
