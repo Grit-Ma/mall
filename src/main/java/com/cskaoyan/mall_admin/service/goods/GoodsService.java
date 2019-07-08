@@ -1,4 +1,4 @@
-package com.cskaoyan.mall_admin.service.good;
+package com.cskaoyan.mall_admin.service.goods;
 
 import com.cskaoyan.bean.Comment;
 import com.cskaoyan.bean.Goods;
@@ -9,7 +9,7 @@ import com.cskaoyan.bean.vo.ProductVo;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface GoodService {
+public interface GoodsService {
     PageData getListData(int page, int limit, String sort, String order,String goodsSn,String name);
 
     PageData getCommentListData(int page, int limit, String sort, String order, String userId, String valueId);
@@ -28,4 +28,5 @@ public interface GoodService {
     void create(GoodsInfo goodsInfo);
 
     int check(GoodsInfo goodsInfo);
+
 }
