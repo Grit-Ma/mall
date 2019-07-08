@@ -13,13 +13,9 @@ public class WxCollect {
 
     private BigDecimal retailPrice;
 
-    private Integer userId;
-
     private Integer valueId;
 
     private Byte type;
-
-    private Boolean deleted;
 
     public String getBrief() {
         return brief;
@@ -61,13 +57,6 @@ public class WxCollect {
         this.retailPrice = retailPrice;
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
 
     public Integer getValueId() {
         return valueId;
@@ -85,11 +74,4 @@ public class WxCollect {
         this.type = type;
     }
 
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
 }
