@@ -4,6 +4,7 @@ import com.cskaoyan.bean.mallmanage.order.OrderDetail;
 import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.service.mallManageService.OrderService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ public class OrderController {
     //admin/order/list?page=1&limit=20&orderStatusArray=103&sort=add_time&order=desc&userId=&orderSn=
     @RequestMapping("order/list")
     @ResponseBody
+    @RequiresPermissions(value = "admin:order:list")
     public ResponseVO orderList(int page, int limit, String sort, String order,Integer userId,String orderSn,Short orderStatusArray){
         ResponseVO<Object> responseVO = new ResponseVO<>();
         PageData data = orderService.orderList(page,limit,sort,order,userId,orderSn,orderStatusArray);
@@ -31,6 +33,7 @@ public class OrderController {
     //admin/order/detail?id=1
     @RequestMapping("order/detail")
     @ResponseBody
+    @RequiresPermissions(value = "admin:order:detail")
     public ResponseVO orderDetail(int id){
         ResponseVO<Object> responseVO = new ResponseVO<>();
         OrderDetail orderDetail = orderService.orderDetail(id);

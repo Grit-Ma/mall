@@ -5,6 +5,7 @@ import com.cskaoyan.bean.mallmanage.category.CategoryL1;
 import com.cskaoyan.bean.mallmanage.category.CategoryList;
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.service.mallManageService.CategoryService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,7 @@ public class CategoryController {
     //admin/category/list
     @RequestMapping("category/list")
     @ResponseBody
+    @RequiresPermissions(value = "admin:category:list")
     public ResponseVO categoryList(){
         ResponseVO<Object> responseVO = new ResponseVO<>();
         List<CategoryList> data = categoryService.categoryList();
@@ -31,6 +33,7 @@ public class CategoryController {
     //admin/category/l1
     @RequestMapping("category/l1")
     @ResponseBody
+    @RequiresPermissions(value = "admin:category:l1")
     public ResponseVO categoryL1(){
         ResponseVO<Object> responseVO = new ResponseVO<>();
         List<CategoryL1> data = categoryService.categoryL1();
@@ -43,6 +46,7 @@ public class CategoryController {
     //admin/category/create
     @RequestMapping("category/create")
     @ResponseBody
+    @RequiresPermissions(value = "admin:category:create")
     public ResponseVO createCategory(@RequestBody Category category){
         ResponseVO<Object> responseVO = new ResponseVO<>();
         Category crate = categoryService.createCategory(category);
@@ -61,6 +65,7 @@ public class CategoryController {
     //admin/category/update
     @RequestMapping("category/update")
     @ResponseBody
+    @RequiresPermissions(value = "admin:category:update")
     public ResponseVO updateCategory(@RequestBody CategoryList category){
         ResponseVO<Object> responseVO = new ResponseVO<>();
         int result = categoryService.updateCategory(category);
@@ -78,6 +83,7 @@ public class CategoryController {
     //admin/category/delete
     @RequestMapping("category/delete")
     @ResponseBody
+    @RequiresPermissions(value = "admin:category:delete")
     public ResponseVO deleteCategory(@RequestBody CategoryList category){
         ResponseVO<Object> responseVO = new ResponseVO<>();
         int result = categoryService.deleteCategory(category);

@@ -4,6 +4,7 @@ import com.cskaoyan.bean.Keyword;
 import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.service.mallManageService.KeywordService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ public class KeywordController {
     //admin/keyword/list?page=1&limit=20&keyword=&url=3&sort=add_time&order=desc
     @RequestMapping("keyword/list")
     @ResponseBody
+    @RequiresPermissions(value = "admin:keyword:list")
     public ResponseVO keywordList(int page, int limit, String sort, String order,String keyword,String url){
         ResponseVO<Object> responseVO = new ResponseVO<>();
         PageData data = keywordService.keywordList(page,limit,sort,order,keyword,url);
@@ -30,6 +32,7 @@ public class KeywordController {
     //admin/keyword/create
     @RequestMapping("keyword/create")
     @ResponseBody
+    @RequiresPermissions(value = "admin:keyword:create")
     public ResponseVO createKeyword(@RequestBody Keyword keyword){
         ResponseVO<Object> responseVO = new ResponseVO<>();
         Keyword result = keywordService.createKeyword(keyword);
@@ -48,6 +51,7 @@ public class KeywordController {
     //admin/keyword/update
     @RequestMapping("keyword/update")
     @ResponseBody
+    @RequiresPermissions(value = "admin:keyword:update")
     public ResponseVO updateKeyword(@RequestBody Keyword keyword){
         ResponseVO<Object> responseVO = new ResponseVO<>();
         Keyword result = keywordService.updateKeyword(keyword);
@@ -66,6 +70,7 @@ public class KeywordController {
     //admin/keyword/delete
     @RequestMapping("keyword/delete")
     @ResponseBody
+    @RequiresPermissions(value = "admin:keyword:delete")
     public ResponseVO deleteKeyword(@RequestBody Keyword keyword){
         ResponseVO<Object> responseVO = new ResponseVO<>();
         int result = keywordService.deleteKeyword(keyword);
