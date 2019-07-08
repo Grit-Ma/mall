@@ -24,7 +24,7 @@ public class ShiroConfig {
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 		shiroFilterFactoryBean.setSecurityManager(defaultWebSecurityManager);
 		shiroFilterFactoryBean.setLoginUrl("/auth/login");
-//		shiroFilterFactoryBean.setSuccessUrl("/auth/info"); //设置登陆成功页面
+//		shiroFilterFactoryBean.setSuccessUrl("/dashboard"); //设置登陆成功页面
 
 		HashMap<String, String> filterMap = new HashMap<>();
 

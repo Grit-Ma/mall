@@ -57,7 +57,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
-    //    当角色删除时，要关联删除admin对应的角色，调用到此方法
+    // 当角色删除时，要关联删除admin对应的角色，调用到此方法
     @Override
     public void updateRoleIds(Integer roleId) {
         List<Admin> admins = adminMapper.fuzzyQueryByName("", null, null);
@@ -82,7 +82,7 @@ public class AdminServiceImpl implements AdminService {
     public boolean adminNotExist(Admin admin) {
         String username = admin.getUsername();
         AdminExample e = new AdminExample();
-        e.createCriteria().andUsernameEqualTo(username);
+        e.createCriteria().andUsernameEqualTo(username).andDeletedEqualTo(false);//注意在未删除里面判断
         List<Admin> admins = adminMapper.selectByExample(e);
         if (admins.isEmpty()||admin==null)
             return true;
@@ -92,7 +92,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Admin selectByName(String username) {
         AdminExample e = new AdminExample();
-        e.createCriteria().andUsernameEqualTo(username);
+        e.createCriteria().andUsernameEqualTo(username).andDeletedEqualTo(false);//注意在未删除里面判断
         List<Admin> admins = adminMapper.selectByExample(e);
         if(admins.isEmpty()||admins==null){
             return null;

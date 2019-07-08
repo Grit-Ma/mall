@@ -46,13 +46,16 @@ public class MallRealm extends AuthorizingRealm {
 		if (admin==null) {
 			throw new UnknownAccountException("找不到用户（" + username + "）的帐号信息");
 		}
-//		String passwordFromDb = admin.getPassword();
+		String passwordFromDb = admin.getPassword();
 
 		//解密，判断两个密码是否匹配
 //		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 //		if (!encoder.matches(password, passwordFromDb)) {
 //			throw new UnknownAccountException("找不到用户（" + username + "）的帐号信息");
 //		}
+		if(!password.equals(passwordFromDb)){
+			throw new UnknownAccountException("找不到用户（" + username + "）的帐号信息");
+		}
 		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(admin, password, "mallrealm");
 		return info;
 	}

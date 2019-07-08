@@ -35,14 +35,14 @@ public class HelloController {
     @RequestMapping("auth/login")
     public HashMap hello(@RequestBody LoginMessage loginMessage, HttpServletRequest request) {
         Subject subject = SecurityUtils.getSubject();
-        try {
-            subject.login(new UsernamePasswordToken(loginMessage.getUsername(), loginMessage.getPassword()));
-            //执行登陆一系列操作
-            logRecording.loginAction(loginMessage, request);
-            return WrapTool.setResponseSuccess(subject.getSession().getId());//返回token
-        } catch (Exception e) {
-            return WrapTool.setResponseFailure(404, "登陆错误");
-        }
+//        try {
+        subject.login(new UsernamePasswordToken(loginMessage.getUsername(), loginMessage.getPassword()));
+        //执行登陆一系列操作
+        logRecording.loginAction(loginMessage, request);
+        return WrapTool.setResponseSuccess(subject.getSession().getId());//返回token
+//        } catch (Exception e) {
+//            return WrapTool.setResponseFailure(401, "登陆错误");
+//        }
     }
 
     @RequiresAuthentication
@@ -54,7 +54,7 @@ public class HelloController {
 
     @RequiresAuthentication
     @PostMapping("auth/logout")
-    public HashMap logout(){
+    public HashMap logout() {
         Subject subject = SecurityUtils.getSubject();
         logRecording.logoutAction();
         subject.logout();
@@ -63,7 +63,7 @@ public class HelloController {
 
 
     //获得当前对象的所有权限
-    public HashMap getPermissionDatas(){
+    public HashMap getPermissionDatas() {
         Subject subject = SecurityUtils.getSubject();
         Admin admin = (Admin) subject.getPrincipal();
         HashMap<String, Object> data = new HashMap<>();

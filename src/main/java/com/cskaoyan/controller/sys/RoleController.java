@@ -16,6 +16,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.cskaoyan.bean.ResponseFailureCode.ROLE_NAME_EXIST;
+
 @RestController
 public class RoleController {
 
@@ -54,16 +56,17 @@ public class RoleController {
         } else if (i == 3) {
             return WrapTool.setResponseFailure(502, "系统内部错误");
         } else {
-            return WrapTool.setResponseFailure(401, "参数不对");
+            return WrapTool.setResponseFailure(ROLE_NAME_EXIST,"角色名已存在" );
         }
     }
+
 
     @RequiresPermissions(value = "admin:role:delete")
     @PostMapping("/role/delete")
     public HashMap deleteAdmin(@RequestBody Role role, BindingResult bindingResult) {
         int i = roleService.delete(role);
         if (i == 1) {
-            adminService.updateRoleIds(role.getId());
+            adminService.updateRoleIds(role.getId());//注意这里需要关联删除
             return WrapTool.setResponseSuccessWithNoData();
         } else {
             return WrapTool.setResponseFailure(401, "参数不对");
@@ -81,7 +84,7 @@ public class RoleController {
         if (i == 1) {
             return WrapTool.setResponseSuccess(role);
         } else if (i == 3) {
-            return WrapTool.setResponseFailure(502, "系统内部错误");
+            return WrapTool.setResponseFailure(ROLE_NAME_EXIST, "角色名已存在");
         }
         return WrapTool.setResponseFailure(401, "参数不对");
     }
