@@ -3,7 +3,6 @@ package com.cskaoyan.controller.mallManage;
 import com.cskaoyan.bean.mallmanage.region.Province;
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.service.mallManageService.RegionService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +17,6 @@ public class RegionController {
     //admin/region/list
    @RequestMapping("region/list")
     @ResponseBody
-   @RequiresPermissions(value = "admin:region:list")
     public ResponseVO regionList(){
         ResponseVO<Object> responseVO = new ResponseVO<>();
         List<Province> list = regionService.regionList();

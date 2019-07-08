@@ -33,7 +33,7 @@ public class OrderController {
     //admin/order/detail?id=1
     @RequestMapping("order/detail")
     @ResponseBody
-    @RequiresPermissions(value = "admin:order:detail")
+    @RequiresPermissions(value = "admin:order:read")
     public ResponseVO orderDetail(int id){
         ResponseVO<Object> responseVO = new ResponseVO<>();
         OrderDetail orderDetail = orderService.orderDetail(id);

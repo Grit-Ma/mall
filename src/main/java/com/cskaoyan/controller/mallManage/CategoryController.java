@@ -33,7 +33,7 @@ public class CategoryController {
     //admin/category/l1
     @RequestMapping("category/l1")
     @ResponseBody
-    @RequiresPermissions(value = "admin:category:l1")
+    @RequiresPermissions(value = "admin:category:list")
     public ResponseVO categoryL1(){
         ResponseVO<Object> responseVO = new ResponseVO<>();
         List<CategoryL1> data = categoryService.categoryL1();
