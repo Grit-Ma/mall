@@ -1,12 +1,13 @@
 package com.cskaoyan.service.promotion.Impl;
 
-import com.cskaoyan.bean.Ad;
-
 import com.cskaoyan.bean.Coupon;
 import com.cskaoyan.bean.CouponExample;
+import com.cskaoyan.bean.CouponUser;
+import com.cskaoyan.bean.CouponUserExample;
 import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.mapper.CouponMapper;
+import com.cskaoyan.mapper.CouponUserMapper;
 import com.cskaoyan.service.promotion.CouponService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -24,6 +25,9 @@ import java.util.List;
 public class CouponServiceImpl implements CouponService {
     @Autowired
     CouponMapper couponMapper;
+
+    @Autowired
+    CouponUserMapper couponUserMapper;
 
     @Override
     public PageData getCouponListData(int page, int limit, String sort, String order, String name, Short type, Short status) {
@@ -87,4 +91,26 @@ public class CouponServiceImpl implements CouponService {
         return vo;
     }
 
+    @Override
+    public Coupon searchCouponById(int id){
+        return couponMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public PageData getCouponUserList(int page, int limit, String sort, String order,Integer userId, Integer couponId, Short status) {
+        PageHelper.startPage(page,limit);
+        CouponUserExample example = new CouponUserExample();
+        CouponUserExample.Criteria criteria = example.createCriteria();
+        criteria.andCouponIdEqualTo(couponId);
+        if(userId != null){
+            criteria.andIdEqualTo(userId);
+        }
+        if(status != null){
+            criteria.andStatusEqualTo(status);
+        }
+        example.setOrderByClause(sort+" "+order);
+        List<CouponUser> coupons = couponUserMapper.selectByExample(example);
+        PageInfo<CouponUser> pageinfo = new PageInfo(coupons);
+        return new PageData(pageinfo.getList(),pageinfo.getTotal());
+    }
 }

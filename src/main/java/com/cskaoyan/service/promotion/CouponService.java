@@ -18,4 +18,7 @@ public interface CouponService {
 
     ResponseVO insertCoupon(Coupon coupon);
 
+    Coupon searchCouponById(int id);
+
+    PageData getCouponUserList(int page, int limit, String sort, String order, Integer userId, Integer couponId, Short status);
 }
