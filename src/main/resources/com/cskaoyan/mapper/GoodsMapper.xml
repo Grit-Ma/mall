@@ -534,4 +534,28 @@
   <select id="getGoodsInfo" parameterType="int" resultMap="GoodsInfo">
     select id from cskaoyan_mall_goods where id = #{id}
   </select>
+  <resultMap id="WxGoodsVoResultMap" type="com.cskaoyan.bean.vo.WxGoodsVo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="brief" jdbcType="VARCHAR" property="brief" />
+    <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+    <result column="is_new" jdbcType="BIT" property="isNew" />
+    <result column="is_hot" jdbcType="BIT" property="isHot" />
+    <result column="counter_price" jdbcType="DECIMAL" property="counterPrice" />
+    <result column="retail_price" jdbcType="DECIMAL" property="retailPrice" />
+  </resultMap>
+<select id="selectWxGoodsByCategoryId" parameterType="int" resultMap="WxGoodsVoResultMap">
+  select * from cskaoyan_mall_goods where category_id = #{id} and deleted = false
+</select>
+  <resultMap id="GoodsList" type="com.cskaoyan.bean.vo.GoodsListVo">
+    <result column="count" property="count"/>
+    <collection property="filterCategoryList" column="category_id" select="com.cskaoyan.mapper.GoodsMapper.selectFilterCategoryList"/>
+    <collection property="goodsList" column="category_id" select="com.cskaoyan.mapper.CategoryMapper.selectWxGoodsByCategoryId"/>
+  </resultMap>
+  <select id="getWxGoodsList" parameterType="int" resultMap="GoodsList">
+        select count(*) as `count`,category_id from cskaoyan_mall_goods where category_id = #{categoryId}
+  </select>
+  <select id="getGoodsCount" resultType="int">
+    select count(*) from cskaoyan_mall_goods where deleted = false
+  </select>
 </mapper>
