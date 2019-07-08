@@ -19,6 +19,7 @@ import java.util.List;
 import static com.cskaoyan.bean.ResponseFailureCode.ROLE_NAME_EXIST;
 
 @RestController
+@RequestMapping("admin")
 public class RoleController {
 
     @Autowired

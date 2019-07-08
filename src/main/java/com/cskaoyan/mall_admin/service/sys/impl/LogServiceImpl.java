@@ -17,7 +17,6 @@ public class LogServiceImpl implements LogService {
     @Autowired
     LogMapper logMapper;
 
-
     private String action(Integer type) {
         switch (type){
             case 1:return "登陆";
@@ -35,7 +34,8 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public PageData fuzzyQueryByName(int page, int limit, String name, String sort, String order) {
-        List<Log> logs = logMapper.fuzzyQueryByName(name,sort,order);
+        String queryorder=sort+" "+order;
+        List<Log> logs = logMapper.fuzzyQueryByName(name,queryorder);
         return WrapTool.setPageData(page,limit,logs);
     }
 }

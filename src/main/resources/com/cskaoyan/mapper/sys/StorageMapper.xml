@@ -88,9 +88,9 @@
             and `name` like concat('%',#{name},'%')
         </if>
         <if test="sort!=null and sort!=''">
-            order by #{sort}
+            order by ${sort}
             <if test="order!=null and order!=''">
-                #{order}
+                ${order}
             </if>
         </if>
     </select>

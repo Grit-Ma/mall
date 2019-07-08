@@ -7,4 +7,11 @@ spring:
 server:
   port: 8080
   servlet:
-    context-path: /admin
+    context-path: /
+logging:
+#  file: cf.log
+  level:
+     com:
+      cskaoyan:
+        mapper: debug
+#  path: log
