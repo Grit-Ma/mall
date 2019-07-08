@@ -20,7 +20,6 @@
     <result column="avatar" jdbcType="VARCHAR" property="avatar" />
     <result column="role_ids" typeHandler="com.cskaoyan.mybatis.IntArrayStringTypeHandler" property="roleIds" />
   </resultMap>
-
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -124,6 +123,13 @@
     <include refid="Base_Column_List" />
     from cskaoyan_mall_admin
     where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getDashBoard" resultType="map">
+    SELECT * from (
+      (SELECT count(*) as goodsTotal from cskaoyan_mall_goods  WHERE deleted = 0) g,
+      (SELECT count(*) as orderTotal from cskaoyan_mall_order WHERE deleted = 0) o,
+      (SELECT count(*) as productTotal from cskaoyan_mall_goods_product WHERE deleted = 0 ) p,
+      (SELECT count(*) as userTotal from cskaoyan_mall_user WHERE deleted = 0) u)
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from cskaoyan_mall_admin
