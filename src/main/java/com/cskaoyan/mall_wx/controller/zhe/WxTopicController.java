@@ -1,9 +1,9 @@
 package com.cskaoyan.mall_wx.controller.zhe;
 
-import com.cskaoyan.bean.Brand;
+import com.cskaoyan.bean.Topic;
 import com.cskaoyan.bean.vo.ResponseVO;
-import com.cskaoyan.bean.wx.pagedata.BrandPageData;
-import com.cskaoyan.mall_wx.service.zhe.WxBrandService;
+import com.cskaoyan.bean.wx.pagedata.TopicPageData;
+import com.cskaoyan.mall_wx.service.zhe.WxTopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,15 +13,15 @@ import java.util.HashMap;
 
 @Controller
 @RequestMapping("wx")
-public class WxBrandController {
+public class WxTopicController {
     @Autowired
-    WxBrandService wxBrandService;
-    //wx/brand/list?page=1&size=10
-    @RequestMapping("brand/list")
+    WxTopicService topicService;
+    //wx/topic/list?page=1&size=10
+    @RequestMapping("topic/list")
     @ResponseBody
-    public ResponseVO brandList(int page, int size){
+    public ResponseVO topicList(int page, int size){
         ResponseVO<Object> responseVO = new ResponseVO<>();
-        BrandPageData data = wxBrandService.brandList(page,size);
+        TopicPageData data = topicService.topicList(page,size);
         if(data != null){
             responseVO.setErrno(0);
             responseVO.setErrmsg("成功");
@@ -32,22 +32,27 @@ public class WxBrandController {
             return responseVO;
         }
     }
-    //wx/brand/detail?id=1001002
-    @RequestMapping("brand/detail")
+
+    //wx/topic/detail?id=266
+    @RequestMapping("topic/detail")
     @ResponseBody
-    public ResponseVO brandDetail(Integer id){
+    public ResponseVO topicDetail(Integer id){
         ResponseVO<Object> responseVO = new ResponseVO<>();
-        Brand brand = wxBrandService.brandDetail(id);
-        if(brand != null){
+        Topic topic = topicService.topicDetail(id);
+        if(topic != null){
             responseVO.setErrno(0);
             responseVO.setErrmsg("成功");
             HashMap<String, Object> map = new HashMap<>();
-            map.put("brand",brand);
+            map.put("goods",topic.getGoods());
+            map.put("topic",topic);
             responseVO.setData(map);
             return responseVO;
         }
         responseVO.setErrmsg("failure");
         return responseVO;
     }
+
+    //wx/topic/related?id=295       //返回数据库前四条数据
+
 
 }
