@@ -6,6 +6,7 @@ import com.cskaoyan.bean.wx.xfor.CurrentCatalogList;
 import com.cskaoyan.mall_wx.service.login.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,11 +14,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.validation.constraints.NotNull;
 
 @Controller
+@RequestMapping("wx/catalog")
 public class CatalogController {
     @Autowired
     CatalogService catalogService;
 
-    @RequestMapping("catalog/index")
+    @GetMapping("index")
     @ResponseBody
     public ResponseVO catalogIndex() {
         CatalogList catalogList = catalogService.getCatalogList();
@@ -25,7 +27,7 @@ public class CatalogController {
         return catalogListResponseVO;
     }
 
-    @RequestMapping("catalog/current")
+    @GetMapping("current")
     @ResponseBody
     public ResponseVO catalogCurrent(@NotNull String id) {
         CurrentCatalogList currentCatalogList = catalogService.getCurrentCatalogList(Integer.valueOf(id));
