@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: cdy
+---
+myoss:
+   bucket: project-mall
+   endpoint: oss-cn-beijing.aliyuncs.com
+   accesskey: LTAIxnp89MtwEeiY
+   secret: jLXWqpMRiADW0deKzKn3kft8u1hfxq
+---
+
+
+

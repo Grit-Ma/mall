@@ -101,7 +101,10 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.cskaoyan.bean.Issue">
+  <insert id="insert" parameterType="com.cskaoyan.bean.Issue" useGeneratedKeys="true">
+    <selectKey resultType="_int" keyProperty="id" order="AFTER">
+      select last_insert_id()
+    </selectKey>
     insert into cskaoyan_mall_issue (id, question, answer, 
       add_time, update_time, deleted
       )

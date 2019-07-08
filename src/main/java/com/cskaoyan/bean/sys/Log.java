@@ -115,4 +115,34 @@ public class Log {
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
+
+    public Log() {
+    }
+
+    public Log(Integer id, String admin, String ip, Integer type, String action, Boolean status, String result, String comment, Date addTime, Date updateTime, Boolean deleted) {
+        this.id = id;
+        this.admin = admin;
+        this.ip = ip;
+        this.type = type;
+        this.action = action;
+        this.status = status;
+        this.result = result;
+        this.comment = comment;
+        this.addTime = addTime;
+        this.updateTime = updateTime;
+        this.deleted = deleted;
+    }
+
+    public Log(String admin, String ip, Integer type, String action, Boolean status, String result, String comment, Date addTime, Date updateTime, Boolean deleted) {
+        this.admin = admin;
+        this.ip = ip;
+        this.type = type;
+        this.action = action;
+        this.status = status;
+        this.result = result;
+        this.comment = comment;
+        this.addTime = addTime;
+        this.updateTime = updateTime;
+        this.deleted = deleted;
+    }
 }

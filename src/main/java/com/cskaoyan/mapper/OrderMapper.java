@@ -2,8 +2,10 @@ package com.cskaoyan.mapper;
 
 import com.cskaoyan.bean.Order;
 import com.cskaoyan.bean.OrderExample;
-import java.util.List;
+import com.cskaoyan.bean.mallmanage.order.OrderDetail;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface OrderMapper {
     long countByExample(OrderExample example);
@@ -27,4 +29,6 @@ public interface OrderMapper {
     int updateByPrimaryKeySelective(Order record);
 
     int updateByPrimaryKey(Order record);
+
+    OrderDetail selectOrderDetailById(@Param("id") int id);
 }

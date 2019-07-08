@@ -6,6 +6,9 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface PermissionMapper {
+
+    List<String> selectPermissions(int roleId);
+
     long countByExample(PermissionExample example);
 
     int deleteByExample(PermissionExample example);
@@ -27,4 +30,5 @@ public interface PermissionMapper {
     int updateByPrimaryKeySelective(Permission record);
 
     int updateByPrimaryKey(Permission record);
+
 }
