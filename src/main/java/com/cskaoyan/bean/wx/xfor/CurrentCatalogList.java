@@ -4,26 +4,16 @@ import com.cskaoyan.bean.Category;
 
 import java.util.List;
 
-public class CatalogList {
-    private List<Category> categoryList;
+public class CurrentCatalogList {
     private Category currentCategory;
     private List<Category> currentSubCategory;
 
-    public CatalogList() {
+    public CurrentCatalogList() {
     }
 
-    public CatalogList(List<Category> categoryList, Category currentCategory, List<Category> currentSubCategory) {
-        this.categoryList = categoryList;
+    public CurrentCatalogList(Category currentCategory, List<Category> currentSubCategory) {
         this.currentCategory = currentCategory;
         this.currentSubCategory = currentSubCategory;
-    }
-
-    public List<Category> getCategoryList() {
-        return categoryList;
-    }
-
-    public void setCategoryList(List<Category> categoryList) {
-        this.categoryList = categoryList;
     }
 
     public Category getCurrentCategory() {

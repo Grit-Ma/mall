@@ -89,9 +89,9 @@ public class HomeServiceImpl implements HomeService {
         return couponList;
     }
 
-    private List<Category> getChannel() {
+    public List<Category> getChannel() {
         CategoryExample categoryExample = new CategoryExample();
-        categoryExample.createCriteria().andIdLessThanOrEqualTo(1005010);
+        categoryExample.createCriteria().andLevelEqualTo("L1");
         List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
         return categoryList;
     }
