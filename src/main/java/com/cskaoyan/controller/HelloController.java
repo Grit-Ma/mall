@@ -35,14 +35,14 @@ public class HelloController {
     @RequestMapping("auth/login")
     public HashMap hello(@RequestBody LoginMessage loginMessage, HttpServletRequest request) {
         Subject subject = SecurityUtils.getSubject();
-//        try {
+        try {
         subject.login(new UsernamePasswordToken(loginMessage.getUsername(), loginMessage.getPassword()));
         //执行登陆一系列操作
         logRecording.loginAction(loginMessage, request);
         return WrapTool.setResponseSuccess(subject.getSession().getId());//返回token
-//        } catch (Exception e) {
-//            return WrapTool.setResponseFailure(401, "登陆错误");
-//        }
+        } catch (Exception e) {
+            return WrapTool.setResponseFailure(501, "登陆错误");
+        }
     }
 
     @RequiresAuthentication

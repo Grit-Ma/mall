@@ -97,9 +97,9 @@
     from cskaoyan_mall_admin
     where deleted=0 and username like concat('%',#{username},'%')
     <if test="sort!=null and sort!=''">
-      order by #{sort}
+      order by ${sort}
       <if test="order!=null and order!=''">
-        #{order}
+        ${order}
       </if>
     </if>
   </select>

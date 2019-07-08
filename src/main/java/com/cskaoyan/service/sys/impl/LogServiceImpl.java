@@ -4,10 +4,13 @@ import com.cskaoyan.bean.LogType;
 import com.cskaoyan.bean.sys.Admin;
 import com.cskaoyan.bean.sys.Log;
 import com.cskaoyan.bean.vo.PageData;
+import com.cskaoyan.controller.sys.LogController;
 import com.cskaoyan.mapper.sys.LogMapper;
 import com.cskaoyan.service.sys.LogService;
 import com.cskaoyan.tool.WrapTool;
 import net.bytebuddy.implementation.bytecode.constant.IntegerConstant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +21,6 @@ import java.util.List;
 public class LogServiceImpl implements LogService {
     @Autowired
     LogMapper logMapper;
-
 
     private String action(Integer type) {
         switch (type){
@@ -37,7 +39,8 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public PageData fuzzyQueryByName(int page, int limit, String name, String sort, String order) {
-        List<Log> logs = logMapper.fuzzyQueryByName(name,sort,order);
+        String queryorder=sort+" "+order;
+        List<Log> logs = logMapper.fuzzyQueryByName(name,queryorder);
         return WrapTool.setPageData(page,limit,logs);
     }
 }

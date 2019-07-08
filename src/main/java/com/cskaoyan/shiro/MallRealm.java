@@ -50,11 +50,11 @@ public class MallRealm extends AuthorizingRealm {
 
 		//解密，判断两个密码是否匹配
 //		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-//		if (!encoder.matches(password, passwordFromDb)) {
-//			throw new UnknownAccountException("找不到用户（" + username + "）的帐号信息");
+//		if (!encoder.matches(password, passwordFromDb)) {w
+//			throw new UnknownAccountException("密码错误");
 //		}
 		if(!password.equals(passwordFromDb)){
-			throw new UnknownAccountException("找不到用户（" + username + "）的帐号信息");
+			throw new UnknownAccountException("密码错误");
 		}
 		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(admin, password, "mallrealm");
 		return info;

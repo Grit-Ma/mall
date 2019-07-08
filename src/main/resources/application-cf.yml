@@ -8,3 +8,10 @@ server:
   port: 8080
   servlet:
     context-path: /admin
+logging:
+#  file: cf.log
+  level:
+     com:
+      cskaoyan:
+        mapper: debug
+#  path: log

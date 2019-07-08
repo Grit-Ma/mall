@@ -1,0 +1,133 @@
+2019-07-08 11:30:16.698  INFO 4701 --- [main] com.cskaoyan.MallApplication             : Starting MallApplication on Machui.local with PID 4701 (started by janesaraxx in /Users/janesaraxx/Documents/JAVA_ThirdPeriod/项目三/mall)
+2019-07-08 11:30:16.701  INFO 4701 --- [main] com.cskaoyan.MallApplication             : The following profiles are active: cf
+2019-07-08 11:30:17.579  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$e4b7fef] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.596  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'shiroConfig' of type [com.cskaoyan.shiro.ShiroConfig$$EnhancerBySpringCGLIB$$72c68ac6] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.627  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'mybatis-org.mybatis.spring.boot.autoconfigure.MybatisProperties' of type [org.mybatis.spring.boot.autoconfigure.MybatisProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.633  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration' of type [org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$411fd11f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.636  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Hikari' of type [org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Hikari$$EnhancerBySpringCGLIB$$4ecae9dc] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.650  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'spring.datasource-org.springframework.boot.autoconfigure.jdbc.DataSourceProperties' of type [org.springframework.boot.autoconfigure.jdbc.DataSourceProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.671  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'dataSource' of type [com.zaxxer.hikari.HikariDataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.680  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.boot.autoconfigure.jdbc.DataSourceInitializerInvoker' of type [org.springframework.boot.autoconfigure.jdbc.DataSourceInitializerInvoker] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.723  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'sqlSessionFactory' of type [org.apache.ibatis.session.defaults.DefaultSqlSessionFactory] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.728  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'sqlSessionTemplate' of type [org.mybatis.spring.SqlSessionTemplate] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.829  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'adminMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.831  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'adminMapper' of type [com.sun.proxy.$Proxy63] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.832  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'adminServiceImpl' of type [com.cskaoyan.service.sys.impl.AdminServiceImpl] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.851  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'permissionMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.852  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'permissionMapper' of type [com.sun.proxy.$Proxy66] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.853  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'permissionServiceImpl' of type [com.cskaoyan.service.sys.impl.PermissionServiceImpl] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.887  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'roleMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.888  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'roleMapper' of type [com.sun.proxy.$Proxy67] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.888  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'roleServiceImpl' of type [com.cskaoyan.service.sys.impl.RoleServiceImpl] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.889  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'mallrealm' of type [com.cskaoyan.shiro.MallRealm] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:17.898  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'mallShiroSessionManager' of type [com.cskaoyan.shiro.MallShiroSessionManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:18.035  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'securityManager' of type [org.apache.shiro.web.mgt.DefaultWebSecurityManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:18.043  INFO 4701 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'authorizationAttributeSourceAdvisor' of type [org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-07-08 11:30:18.425  INFO 4701 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2019-07-08 11:30:18.462  INFO 4701 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2019-07-08 11:30:18.462  INFO 4701 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2019-07-08 11:30:18.549  INFO 4701 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/admin]  : Initializing Spring embedded WebApplicationContext
+2019-07-08 11:30:18.549  INFO 4701 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1790 ms
+2019-07-08 11:30:19.489  INFO 4701 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2019-07-08 11:30:20.439  INFO 4701 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path '/admin'
+2019-07-08 11:30:20.451  INFO 4701 --- [main] com.cskaoyan.MallApplication             : Started MallApplication in 4.161 seconds (JVM running for 4.753)
+2019-07-08 11:30:33.883  INFO 4701 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/admin]  : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-07-08 11:30:33.884  INFO 4701 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2019-07-08 11:30:33.894  INFO 4701 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 10 ms
+2019-07-08 11:30:33.939  INFO 4701 --- [http-nio-8080-exec-2] a.s.s.m.AbstractValidatingSessionManager : Enabling session validation scheduler...
+2019-07-08 11:30:33.985  WARN 4701 --- [http-nio-8080-exec-4] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public java.util.HashMap com.cskaoyan.controller.HelloController.hello(com.cskaoyan.bean.sys.LoginMessage,javax.servlet.http.HttpServletRequest)]
+2019-07-08 11:30:35.342  INFO 4701 --- [http-nio-8080-exec-6] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2019-07-08 11:30:35.526  INFO 4701 --- [http-nio-8080-exec-6] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2019-07-08 11:30:35.532 DEBUG 4701 --- [http-nio-8080-exec-6] c.c.m.sys.AdminMapper.selectByExample    : ==>  Preparing: select 'true' as QUERYID, id, username, password, last_login_ip, last_login_time, avatar, add_time, update_time, deleted, role_ids from cskaoyan_mall_admin WHERE ( username = ? and deleted = ? ) 
+2019-07-08 11:30:35.547 DEBUG 4701 --- [http-nio-8080-exec-6] c.c.m.sys.AdminMapper.selectByExample    : ==> Parameters: admin123(String), false(Boolean)
+2019-07-08 11:30:35.559 DEBUG 4701 --- [http-nio-8080-exec-6] c.c.m.sys.AdminMapper.selectByExample    : <==      Total: 1
+2019-07-08 11:30:35.575 DEBUG 4701 --- [http-nio-8080-exec-6] c.c.m.sys.AdminMapper.selectByExample    : ==>  Preparing: select 'true' as QUERYID, id, username, password, last_login_ip, last_login_time, avatar, add_time, update_time, deleted, role_ids from cskaoyan_mall_admin WHERE ( username = ? and deleted = ? ) 
+2019-07-08 11:30:35.575 DEBUG 4701 --- [http-nio-8080-exec-6] c.c.m.sys.AdminMapper.selectByExample    : ==> Parameters: admin123(String), false(Boolean)
+2019-07-08 11:30:35.576 DEBUG 4701 --- [http-nio-8080-exec-6] c.c.m.sys.AdminMapper.selectByExample    : <==      Total: 1
+2019-07-08 11:30:35.579 DEBUG 4701 --- [http-nio-8080-exec-6] c.c.m.s.A.updateByPrimaryKeySelective    : ==>  Preparing: update cskaoyan_mall_admin SET username = ?, password = ?, last_login_ip = ?, last_login_time = ?, avatar = ?, add_time = ?, update_time = ?, deleted = ?, role_ids = ? where id = ? 
+2019-07-08 11:30:35.580 DEBUG 4701 --- [http-nio-8080-exec-6] c.c.m.s.A.updateByPrimaryKeySelective    : ==> Parameters: admin123(String), admin123(String), 0:0:0:0:0:0:0:1(String), 2019-07-08 11:30:35.577(Timestamp), '(String), 2019-07-05 17:20:00.0(Timestamp), 2019-07-05 18:08:33.0(Timestamp), false(Boolean), [1,2,3](String), 12(Integer)
+2019-07-08 11:30:35.581 DEBUG 4701 --- [http-nio-8080-exec-6] c.c.m.s.A.updateByPrimaryKeySelective    : <==    Updates: 1
+2019-07-08 11:30:35.582 DEBUG 4701 --- [http-nio-8080-exec-6] c.cskaoyan.mapper.sys.LogMapper.insert   : ==>  Preparing: insert into cskaoyan_mall_log (id, admin, ip, `type`, `action`, status, result, comment, add_time, update_time, deleted) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) 
+2019-07-08 11:30:35.583 DEBUG 4701 --- [http-nio-8080-exec-6] c.cskaoyan.mapper.sys.LogMapper.insert   : ==> Parameters: null, admin123(String), 0:0:0:0:0:0:0:1(String), 1(Integer), 登陆(String), true(Boolean), null, null, 2019-07-08 11:30:35.582(Timestamp), 2019-07-08 11:30:35.582(Timestamp), false(Boolean)
+2019-07-08 11:30:35.584 DEBUG 4701 --- [http-nio-8080-exec-6] c.cskaoyan.mapper.sys.LogMapper.insert   : <==    Updates: 1
+2019-07-08 11:30:35.604 DEBUG 4701 --- [http-nio-8080-exec-8] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==>  Preparing: select 'true' as QUERYID, id, `name`, `desc`, enabled, add_time, update_time, deleted from cskaoyan_mall_role where id = ? 
+2019-07-08 11:30:35.604 DEBUG 4701 --- [http-nio-8080-exec-8] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==> Parameters: 1(Integer)
+2019-07-08 11:30:35.606 DEBUG 4701 --- [http-nio-8080-exec-8] c.c.m.sys.RoleMapper.selectByPrimaryKey  : <==      Total: 1
+2019-07-08 11:30:35.606 DEBUG 4701 --- [http-nio-8080-exec-8] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==>  Preparing: select 'true' as QUERYID, id, `name`, `desc`, enabled, add_time, update_time, deleted from cskaoyan_mall_role where id = ? 
+2019-07-08 11:30:35.607 DEBUG 4701 --- [http-nio-8080-exec-8] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==> Parameters: 2(Integer)
+2019-07-08 11:30:35.608 DEBUG 4701 --- [http-nio-8080-exec-8] c.c.m.sys.RoleMapper.selectByPrimaryKey  : <==      Total: 1
+2019-07-08 11:30:35.609 DEBUG 4701 --- [http-nio-8080-exec-8] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==>  Preparing: select 'true' as QUERYID, id, `name`, `desc`, enabled, add_time, update_time, deleted from cskaoyan_mall_role where id = ? 
+2019-07-08 11:30:35.609 DEBUG 4701 --- [http-nio-8080-exec-8] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==> Parameters: 3(Integer)
+2019-07-08 11:30:35.610 DEBUG 4701 --- [http-nio-8080-exec-8] c.c.m.sys.RoleMapper.selectByPrimaryKey  : <==      Total: 1
+2019-07-08 11:30:35.613 DEBUG 4701 --- [http-nio-8080-exec-8] c.c.m.s.P.selectPermissions              : ==>  Preparing: select permission from cskaoyan_mall_permission where role_id=? and deleted=0 
+2019-07-08 11:30:35.613 DEBUG 4701 --- [http-nio-8080-exec-8] c.c.m.s.P.selectPermissions              : ==> Parameters: 1(Integer)
+2019-07-08 11:30:35.615 DEBUG 4701 --- [http-nio-8080-exec-8] c.c.m.s.P.selectPermissions              : <==      Total: 8
+2019-07-08 11:30:35.616 DEBUG 4701 --- [http-nio-8080-exec-8] c.c.m.s.P.selectPermissions              : ==>  Preparing: select permission from cskaoyan_mall_permission where role_id=? and deleted=0 
+2019-07-08 11:30:35.616 DEBUG 4701 --- [http-nio-8080-exec-8] c.c.m.s.P.selectPermissions              : ==> Parameters: 2(Integer)
+2019-07-08 11:30:35.616 DEBUG 4701 --- [http-nio-8080-exec-8] c.c.m.s.P.selectPermissions              : <==      Total: 0
+2019-07-08 11:30:35.617 DEBUG 4701 --- [http-nio-8080-exec-8] c.c.m.s.P.selectPermissions              : ==>  Preparing: select permission from cskaoyan_mall_permission where role_id=? and deleted=0 
+2019-07-08 11:30:35.617 DEBUG 4701 --- [http-nio-8080-exec-8] c.c.m.s.P.selectPermissions              : ==> Parameters: 3(Integer)
+2019-07-08 11:30:35.618 DEBUG 4701 --- [http-nio-8080-exec-8] c.c.m.s.P.selectPermissions              : <==      Total: 20
+2019-07-08 11:30:41.825 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==>  Preparing: select 'true' as QUERYID, id, `name`, `desc`, enabled, add_time, update_time, deleted from cskaoyan_mall_role where id = ? 
+2019-07-08 11:30:41.826 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==> Parameters: 1(Integer)
+2019-07-08 11:30:41.827 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.sys.RoleMapper.selectByPrimaryKey  : <==      Total: 1
+2019-07-08 11:30:41.827 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==>  Preparing: select 'true' as QUERYID, id, `name`, `desc`, enabled, add_time, update_time, deleted from cskaoyan_mall_role where id = ? 
+2019-07-08 11:30:41.827 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==> Parameters: 2(Integer)
+2019-07-08 11:30:41.828 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.sys.RoleMapper.selectByPrimaryKey  : <==      Total: 1
+2019-07-08 11:30:41.828 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==>  Preparing: select 'true' as QUERYID, id, `name`, `desc`, enabled, add_time, update_time, deleted from cskaoyan_mall_role where id = ? 
+2019-07-08 11:30:41.829 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==> Parameters: 3(Integer)
+2019-07-08 11:30:41.829 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.sys.RoleMapper.selectByPrimaryKey  : <==      Total: 1
+2019-07-08 11:30:41.830 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.s.P.selectPermissions              : ==>  Preparing: select permission from cskaoyan_mall_permission where role_id=? and deleted=0 
+2019-07-08 11:30:41.830 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.s.P.selectPermissions              : ==> Parameters: 1(Integer)
+2019-07-08 11:30:41.831 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.s.P.selectPermissions              : <==      Total: 8
+2019-07-08 11:30:41.831 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.s.P.selectPermissions              : ==>  Preparing: select permission from cskaoyan_mall_permission where role_id=? and deleted=0 
+2019-07-08 11:30:41.832 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.s.P.selectPermissions              : ==> Parameters: 2(Integer)
+2019-07-08 11:30:41.832 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.s.P.selectPermissions              : <==      Total: 0
+2019-07-08 11:30:41.832 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.s.P.selectPermissions              : ==>  Preparing: select permission from cskaoyan_mall_permission where role_id=? and deleted=0 
+2019-07-08 11:30:41.833 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.s.P.selectPermissions              : ==> Parameters: 3(Integer)
+2019-07-08 11:30:41.834 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.s.P.selectPermissions              : <==      Total: 20
+2019-07-08 11:30:41.841 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.sys.LogMapper.fuzzyQueryByName     : ==>  Preparing: select id, admin, ip, `type`, `action`, status, result, comment, add_time, update_time, deleted from cskaoyan_mall_log where deleted=0 order by add_time desc 
+2019-07-08 11:30:41.841 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.sys.LogMapper.fuzzyQueryByName     : ==> Parameters: 
+2019-07-08 11:30:41.855 DEBUG 4701 --- [http-nio-8080-exec-2] c.c.m.sys.LogMapper.fuzzyQueryByName     : <==      Total: 81
+2019-07-08 11:31:46.875 DEBUG 4701 --- [http-nio-8080-exec-5] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==>  Preparing: select 'true' as QUERYID, id, `name`, `desc`, enabled, add_time, update_time, deleted from cskaoyan_mall_role where id = ? 
+2019-07-08 11:31:46.876 DEBUG 4701 --- [http-nio-8080-exec-5] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==> Parameters: 1(Integer)
+2019-07-08 11:31:46.878 DEBUG 4701 --- [http-nio-8080-exec-5] c.c.m.sys.RoleMapper.selectByPrimaryKey  : <==      Total: 1
+2019-07-08 11:31:46.879 DEBUG 4701 --- [http-nio-8080-exec-5] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==>  Preparing: select 'true' as QUERYID, id, `name`, `desc`, enabled, add_time, update_time, deleted from cskaoyan_mall_role where id = ? 
+2019-07-08 11:31:46.879 DEBUG 4701 --- [http-nio-8080-exec-5] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==> Parameters: 2(Integer)
+2019-07-08 11:31:46.880 DEBUG 4701 --- [http-nio-8080-exec-5] c.c.m.sys.RoleMapper.selectByPrimaryKey  : <==      Total: 1
+2019-07-08 11:31:46.881 DEBUG 4701 --- [http-nio-8080-exec-5] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==>  Preparing: select 'true' as QUERYID, id, `name`, `desc`, enabled, add_time, update_time, deleted from cskaoyan_mall_role where id = ? 
+2019-07-08 11:31:46.881 DEBUG 4701 --- [http-nio-8080-exec-5] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==> Parameters: 3(Integer)
+2019-07-08 11:31:46.882 DEBUG 4701 --- [http-nio-8080-exec-5] c.c.m.sys.RoleMapper.selectByPrimaryKey  : <==      Total: 1
+2019-07-08 11:31:46.883 DEBUG 4701 --- [http-nio-8080-exec-5] c.c.m.s.P.selectPermissions              : ==>  Preparing: select permission from cskaoyan_mall_permission where role_id=? and deleted=0 
+2019-07-08 11:31:46.883 DEBUG 4701 --- [http-nio-8080-exec-5] c.c.m.s.P.selectPermissions              : ==> Parameters: 1(Integer)
+2019-07-08 11:31:46.884 DEBUG 4701 --- [http-nio-8080-exec-5] c.c.m.s.P.selectPermissions              : <==      Total: 8
+2019-07-08 11:31:46.884 DEBUG 4701 --- [http-nio-8080-exec-5] c.c.m.s.P.selectPermissions              : ==>  Preparing: select permission from cskaoyan_mall_permission where role_id=? and deleted=0 
+2019-07-08 11:31:46.884 DEBUG 4701 --- [http-nio-8080-exec-5] c.c.m.s.P.selectPermissions              : ==> Parameters: 2(Integer)
+2019-07-08 11:31:46.885 DEBUG 4701 --- [http-nio-8080-exec-5] c.c.m.s.P.selectPermissions              : <==      Total: 0
+2019-07-08 11:31:46.886 DEBUG 4701 --- [http-nio-8080-exec-5] c.c.m.s.P.selectPermissions              : ==>  Preparing: select permission from cskaoyan_mall_permission where role_id=? and deleted=0 
+2019-07-08 11:31:46.886 DEBUG 4701 --- [http-nio-8080-exec-5] c.c.m.s.P.selectPermissions              : ==> Parameters: 3(Integer)
+2019-07-08 11:31:46.887 DEBUG 4701 --- [http-nio-8080-exec-5] c.c.m.s.P.selectPermissions              : <==      Total: 20
+2019-07-08 11:31:47.098 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==>  Preparing: select 'true' as QUERYID, id, `name`, `desc`, enabled, add_time, update_time, deleted from cskaoyan_mall_role where id = ? 
+2019-07-08 11:31:47.098 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==> Parameters: 1(Integer)
+2019-07-08 11:31:47.107 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.sys.RoleMapper.selectByPrimaryKey  : <==      Total: 1
+2019-07-08 11:31:47.108 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==>  Preparing: select 'true' as QUERYID, id, `name`, `desc`, enabled, add_time, update_time, deleted from cskaoyan_mall_role where id = ? 
+2019-07-08 11:31:47.108 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==> Parameters: 2(Integer)
+2019-07-08 11:31:47.114 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.sys.RoleMapper.selectByPrimaryKey  : <==      Total: 1
+2019-07-08 11:31:47.115 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==>  Preparing: select 'true' as QUERYID, id, `name`, `desc`, enabled, add_time, update_time, deleted from cskaoyan_mall_role where id = ? 
+2019-07-08 11:31:47.115 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.sys.RoleMapper.selectByPrimaryKey  : ==> Parameters: 3(Integer)
+2019-07-08 11:31:47.119 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.sys.RoleMapper.selectByPrimaryKey  : <==      Total: 1
+2019-07-08 11:31:47.120 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.s.P.selectPermissions              : ==>  Preparing: select permission from cskaoyan_mall_permission where role_id=? and deleted=0 
+2019-07-08 11:31:47.121 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.s.P.selectPermissions              : ==> Parameters: 1(Integer)
+2019-07-08 11:31:47.123 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.s.P.selectPermissions              : <==      Total: 8
+2019-07-08 11:31:47.125 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.s.P.selectPermissions              : ==>  Preparing: select permission from cskaoyan_mall_permission where role_id=? and deleted=0 
+2019-07-08 11:31:47.125 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.s.P.selectPermissions              : ==> Parameters: 2(Integer)
+2019-07-08 11:31:47.126 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.s.P.selectPermissions              : <==      Total: 0
+2019-07-08 11:31:47.127 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.s.P.selectPermissions              : ==>  Preparing: select permission from cskaoyan_mall_permission where role_id=? and deleted=0 
+2019-07-08 11:31:47.128 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.s.P.selectPermissions              : ==> Parameters: 3(Integer)
+2019-07-08 11:31:47.130 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.s.P.selectPermissions              : <==      Total: 20
+2019-07-08 11:31:47.132 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.sys.LogMapper.fuzzyQueryByName     : ==>  Preparing: select id, admin, ip, `type`, `action`, status, result, comment, add_time, update_time, deleted from cskaoyan_mall_log where deleted=0 order by add_time desc 
+2019-07-08 11:31:47.132 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.sys.LogMapper.fuzzyQueryByName     : ==> Parameters: 
+2019-07-08 11:31:47.149 DEBUG 4701 --- [http-nio-8080-exec-7] c.c.m.sys.LogMapper.fuzzyQueryByName     : <==      Total: 81
+2019-07-08 11:32:42.874  INFO 4701 --- [Thread-10] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2019-07-08 11:32:42.875  INFO 4701 --- [Thread-10] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2019-07-08 11:32:42.882  INFO 4701 --- [Thread-10] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
