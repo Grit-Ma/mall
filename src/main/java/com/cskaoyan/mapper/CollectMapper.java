@@ -2,8 +2,10 @@ package com.cskaoyan.mapper;
 
 import com.cskaoyan.bean.Collect;
 import com.cskaoyan.bean.CollectExample;
-import java.util.List;
+import com.cskaoyan.bean.wx.collect.WxCollect;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface CollectMapper {
     long countByExample(CollectExample example);
@@ -27,4 +29,6 @@ public interface CollectMapper {
     int updateByPrimaryKeySelective(Collect record);
 
     int updateByPrimaryKey(Collect record);
+
+    List<WxCollect> selectCollectByTypeAndUserId(@Param("type") Integer type,@Param("userId") Integer userId);
 }

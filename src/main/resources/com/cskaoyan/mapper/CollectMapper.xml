@@ -241,4 +241,12 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <resultMap id="SelectCollectMap" type="com.cskaoyan.bean.wx.collect.WxCollect">
+
+  </resultMap>
+
+  <select id="selectCollectByTypeAndUserId" resultMap="SelectCollectMap">
+
+  </select>
 </mapper>
