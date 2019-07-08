@@ -358,6 +358,11 @@
   </select>
 <!--id, name, keywords, desc, pid, icon_url, pic_url, level, sort_order, add_time, update_time,
     deleted-->
+  <select id="selectFilterCategoryList" parameterType="int" resultMap="BaseResultMap">
+    select * from cskaoyan_mall_category where pid =
+        (select pid from cskaoyan_mall_category WHERE id = #{id})
+    and deleted = false
+  </select>
   <insert id="createCategory" useGeneratedKeys="true">
     <selectKey resultType="_int"  keyProperty="category.id"  order="AFTER">
       select last_insert_id()
