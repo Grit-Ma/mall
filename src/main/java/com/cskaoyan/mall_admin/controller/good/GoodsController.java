@@ -17,7 +17,7 @@ import java.security.InvalidParameterException;
 import java.util.HashMap;
 
 
-@Controller
+@Controller("admin")
 public class GoodsController {
     @Autowired
     GoodService goodService;
