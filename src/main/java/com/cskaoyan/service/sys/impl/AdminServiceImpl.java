@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -100,5 +101,10 @@ public class AdminServiceImpl implements AdminService {
         return admins.get(0);
     }
 
+    @Override
+    public HashMap getDashBoard(){
+        HashMap dashBoard = adminMapper.getDashBoard();
+        return dashBoard;
+    }
 
 }

@@ -2,6 +2,7 @@ package com.cskaoyan.controller;
 
 import com.cskaoyan.bean.sys.Admin;
 import com.cskaoyan.bean.sys.LoginMessage;
+import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.service.sys.AdminService;
 import com.cskaoyan.service.sys.LogService;
 import com.cskaoyan.service.sys.PermissionService;
@@ -82,6 +83,15 @@ public class HelloController {
         data.put("roles", roles);
         data.put("perms", permissions);
         return data;
+    }
+
+    @RequestMapping("dashboard")
+    @ResponseBody
+    public ResponseVO dashboard(){
+        ResponseVO<Object> vo = new ResponseVO<>();
+        vo.setData(adminService.getDashBoard());
+        vo.setErrmsg("成功");
+        return vo;
     }
 
 }

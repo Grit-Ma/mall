@@ -4,6 +4,7 @@ package com.cskaoyan.service.sys;
 import com.cskaoyan.bean.sys.Admin;
 import com.cskaoyan.bean.vo.PageData;
 
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -28,4 +29,6 @@ public interface AdminService {
     boolean adminNotExist(Admin admin);
 
     Admin selectByName(String name);
+
+    HashMap getDashBoard();
 }
