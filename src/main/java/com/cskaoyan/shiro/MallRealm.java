@@ -1,9 +1,9 @@
 package com.cskaoyan.shiro;
 
 import com.cskaoyan.bean.sys.Admin;
-import com.cskaoyan.service.sys.AdminService;
-import com.cskaoyan.service.sys.PermissionService;
-import com.cskaoyan.service.sys.RoleService;
+import com.cskaoyan.mall_admin.service.sys.AdminService;
+import com.cskaoyan.mall_admin.service.sys.PermissionService;
+import com.cskaoyan.mall_admin.service.sys.RoleService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;

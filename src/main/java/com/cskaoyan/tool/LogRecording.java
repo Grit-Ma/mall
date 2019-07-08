@@ -2,8 +2,8 @@ package com.cskaoyan.tool;
 
 import com.cskaoyan.bean.sys.Admin;
 import com.cskaoyan.bean.sys.LoginMessage;
-import com.cskaoyan.service.sys.AdminService;
-import com.cskaoyan.service.sys.LogService;
+import com.cskaoyan.mall_admin.service.sys.AdminService;
+import com.cskaoyan.mall_admin.service.sys.LogService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
