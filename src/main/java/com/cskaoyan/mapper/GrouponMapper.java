@@ -1,5 +1,6 @@
 package com.cskaoyan.mapper;
 
+import com.cskaoyan.bean.GroupActivity;
 import com.cskaoyan.bean.Groupon;
 import com.cskaoyan.bean.GrouponExample;
 import java.util.List;

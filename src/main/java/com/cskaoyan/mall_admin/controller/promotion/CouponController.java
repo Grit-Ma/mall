@@ -6,6 +6,7 @@ import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.mall_admin.service.promotion.CouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -51,8 +52,26 @@ public class CouponController {
     @ResponseBody
     public ResponseVO insert(@RequestBody Coupon coupon) {
         ResponseVO vo = new ResponseVO();
-        System.out.println(coupon);
         vo = couponService.insertCoupon(coupon);
+        return vo;
+    }
+
+    @RequestMapping("coupon/read")
+    @ResponseBody
+    public ResponseVO read(int id){
+        ResponseVO vo = new ResponseVO();
+        vo.setErrmsg("成功");
+        vo.setData(couponService.searchCouponById(id));
+        return vo;
+    }
+
+    @RequestMapping("coupon/listuser")
+    @ResponseBody
+    public ResponseVO list(int page, int limit, String sort, String order, Integer userId, Integer couponId, Short status) {
+        ResponseVO vo = new ResponseVO();
+        PageData data = couponService.getCouponUserList(page, limit, sort, order, userId, couponId, status);
+        vo.setErrmsg("成功");
+        vo.setData(data);
         return vo;
     }
 }
