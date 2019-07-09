@@ -71,4 +71,31 @@ public class WxGoodsController {
         //vo.setErrmsg("成功");
         return vo;
     }
+
+
+    @RequestMapping("comment/list")
+    @ResponseBody
+    public ResponseVO commentList(@RequestParam(name = "valueId")int valueId,@RequestParam(name = "type")int type,int size,int page,int showType){
+        ResponseVO<Object> vo = new ResponseVO<>();
+        HashMap map = wxGoodsService.commentList(valueId,type,size,page,showType);
+        vo.setData(map);
+        vo.setErrmsg("成功");
+        return vo;
+    }
+
+    @RequestMapping("comment/count")
+    @ResponseBody
+    public ResponseVO commentCount(@RequestParam(name = "valueId")int valueId,int type){
+        ResponseVO<Object> vo = new ResponseVO<>();
+        HashMap map = wxGoodsService.commentCount(valueId,type);
+        vo.setData(map);
+        vo.setErrmsg("成功");
+        return vo;
+    }
+
+    @RequestMapping("comment/post")
+    @ResponseBody
+    public ResponseVO commentPost(){
+        return null;
+    }
 }

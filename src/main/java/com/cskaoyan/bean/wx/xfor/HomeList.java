@@ -5,7 +5,7 @@ import com.cskaoyan.bean.*;
 import java.util.List;
 
 public class HomeList {
-    private List<Ad> bannerList;
+    private List<Ad> banner;
     private List<Brand> brandList;
     private List<Category> channel;
     private List<Coupon> couponList;
@@ -13,14 +13,14 @@ public class HomeList {
     private List<GrouponList> grouponList;
     private List<Goods> hotGoodsList;
     private List<Goods> newGoodsList;
-    private List<Goods> topicList;
+    private List<Topic> topicList;
 
-    public List<Ad> getBannerList() {
-        return bannerList;
+    public List<Ad> getBanner() {
+        return banner;
     }
 
-    public void setBannerList(List<Ad> bannerList) {
-        this.bannerList = bannerList;
+    public void setBanner(List<Ad> banner) {
+        this.banner = banner;
     }
 
     public List<Brand> getBrandList() {
@@ -79,11 +79,11 @@ public class HomeList {
         this.newGoodsList = newGoodsList;
     }
 
-    public List<Goods> getTopicList() {
+    public List<Topic> getTopicList() {
         return topicList;
     }
 
-    public void setTopicList(List<Goods> topicList) {
+    public void setTopicList(List<Topic> topicList) {
         this.topicList = topicList;
     }
 }

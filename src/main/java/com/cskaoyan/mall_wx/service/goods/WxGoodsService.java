@@ -16,4 +16,8 @@ public interface WxGoodsService {
     GoodsDeatil getDetail(int id);
 
     HashMap getCount();
+
+    HashMap commentCount(int valueId, int type);
+
+    HashMap commentList(int valueId, int type, int size, int page, int showType);
 }
