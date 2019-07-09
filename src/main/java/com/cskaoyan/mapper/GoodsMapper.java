@@ -2,10 +2,11 @@ package com.cskaoyan.mapper;
 
 import com.cskaoyan.bean.Goods;
 import com.cskaoyan.bean.GoodsExample;
-import java.util.List;
-
 import com.cskaoyan.bean.GoodsInfo;
+import com.cskaoyan.bean.vo.GoodsListVo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface GoodsMapper {
     long countByExample(GoodsExample example);
@@ -37,4 +38,8 @@ public interface GoodsMapper {
     int updateByPrimaryKey(Goods record);
 
     GoodsInfo getGoodsInfo(int goodsId);
+
+    GoodsListVo getWxGoodsList(int categoryId);
+
+    int getGoodsCount();
 }

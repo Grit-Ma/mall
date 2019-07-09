@@ -1,21 +1,19 @@
-package com.cskaoyan.bean.wx.collect;
+package com.cskaoyan.bean.vo;
 
 import java.math.BigDecimal;
 
-public class WxCollect {
+public class WxGoodsVo {
     private String brief;
-
+    private BigDecimal counterPrice;
     private Integer id;
-
+    private Boolean isHot;
+    private Boolean isNew;
     private String name;
-
     private String picUrl;
-
     private BigDecimal retailPrice;
 
-    private Integer valueId;
-
-    private Byte type;
+    public WxGoodsVo() {
+    }
 
     public String getBrief() {
         return brief;
@@ -25,12 +23,36 @@ public class WxCollect {
         this.brief = brief;
     }
 
+    public BigDecimal getCounterPrice() {
+        return counterPrice;
+    }
+
+    public void setCounterPrice(BigDecimal counterPrice) {
+        this.counterPrice = counterPrice;
+    }
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Boolean getHot() {
+        return isHot;
+    }
+
+    public void setHot(Boolean hot) {
+        isHot = hot;
+    }
+
+    public Boolean getNew() {
+        return isNew;
+    }
+
+    public void setNew(Boolean aNew) {
+        isNew = aNew;
     }
 
     public String getName() {
@@ -56,22 +78,4 @@ public class WxCollect {
     public void setRetailPrice(BigDecimal retailPrice) {
         this.retailPrice = retailPrice;
     }
-
-
-    public Integer getValueId() {
-        return valueId;
-    }
-
-    public void setValueId(Integer valueId) {
-        this.valueId = valueId;
-    }
-
-    public Byte getType() {
-        return type;
-    }
-
-    public void setType(Byte type) {
-        this.type = type;
-    }
-
 }
