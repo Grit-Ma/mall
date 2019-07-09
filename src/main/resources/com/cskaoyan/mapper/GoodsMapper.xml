@@ -550,7 +550,6 @@
   <resultMap id="GoodsList" type="com.cskaoyan.bean.vo.GoodsListVo">
     <result column="count" property="count"/>
     <collection property="filterCategoryList" column="category_id" select="com.cskaoyan.mapper.CategoryMapper.selectFilterCategoryList"/>
-    <collection property="goodsList" column="category_id" select="com.cskaoyan.mapper.GoodsMapper.selectWxGoodsByCategoryId"/>
   </resultMap>
   <select id="getWxGoodsList" parameterType="int" resultMap="GoodsList">
         select count(*) as `count`,category_id from cskaoyan_mall_goods where category_id = #{categoryId}
@@ -558,4 +557,15 @@
   <select id="getGoodsCount" resultType="int">
     select count(*) from cskaoyan_mall_goods where deleted = false
   </select>
+
+
+<select id="selectLikeName" resultMap="WxGoodsVoResultMap">
+  select brief,counter_price,id,is_hot,is_new,name,pic_url,retail_price
+  from cskaoyan_mall_goods
+  where name like #{name}
+  and deleted = false
+  <if test="orderByClause != null">
+    order by ${orderByClause}
+  </if>
+</select>
 </mapper>

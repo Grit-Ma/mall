@@ -32,9 +32,11 @@ public class WxGoodsController {
 
     @RequestMapping("goods/list")
     @ResponseBody
-    public ResponseVO list(int categoryId, int page, int size){
+    public ResponseVO list(int categoryId, int page, int size,String keyword,
+                           String sort,
+                           String order){
         ResponseVO vo = new ResponseVO();
-        GoodsListVo data = wxGoodsService.getWxListData(categoryId,page,size);
+        GoodsListVo data = wxGoodsService.getWxListData(categoryId,page,size,keyword,sort,order);
         vo.setErrmsg("成功");
         vo.setData(data);
         return vo;

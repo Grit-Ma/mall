@@ -32,23 +32,42 @@ public class WxGoodsServiceImpl implements WxGoodsService {
     GoodsSpecificationMapper goodsSpecificationMapper;
 
     @Override
-    public GoodsListVo getWxListData(int categoryId, int page, int size) {
+    public GoodsListVo getWxListData(int categoryId, int page, int size, String keyword, String sort, String order) {
         GoodsListVo vo = goodsMapper.getWxGoodsList(categoryId);
+        PageHelper.startPage(page,size);
+        List<WxGoodsVo> goodsList = null;
+        if(keyword != null && !keyword.isEmpty()){
+            goodsList = goodsMapper.selectLikeName("%" + keyword + "%", sort + " " + order);
+        }else {
+            goodsList = goodsMapper.selectWxGoodsByCategoryId(categoryId);
+        }
+        PageInfo<WxGoodsVo> pageinfo = new PageInfo(goodsList);
+        vo.setGoodsList(pageinfo.getList());
+        vo.setCount(pageinfo.getSize());
         return vo;
 
     }
 
     @Override
     public CategoryVo getCategory(int id) {
+        Category parentCategory = null;
         CategoryExample example = new CategoryExample();
-        CategoryExample.Criteria criteria = example.createCriteria().andIdEqualTo(id).andDeletedEqualTo(false);
+        example.createCriteria().andIdEqualTo(id).andDeletedEqualTo(false);
         Category currentCategory = categoryMapper.selectByExample(example).get(0);
+        int pid = currentCategory.getPid();
+        if (currentCategory.getPid() == 0){// 一级
+            parentCategory = currentCategory;
+            pid = parentCategory.getId();
+        }else {
+            parentCategory = categoryMapper.selectByPrimaryKey(currentCategory.getPid());
+        }
         example.clear();
-        criteria = example.createCriteria().andIdEqualTo(currentCategory.getPid()).andDeletedEqualTo(false);
-        Category parentCategory = categoryMapper.selectByExample(example).get(0);
-        example.clear();
-        criteria = example.createCriteria().andPidEqualTo(currentCategory.getPid()).andDeletedEqualTo(false);
+
+        example.createCriteria().andPidEqualTo(pid).andDeletedEqualTo(false);
         List<Category> brotherCategory = categoryMapper.selectByExample(example);
+        if(currentCategory.getPid() == 0){
+            currentCategory = brotherCategory.size() > 0 ? brotherCategory.get(0) : null;
+        }
         CategoryVo vo = new CategoryVo(brotherCategory, currentCategory, parentCategory);
         return vo;
     }
