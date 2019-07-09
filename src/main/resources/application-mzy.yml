@@ -18,8 +18,6 @@ Spring:
 
 server:
   port: 8080
-  servlet:
-    context-path: /admin
 
   tomcat:
     uri-encoding: UTF-8

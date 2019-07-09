@@ -21,6 +21,7 @@ import java.util.*;
 
 
 @RestController
+@RequestMapping("admin")
 public class HelloController {
     @Autowired
     AdminService adminService;

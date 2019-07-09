@@ -3,7 +3,7 @@ package com.cskaoyan.mall_wx.controller.xfor;
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.bean.wx.xfor.CatalogList;
 import com.cskaoyan.bean.wx.xfor.CurrentCatalogList;
-import com.cskaoyan.mall_wx.service.xfor.CatalogService;
+import com.cskaoyan.mall_wx.service.xfor.WxCatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +14,9 @@ import javax.validation.constraints.NotNull;
 
 @Controller
 @RequestMapping("wx/catalog")
-public class CatalogController {
+public class WxCatalogController {
     @Autowired
-    CatalogService catalogService;
+    WxCatalogService catalogService;
 
     @GetMapping("index")
     @ResponseBody
