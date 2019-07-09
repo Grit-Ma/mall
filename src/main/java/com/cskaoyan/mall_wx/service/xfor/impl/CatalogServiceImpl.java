@@ -1,10 +1,10 @@
-package com.cskaoyan.mall_wx.service.login.impl;
+package com.cskaoyan.mall_wx.service.xfor.impl;
 
 import com.cskaoyan.bean.Category;
 import com.cskaoyan.bean.CategoryExample;
 import com.cskaoyan.bean.wx.xfor.CatalogList;
 import com.cskaoyan.bean.wx.xfor.CurrentCatalogList;
-import com.cskaoyan.mall_wx.service.login.CatalogService;
+import com.cskaoyan.mall_wx.service.xfor.CatalogService;
 import com.cskaoyan.mapper.CategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

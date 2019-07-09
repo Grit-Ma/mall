@@ -2,9 +2,11 @@ package com.cskaoyan.bean.wx.xfor;
 
 import com.cskaoyan.bean.Goods;
 
+import java.math.BigDecimal;
+
 public class GrouponList {
     private int groupon_member;
-    private double groupon_price;
+    private BigDecimal groupon_price;
     private Goods goods;
 
     public int getGroupon_member() {
@@ -15,11 +17,11 @@ public class GrouponList {
         this.groupon_member = groupon_member;
     }
 
-    public double getGroupon_price() {
+    public BigDecimal getGroupon_price() {
         return groupon_price;
     }
 
-    public void setGroupon_price(double groupon_price) {
+    public void setGroupon_price(BigDecimal groupon_price) {
         this.groupon_price = groupon_price;
     }
 
