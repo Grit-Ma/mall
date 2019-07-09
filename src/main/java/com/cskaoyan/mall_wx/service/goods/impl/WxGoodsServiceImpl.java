@@ -4,6 +4,8 @@ import com.cskaoyan.bean.*;
 import com.cskaoyan.bean.vo.*;
 import com.cskaoyan.mall_wx.service.goods.WxGoodsService;
 import com.cskaoyan.mapper.*;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -104,8 +106,12 @@ public class WxGoodsServiceImpl implements WxGoodsService {
     @Override
     public HashMap commentList(int valueId, int type, int size, int page, int showType) {
         HashMap<String, Object> map = new HashMap<>();
-
-
-        return null;
+        PageHelper.startPage(page,size);
+        List<GoodsCommentVo> goodsCommentVo = commentMapper.selectCommentByValueIdAndTypeAndShowType(valueId,type,showType);
+        PageInfo<GoodsCommentVo> pageinfo = new PageInfo(goodsCommentVo);
+        map.put("count",pageinfo.getTotal());
+        map.put("currentPage",pageinfo.getPageNum());
+        map.put("data",pageinfo.getList());
+        return map;
     }
 }
