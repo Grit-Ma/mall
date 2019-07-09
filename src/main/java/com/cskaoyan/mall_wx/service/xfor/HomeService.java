@@ -1,4 +1,4 @@
-package com.cskaoyan.mall_wx.service.login;
+package com.cskaoyan.mall_wx.service.xfor;
 
 import com.cskaoyan.bean.wx.xfor.HomeList;
 

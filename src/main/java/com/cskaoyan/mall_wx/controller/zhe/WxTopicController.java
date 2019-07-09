@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Controller
 @RequestMapping("wx")
@@ -53,6 +54,18 @@ public class WxTopicController {
     }
 
     //wx/topic/related?id=295       //返回数据库前四条数据
-
+    @RequestMapping("topic/related")
+    @ResponseBody
+    public ResponseVO topicRelated(Integer id){
+        ResponseVO<Object> responseVO = new ResponseVO<>();
+        List<Topic> list = topicService.topicRelated(id);
+        if(list != null ){
+            responseVO.setData(list);
+            responseVO.setErrno(0);
+            responseVO.setErrmsg("成功");
+        }
+        responseVO.setErrmsg("failure");
+        return responseVO;
+    }
 
 }

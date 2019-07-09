@@ -1,4 +1,4 @@
-package com.cskaoyan.mall_wx.util;
+package com.cskaoyan.bean;
 
 public class UserInfo {
     private String nickName;

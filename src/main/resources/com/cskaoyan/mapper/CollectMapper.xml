@@ -246,9 +246,9 @@
     <result column="brief" property="brief"/>
     <result column="id" property="id"/>
     <result column="name" property="name"/>
-    <result column="picUrl" property="picUrl"/>
-    <result column="retailPrice" property="retailPrice"/>
-    <result column="valueId" property="valueId"/>
+    <result column="pic_url" property="picUrl"/>
+    <result column="retail_price" property="retailPrice"/>
+    <result column="value_id" property="valueId"/>
     <result column="type" property="type"/>
   </resultMap>
 

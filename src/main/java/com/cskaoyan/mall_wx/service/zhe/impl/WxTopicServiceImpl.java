@@ -31,7 +31,14 @@ public class WxTopicServiceImpl implements WxTopicService {
         Topic topic = new Topic();
         if(id != null){
             topic = topicMapper.selectByPrimaryKey(id);
+
         }
         return topic;
+    }
+
+    @Override
+    public List<Topic> topicRelated(Integer id) {
+        List<Topic> list = topicMapper.selectRelated();
+        return list;
     }
 }
