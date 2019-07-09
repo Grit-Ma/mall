@@ -1,23 +1,23 @@
 package com.cskaoyan.bean.wx.pagedata;
 
 public class CollectPageData<T> {
-    T collectdList;
+    T collectList;
     long totalPages;
 
     public CollectPageData() {
     }
 
-    public CollectPageData(T collectdList, long totalPages) {
-        this.collectdList = collectdList;
+    public CollectPageData(T collectList, long totalPages) {
+        this.collectList = collectList;
         this.totalPages = totalPages;
     }
 
-    public T getCollectdList() {
-        return collectdList;
+    public T getCollectList() {
+        return collectList;
     }
 
-    public void setCollectdList(T collectdList) {
-        this.collectdList = collectdList;
+    public void setCollectList(T collectList) {
+        this.collectList = collectList;
     }
 
     public long getTotalPages() {
