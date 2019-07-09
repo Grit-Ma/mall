@@ -1,5 +1,9 @@
 package com.cskaoyan.bean.vo;
 
+import com.cskaoyan.bean.Cart;
+
+import java.util.List;
+
 public class CartTotalVO {
 
     long checkedGoodsAmount;
@@ -9,6 +13,16 @@ public class CartTotalVO {
     long goodsAmount;
 
     long goodsCount;
+
+    List<Cart> carts;
+
+    public List<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(List<Cart> carts) {
+        this.carts = carts;
+    }
 
     public CartTotalVO() {
     }

@@ -30,5 +30,7 @@ public interface CartMapper {
 
     int sumAll(@Param("userId")int userId);
 
-    void deleteChecked(@Param("userId")int userId,int[] productsId);
+    void deleteChecked(@Param("userId")int userId, @Param("array")int[] productsId);
+
+    int sumAllChecked(@Param("userId")int userId);
 }

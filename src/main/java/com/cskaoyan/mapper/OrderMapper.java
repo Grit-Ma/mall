@@ -31,4 +31,6 @@ public interface OrderMapper {
     int updateByPrimaryKey(Order record);
 
     OrderDetail selectOrderDetailById(@Param("id") int id);
+
+
 }
