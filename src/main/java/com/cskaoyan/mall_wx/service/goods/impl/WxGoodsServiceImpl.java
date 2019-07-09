@@ -30,20 +30,28 @@ public class WxGoodsServiceImpl implements WxGoodsService {
     GoodsProductMapper goodsProductMapper;
     @Autowired
     GoodsSpecificationMapper goodsSpecificationMapper;
+    @Autowired
+    SearchHistoryMapper searchHistoryMapper;
 
     @Override
-    public GoodsListVo getWxListData(int categoryId, int page, int size, String keyword, String sort, String order) {
-        GoodsListVo vo = goodsMapper.getWxGoodsList(categoryId);
+    public GoodsListVo getWxListData(int categoryId, int page, int size, String keyword, String sort, String order,Integer userId) {
+        GoodsListVo vo = new GoodsListVo();
+
         PageHelper.startPage(page,size);
         List<WxGoodsVo> goodsList = null;
+        List<Category> categories = null;
         if(keyword != null && !keyword.isEmpty()){
-            goodsList = goodsMapper.selectLikeName("%" + keyword + "%", sort + " " + order);
+            goodsList = goodsMapper.selectLikeGoodsName("%" + keyword + "%", sort + " " + order);
+            categories = categoryMapper.selectLikeGoodsName("%" + keyword + "%");
         }else {
             goodsList = goodsMapper.selectWxGoodsByCategoryId(categoryId);
+            categories = categoryMapper.selectFilterCategoryList(categoryId);
         }
         PageInfo<WxGoodsVo> pageinfo = new PageInfo(goodsList);
         vo.setGoodsList(pageinfo.getList());
+        vo.setFilterCategoryList(categories);
         vo.setCount(pageinfo.getSize());
+        addSearchHistory(keyword, userId);
         return vo;
 
     }
@@ -132,5 +140,13 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         map.put("currentPage",pageinfo.getPageNum());
         map.put("data",pageinfo.getList());
         return map;
+    }
+
+    private void addSearchHistory(String keyword,Integer userId){
+        SearchHistory searchHistory = new SearchHistory();
+        searchHistory.setFrom("wx");
+        searchHistory.setKeyword(keyword);
+        searchHistory.setUserId(userId);
+        searchHistoryMapper.insert(searchHistory);
     }
 }

@@ -550,6 +550,7 @@
   <resultMap id="GoodsList" type="com.cskaoyan.bean.vo.GoodsListVo">
     <result column="count" property="count"/>
     <collection property="filterCategoryList" column="category_id" select="com.cskaoyan.mapper.CategoryMapper.selectFilterCategoryList"/>
+    <collection property="goodsList" column="category_id" select="com.cskaoyan.mapper.GoodsMapper.selectWxGoodsByCategoryId"/>
   </resultMap>
   <select id="getWxGoodsList" parameterType="int" resultMap="GoodsList">
         select count(*) as `count`,category_id from cskaoyan_mall_goods where category_id = #{categoryId}
@@ -559,13 +560,22 @@
   </select>
 
 
-<select id="selectLikeName" resultMap="WxGoodsVoResultMap">
-  select brief,counter_price,id,is_hot,is_new,name,pic_url,retail_price
-  from cskaoyan_mall_goods
-  where name like #{name}
-  and deleted = false
-  <if test="orderByClause != null">
-    order by ${orderByClause}
-  </if>
-</select>
+  <resultMap id="GoodsLikeNameList" type="com.cskaoyan.bean.vo.GoodsListVo">
+    <collection property="filterCategoryList" column="goods_name" select="com.cskaoyan.mapper.CategoryMapper.selectLikeGoodsName"/>
+    <collection property="goodsList" column="{goodsName=goods_name,orderByClause=order_by_clause}" select="com.cskaoyan.mapper.GoodsMapper.selectLikeGoodsName"/>
+  </resultMap>
+
+  <select id="selectLikeGoodsName" resultType="com.cskaoyan.bean.vo.WxGoodsVo">
+    select  g.id,  g.name, g.brief,
+    g.pic_url as picUrl,  g.is_new as isNew, g.is_hot as isHot,  g.counter_price as counterPrice, g.retail_price as retailPrice
+    from cskaoyan_mall_goods g
+    where name like #{goodsName}
+    and deleted = false
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectLikeName" resultMap="GoodsLikeNameList">
+    select #{name} as goods_name,#{orderByClause} as order_by_clause
+  </select>
 </mapper>

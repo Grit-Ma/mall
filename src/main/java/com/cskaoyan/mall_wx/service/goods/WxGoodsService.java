@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public interface WxGoodsService {
 
-    GoodsListVo getWxListData(int categoryId, int page, int size, String keyword, String sort, String order);
+    GoodsListVo getWxListData(int categoryId, int page, int size, String keyword, String sort, String order,Integer userId);
 
     CategoryVo getCategory(int id);
 

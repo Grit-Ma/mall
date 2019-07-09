@@ -46,6 +46,6 @@ public interface GoodsMapper {
 
     List<WxGoodsVo> selectWxGoodsByCategoryId(int categoryId);
 
-    List<WxGoodsVo> selectLikeName(String name, String orderByClause);
+    List<WxGoodsVo>  selectLikeGoodsName(String goodsName, String orderByClause);
 
 }
