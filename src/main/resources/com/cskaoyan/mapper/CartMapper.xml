@@ -356,9 +356,9 @@
     select sum(price*number) from cskaoyan_mall_cart where user_id = #{userId}
   </select>
   
-  <delete id="deleteChecked">
+  <delete id="deleteChecked" parameterType="java.util.List">
     delete from cskaoyan_mall_cart where user_id = #{userId} and product_id in
-      <foreach collection="array" open="(" separator="," close=")" item="productId">
+      <foreach collection="list" open="(" separator="," close=")" item="productId">
         #{productId}
       </foreach>
   </delete>
