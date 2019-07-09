@@ -39,4 +39,27 @@ public class ResponseVO<T> {
     }
 
 
+    public ResponseVO unlogin(ResponseVO vo) {
+        vo.setErrno(501);
+        vo.setErrmsg("请登录");
+        return vo;
+    }
+
+    public ResponseVO ok(ResponseVO vo) {
+        vo.setErrno(0);
+        vo.setErrmsg("成功");
+        return vo;
+    }
+
+    public ResponseVO errParm(ResponseVO vo) {
+        vo.setErrno(401);
+        vo.setErrmsg("参数不对");
+        return vo;
+    }
+
+    public ResponseVO errParmValue(ResponseVO vo) {
+        vo.setErrno(402);
+        vo.setErrmsg("参数值不对");
+        return vo;
+    }
 }
