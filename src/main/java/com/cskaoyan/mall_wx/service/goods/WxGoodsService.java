@@ -13,7 +13,7 @@ public interface WxGoodsService {
 
     CategoryVo getCategory(int id);
 
-    GoodsDeatil getDetail(int id);
+    GoodsDeatil getDetail(int goodsId, Integer userId);
 
     HashMap getCount();
 

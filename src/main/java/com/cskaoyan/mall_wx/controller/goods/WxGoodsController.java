@@ -59,9 +59,11 @@ public class WxGoodsController {
 
     @RequestMapping("goods/detail")
     @ResponseBody
-    public ResponseVO detail(@RequestParam(name = "id") int id){
+    public ResponseVO detail(@RequestParam(name = "id") int id, HttpServletRequest request){
         ResponseVO vo = new ResponseVO();
-        GoodsDeatil data = wxGoodsService.getDetail(id);
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        Integer userId = UserTokenManager.getUserId(tokenKey);
+        GoodsDeatil data = wxGoodsService.getDetail(id,userId);
         vo.setData(data);
         vo.setErrmsg("成功");
         return vo;

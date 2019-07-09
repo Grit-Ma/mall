@@ -32,9 +32,13 @@ public class WxGoodsServiceImpl implements WxGoodsService {
     GoodsSpecificationMapper goodsSpecificationMapper;
     @Autowired
     SearchHistoryMapper searchHistoryMapper;
+    @Autowired
+    GrouponRulesMapper grouponRulesMapper;
+    @Autowired
+    CollectMapper collectMapper;
 
     @Override
-    public GoodsListVo getWxListData(int categoryId, int page, int size, String keyword, String sort, String order,Integer userId) {
+    public GoodsListVo getWxListData(int categoryId, int page, int size, String keyword, String sort, String order, Integer userId) {
         GoodsListVo vo = new GoodsListVo();
 
         PageHelper.startPage(page,size);
@@ -43,6 +47,7 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         if(keyword != null && !keyword.isEmpty()){
             goodsList = goodsMapper.selectLikeGoodsName("%" + keyword + "%", sort + " " + order);
             categories = categoryMapper.selectLikeGoodsName("%" + keyword + "%");
+            addSearchHistory(keyword, userId);
         }else {
             goodsList = goodsMapper.selectWxGoodsByCategoryId(categoryId);
             categories = categoryMapper.selectFilterCategoryList(categoryId);
@@ -51,7 +56,6 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         vo.setGoodsList(pageinfo.getList());
         vo.setFilterCategoryList(categories);
         vo.setCount(pageinfo.getSize());
-        addSearchHistory(keyword, userId);
         return vo;
 
     }
@@ -81,7 +85,7 @@ public class WxGoodsServiceImpl implements WxGoodsService {
     }
 
     @Override
-    public GoodsDeatil getDetail(int goodsId) {
+    public GoodsDeatil getDetail(int goodsId, Integer userId) {
         GoodsDeatil detail = new GoodsDeatil();
         GoodsAttributeExample example = new GoodsAttributeExample();
         example.createCriteria().andGoodsIdEqualTo(goodsId).andDeletedEqualTo(false);
@@ -111,8 +115,20 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         detail.setProductList(goodsProducts);
         List<Specification> goodsSpecifications = goodsSpecificationMapper.selectSpecificationList(goodsId);
         detail.setSpecificationList(goodsSpecifications);
-        //TODO groupon、shareImage、userHasCollect 不知道是什么 先不写
-
+        detail.setShareImage(detail.getInfo().getShareUrl());
+        GrouponRulesExample grouponRulesExample = new GrouponRulesExample();
+        grouponRulesExample.createCriteria().andGoodsIdEqualTo(goodsId).andDeletedEqualTo(false);
+        List<GrouponRules> grouponRules = grouponRulesMapper.selectByExample(grouponRulesExample);
+        detail.setGroupon(grouponRules);
+        CollectExample collectExample = new CollectExample();
+        if(userId != null){
+            collectExample.createCriteria().andTypeEqualTo(Byte.valueOf("0")).andUserIdEqualTo(userId)
+                    .andValueIdEqualTo(detail.getInfo().getId()).andDeletedEqualTo(false);
+            List<Collect> collects = collectMapper.selectByExample(collectExample);
+            if(collects.size() > 0){
+                detail.setUserHasCollect(1);
+            }
+        }
         return detail;
     }
 
@@ -147,6 +163,8 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         searchHistory.setFrom("wx");
         searchHistory.setKeyword(keyword);
         searchHistory.setUserId(userId);
-        searchHistoryMapper.insert(searchHistory);
+        if(userId != null){
+            searchHistoryMapper.insert(searchHistory);
+        }
     }
 }
