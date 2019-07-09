@@ -4,6 +4,8 @@ import com.cskaoyan.bean.Coupon;
 import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.bean.vo.ResponseVO;
 
+import java.util.List;
+
 /**
  * created by ZengWei
  * on 2019/7/4
@@ -21,4 +23,6 @@ public interface CouponService {
     Coupon searchCouponById(int id);
 
     PageData getCouponUserList(int page, int limit, String sort, String order, Integer userId, Integer couponId, Short status);
+
+    List<Coupon> queryExpired();
 }

@@ -1,15 +1,21 @@
 package com.cskaoyan.mall_admin.controller.promotion;
 
 import com.cskaoyan.bean.Coupon;
+import com.cskaoyan.bean.CouponUser;
+import com.cskaoyan.bean.coupon.CouponConstant;
+import com.cskaoyan.bean.coupon.CouponUserConstant;
 import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.mall_admin.service.promotion.CouponService;
+import com.cskaoyan.mall_wx.service.mtan.WxCouponService;
+import com.cskaoyan.mall_wx.util.CouponCheck;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 /**
  * created by ZengWei
@@ -23,10 +29,15 @@ public class CouponController {
     @Autowired
     CouponService couponService;
 
+    @Autowired
+    CouponCheck couponCheck;
+
+
     @RequestMapping("coupon/list")
     @ResponseBody
     public ResponseVO list(int page, int limit, String sort, String order, String name, Short type, Short status) {
         ResponseVO vo = new ResponseVO();
+        couponCheck.checkCouponExpired();
         PageData data = couponService.getCouponListData(page, limit, sort, order, name, type, status);
         vo.setErrmsg("成功");
         vo.setData(data);

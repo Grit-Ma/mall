@@ -1,9 +1,6 @@
 package com.cskaoyan.mall_wx.controller.goods;
 
-import com.cskaoyan.bean.vo.CategoryVo;
-import com.cskaoyan.bean.vo.GoodsDeatil;
-import com.cskaoyan.bean.vo.GoodsListVo;
-import com.cskaoyan.bean.vo.ResponseVO;
+import com.cskaoyan.bean.vo.*;
 import com.cskaoyan.mall_wx.service.goods.WxGoodsService;
 import com.cskaoyan.mall_wx.util.UserTokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 
 @RequestMapping("wx")
 @Controller
@@ -34,14 +32,15 @@ public class WxGoodsController {
 
     @RequestMapping("goods/list")
     @ResponseBody
-    public ResponseVO list(int categoryId, int page, int size, String keyword,
+    public ResponseVO list(Integer categoryId, Integer page, Integer size, String keyword,
                            String sort,
                            String order,
+                           Integer brandId,
                            HttpServletRequest request){
         ResponseVO vo = new ResponseVO();
         String tokenKey = request.getHeader("X-Litemall-Token");
         Integer userId = UserTokenManager.getUserId(tokenKey);
-        GoodsListVo data = wxGoodsService.getWxListData(categoryId,page,size,keyword,sort,order,userId);
+        GoodsListVo data = wxGoodsService.getWxListData(categoryId,page,size,keyword,sort,order,userId,brandId);
         vo.setErrmsg("成功");
         vo.setData(data);
         return vo;
@@ -74,10 +73,11 @@ public class WxGoodsController {
     @ResponseBody
     public ResponseVO related(@RequestParam(name = "id") int id){
         ResponseVO vo = new ResponseVO();
-        //GoodsDeatil data = wxGoodsService.getDetail(id);
-        //vo.setData(data);
-
-        //vo.setErrmsg("成功");
+        List<WxGoodsVo> data = wxGoodsService.getRelated(id);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("goodsList",data);
+        vo.setData(map);
+        vo.setErrmsg("成功");
         return vo;
     }
 
