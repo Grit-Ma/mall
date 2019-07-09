@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.Map;
 
 public interface WxOrderService {
 
@@ -14,4 +15,6 @@ public interface WxOrderService {
     HashMap submitOrder(HttpServletRequest request, SubmitInfo submitInfo) ;
 
     HashMap showOrderList(int showTpe, int page, int size, String sort, String order);
+
+    Map<String, Integer> orderInfo(Integer userId);
 }

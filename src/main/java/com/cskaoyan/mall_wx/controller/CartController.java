@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,7 +95,8 @@ public class CartController {
     //删除购物车的商品，购物车内编辑，选中商品，删除所有选中商品，返回删除后index
     @RequestMapping("delete")
     @ResponseBody
-    public ResponseVO deleteCart(@RequestBody int[] productsId, HttpServletRequest request){
+    public ResponseVO deleteCart(@RequestBody Map productsIdMap, HttpServletRequest request){
+        List productsId = ((List) productsIdMap.get("productIds"));
         String tokenKey = request.getHeader("X-Litemall-Token");
         Integer userId = UserTokenManager.getUserId(tokenKey);
         Cart cart = new Cart();
@@ -165,41 +167,49 @@ public class CartController {
     }
 
 
-    /*//下单前信息确认，购物车结算或者立即购买都会发送此请求
+    //下单前信息确认，购物车结算或者立即购买都会发送此请求
     //cartId获取购物车的id，address地址id，couponId优惠券id，grouponRulesId团购id
     @RequestMapping("checkout")
     @ResponseBody
-    public ResponseVO checkOut(@RequestBody Map check){
-
+    public ResponseVO checkOut(int cartId, int addressId, int couponId, int grouponRulesId,HttpServletRequest request){
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        Integer userId = UserTokenManager.getUserId(tokenKey);
         Cart cart = new Cart();
-        cart.setUserId(1);
+        cart.setUserId(userId);
+
+        Map check = new HashMap();
+        check.put("cartId",cartId);
+        check.put("addressId",addressId);
+        check.put("couponId",couponId);
+        check.put("grouponRulesId",grouponRulesId);
+
 
         //商品总价格，list--checkedGoodsList--goodsTotalPrice
         CartTotalVO cartTotalVO = cartService.getCartTotal(cart,check);
         //优惠券金额-couponPrice
-        BigDecimal couponPrice = cartService.coupon(cart,(int) check.get("couponId")).getDiscount();
+        //BigDecimal couponPrice = cartService.coupon(cart,(int) check.get("couponId")).getDiscount();
         //actualPrice与orderTotalPrice
-        BigDecimal actualPrice = BigDecimal.valueOf(cartTotalVO.getCheckedGoodsAmount()).subtract(couponPrice);
+        //BigDecimal actualPrice = BigDecimal.valueOf(cartTotalVO.getCheckedGoodsAmount()).subtract(couponPrice);
         //可用于优惠券数量-availableCouponLength
-        List<Coupon> coupons = cartService.coupons(actualPrice);
+        //List<Coupon> coupons = cartService.coupons(actualPrice);
 
         Map data = new HashMap();
-        data.put("actualPrice",actualPrice);  //订单总价
+        data.put("actualPrice",cartTotalVO.getCheckedGoodsAmount());  //订单总价
         data.put("addressId",check.get("addressId"));  //收货地追id
-        data.put("availableCouponLength",coupons.size());  //可用
-        //data.put("checkedAddress",);
+        data.put("availableCouponLength",0);  //可用优惠券数量
+        data.put("checkedAddress",null);
         data.put("checkedGoodsList",cartTotalVO.getCarts());
         data.put("couponId",check.get("couponId"));
-        data.put("couponPrice",couponPrice);
-        //data.put("freightPrice",);
+        data.put("couponPrice",0);
+        data.put("freightPrice",null);
         data.put("goodsTotalPrice",cartTotalVO.getCheckedGoodsAmount());
         data.put("grouponPrice",0);
         data.put("grouponRulesId",check.get("grouponRulesId"));
-        data.put("orderTotalPrice",actualPrice);
+        data.put("orderTotalPrice",0);
         ResponseVO vo = new ResponseVO();
         vo.setData(data);
         vo.setErrmsg("成功");
         return vo;
-    }*/
+    }
 
 }

@@ -17,7 +17,6 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="deleted" jdbcType="BIT" property="deleted" />
   </resultMap>
-
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -75,6 +74,10 @@
         </if>
       </foreach>
     </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, order_id, goods_id, goods_name, goods_sn, product_id, number, price, specifications,
+    pic_url, comment, add_time, update_time, deleted
   </sql>
   <select id="selectByExample" parameterType="com.cskaoyan.bean.OrderGoodsExample" resultMap="BaseResultMap">
     select

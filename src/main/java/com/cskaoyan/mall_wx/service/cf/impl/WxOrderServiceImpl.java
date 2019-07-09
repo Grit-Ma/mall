@@ -21,10 +21,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static com.cskaoyan.mall_wx.util.WxResponseCode.GROUPON_EXPIRED;
 import static com.cskaoyan.mall_wx.util.WxResponseCode.STATUS_USED;
@@ -335,6 +332,41 @@ public class WxOrderServiceImpl implements WxOrderService {
         OrderExample example = new OrderExample();
         example.or().andUserIdEqualTo(userId).andOrderSnEqualTo(orderSn).andDeletedEqualTo(false);
         return (int) orderMapper.countByExample(example);
+    }
+
+
+
+    @Override
+    public Map<String, Integer> orderInfo(Integer userId) {
+        OrderExample orderExample = new OrderExample();
+        orderExample.or().andUserIdEqualTo(userId).andDeletedEqualTo(false);
+        List<Order> orders = orderMapper.selectByExample(orderExample);
+        int unpaid = 0;
+        int unship = 0;
+        int unrecv = 0;
+        int uncomment = 0;
+        if (null == orders) {
+            return null;
+        } else {
+            Map<String, Integer> map = new HashMap<>();
+            for (Order order: orders) {
+                if (order.getOrderStatus() == 101) {
+                    unpaid++;
+                } else if (order.getOrderStatus() == 201) {
+                    unship++;
+                } else if (order.getOrderStatus() == 301) {
+                    unrecv++;
+                } else if (order.getOrderStatus() == 401) {
+                    uncomment++;
+                }
+            }
+            map.put("unpaid", unpaid);
+            map.put("unship", unship);
+            map.put("unrecv", unrecv);
+            map.put("uncomment", uncomment);
+
+            return map;
+        }
     }
 
 }
