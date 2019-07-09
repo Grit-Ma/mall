@@ -27,4 +27,8 @@ public interface CartMapper {
     int updateByPrimaryKeySelective(Cart record);
 
     int updateByPrimaryKey(Cart record);
+
+    int sumAll(@Param("userId")int userId);
+
+    void deleteChecked(@Param("userId")int userId,int[] productsId);
 }
