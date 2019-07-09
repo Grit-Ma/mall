@@ -19,10 +19,8 @@ public class ConfigController {
     public ResponseVO listMall() {
         ResponseVO vo = new ResponseVO();
         Map<String, Object> data = configService.listMall();
-        vo.setErrno(0);
-        vo.setErrmsg("成功");
         vo.setData(data);
-        return vo;
+        return vo.ok(vo);
     }
 
     @RequiresPermissions("admin:config:mall:updateConfigs")
@@ -30,9 +28,7 @@ public class ConfigController {
     public ResponseVO updateMall(@RequestBody Map<String, Object> data) {
         ResponseVO vo = new ResponseVO();
         configService.updateConfig(data);
-        vo.setErrno(0);
-        vo.setErrmsg("成功");
-        return vo;
+        return vo.ok(vo);
     }
 
     @RequiresPermissions("admin:config:express:list")
@@ -40,10 +36,8 @@ public class ConfigController {
     public ResponseVO listExpress() {
         ResponseVO vo = new ResponseVO();
         Map<String, Object> data = configService.listExpress();
-        vo.setErrno(0);
-        vo.setErrmsg("成功");
         vo.setData(data);
-        return vo;
+        return vo.ok(vo);
     }
 
     @RequiresPermissions("admin:config:express:updateConfigs")
@@ -51,9 +45,7 @@ public class ConfigController {
     public ResponseVO updateExpress(@RequestBody Map<String, Object> data) {
         ResponseVO vo = new ResponseVO();
         configService.updateConfig(data);
-        vo.setErrno(0);
-        vo.setErrmsg("成功");
-        return vo;
+        return vo.ok(vo);
     }
 
     @RequiresPermissions("admin:config:order:list")
@@ -61,10 +53,8 @@ public class ConfigController {
     public ResponseVO listOrder() {
         ResponseVO vo = new ResponseVO();
         Map<String, Object> data = configService.listOrder();
-        vo.setErrno(0);
-        vo.setErrmsg("成功");
         vo.setData(data);
-        return vo;
+        return vo.ok(vo);
     }
 
     @RequiresPermissions("admin:config:order:updateConfigs")
@@ -72,9 +62,7 @@ public class ConfigController {
     public ResponseVO updateOrder(@RequestBody Map<String, Object> data) {
         ResponseVO vo = new ResponseVO();
         configService.updateConfig(data);
-        vo.setErrno(0);
-        vo.setErrmsg("成功");
-        return vo;
+        return vo.ok(vo);
     }
 
     @RequiresPermissions("admin:config:wx:list")
@@ -82,10 +70,8 @@ public class ConfigController {
     public ResponseVO listWx() {
         ResponseVO vo = new ResponseVO();
         Map<String, Object> data = configService.listWx();
-        vo.setErrno(0);
-        vo.setErrmsg("成功");
         vo.setData(data);
-        return vo;
+        return vo.ok(vo);
     }
 
     @RequiresPermissions("admin:config:wx:updateConfigs")
@@ -93,9 +79,7 @@ public class ConfigController {
     public ResponseVO updateWx(@RequestBody Map<String, Object> data) {
         ResponseVO vo = new ResponseVO();
         configService.updateConfig(data);
-        vo.setErrno(0);
-        vo.setErrmsg("成功");
-        return vo;
+        return vo.ok(vo);
     }
 
 

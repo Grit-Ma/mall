@@ -17,8 +17,8 @@ public class WxUserServiceImpl implements WxUserService {
     @Override
     public List<User> queryByUsername(String username) {
         UserExample userExample = new UserExample();
-        UserExample.Criteria criteria = userExample.createCriteria();
-        criteria.andUsernameEqualTo(username);
+        userExample.or().andUsernameEqualTo(username).andDeletedEqualTo(false);
+
         return userMapper.selectByExample(userExample);
     }
 
@@ -28,5 +28,20 @@ public class WxUserServiceImpl implements WxUserService {
         userExample.or().andUsernameEqualTo(user.getUsername()).andDeletedEqualTo(false);
 
         return userMapper.updateByExampleSelective(user, userExample);
+    }
+
+    @Override
+    public List<User> queryByMobile(String mobile) {
+        UserExample userExample = new UserExample();
+        userExample.or().andMobileEqualTo(mobile).andDeletedEqualTo(false);
+
+        List<User> users = userMapper.selectByExample(userExample);
+        return users;
+    }
+
+    @Override
+    public int add(User user) {
+        int insert = userMapper.insert(user);
+        return insert;
     }
 }
