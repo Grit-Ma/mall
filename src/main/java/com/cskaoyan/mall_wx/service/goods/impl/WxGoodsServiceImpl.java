@@ -36,9 +36,12 @@ public class WxGoodsServiceImpl implements WxGoodsService {
     GrouponRulesMapper grouponRulesMapper;
     @Autowired
     CollectMapper collectMapper;
+    @Autowired
+    FootprintMapper footprintMapper;
+
 
     @Override
-    public GoodsListVo getWxListData(int categoryId, int page, int size, String keyword, String sort, String order, Integer userId) {
+    public GoodsListVo getWxListData(int categoryId, int page, int size, String keyword, String sort, String order, Integer id, Integer userId,Integer brandId) {
         GoodsListVo vo = new GoodsListVo();
 
         PageHelper.startPage(page,size);
@@ -98,13 +101,17 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         }
         BrandExample brandExample = new BrandExample();
         brandExample.createCriteria().andIdEqualTo(detail.getInfo().getBrandId()).andDeletedEqualTo(false);
-        brandMapper.selectByExample(brandExample);
+        List<Brand> brands = brandMapper.selectByExample(brandExample);
+        if(!brands.isEmpty()){
+            detail.setBrand(brands.get(0));
+        }
         CommentVo commentVo = new CommentVo();
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria().andValueIdEqualTo(goodsId).andDeletedEqualTo(false);
         List<Comment> comments = commentMapper.selectByExample(commentExample);
         commentVo.setData(comments);
         commentVo.setCount(comments.size());
+        detail.setComment(commentVo);
         IssueExample issueExample = new IssueExample();
         issueExample.createCriteria().andDeletedEqualTo(false);
         List<Issue> issues = issueMapper.selectByExample(issueExample);
@@ -127,7 +134,10 @@ public class WxGoodsServiceImpl implements WxGoodsService {
             List<Collect> collects = collectMapper.selectByExample(collectExample);
             if(collects.size() > 0){
                 detail.setUserHasCollect(1);
+            }else {
+                detail.setUserHasCollect(0);
             }
+            addFootPrint(userId,goodsId);
         }
         return detail;
     }
@@ -158,6 +168,14 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         return map;
     }
 
+    @Override
+    public List<WxGoodsVo> getRelated(int id) {
+        PageHelper.startPage(1,6);
+        int[] keys = footprintMapper.selectRelated();
+        List<WxGoodsVo> list = goodsMapper.selectByPrimaryKeys(keys);
+        return list;
+    }
+
     private void addSearchHistory(String keyword,Integer userId){
         SearchHistory searchHistory = new SearchHistory();
         searchHistory.setFrom("wx");
@@ -165,6 +183,15 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         searchHistory.setUserId(userId);
         if(userId != null){
             searchHistoryMapper.insert(searchHistory);
+        }
+    }
+
+    private void addFootPrint(Integer userId,Integer goodsId){
+        Footprint footprint = new Footprint();
+        footprint.setGoodsId(goodsId);
+        footprint.setUserId(userId);
+        if(userId != null){
+            footprintMapper.insert(footprint);
         }
     }
 }
