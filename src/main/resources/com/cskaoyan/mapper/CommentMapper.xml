@@ -289,7 +289,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="getCommentCount" resultType="map">
-    SELECT count(*) as total,
+    SELECT count(*) as allCount,
         (
           select count(*) from cskaoyan_mall_comment a
           WHERE value_id = #{valueId}
@@ -297,7 +297,7 @@
           and a.type = #{type}
           and a.deleted = false
         )
-         as hasPic
+         as hasPicCount
     from cskaoyan_mall_comment b
     where value_id = #{valueId}
     and type = #{type}

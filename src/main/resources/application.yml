@@ -1,6 +1,13 @@
 spring:
   profiles:
-    active: zhe
+    active: xfor
+
+myoss:
+  bucket: xfor
+  end-point: oss-cn-shenzhen.aliyuncs.com
+  access-key: LTAIO5qvCfMxUHqt
+  secret: Tks0mrDZicbo5h9IndPWHNjG28h0v9
+
 ---
 myoss:
    bucket: project-mall

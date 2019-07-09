@@ -2,8 +2,9 @@ package com.cskaoyan.mapper;
 
 import com.cskaoyan.bean.Footprint;
 import com.cskaoyan.bean.FootprintExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface FootprintMapper {
     long countByExample(FootprintExample example);
@@ -30,5 +31,7 @@ public interface FootprintMapper {
 
     List<Footprint> selectAll();
 
-    List<Footprint> selectBysearch(@Param("userId")Integer userId, @Param("goodsId")Integer goodsId);
+    List<Footprint> selectBysearch(@Param("userId") Integer userId, @Param("goodsId") Integer goodsId);
+
+    int[] selectRelated();
 }

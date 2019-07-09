@@ -2,6 +2,7 @@ package com.cskaoyan.mall_wx.controller.mtan;
 
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.bean.wx.pagedata.CouponPageData;
+import com.cskaoyan.mall_admin.service.promotion.CouponService;
 import com.cskaoyan.mall_wx.service.mtan.WxCouponService;
 import com.cskaoyan.mall_wx.util.UserTokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class WxCouponController {
 
     @Autowired
     WxCouponService wxCouponService;
+
 
     @RequestMapping("coupon/mylist")
     @ResponseBody

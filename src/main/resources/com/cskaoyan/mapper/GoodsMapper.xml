@@ -578,4 +578,15 @@
   <select id="selectLikeName" resultMap="GoodsLikeNameList">
     select #{name} as goods_name,#{orderByClause} as order_by_clause
   </select>
+
+  <select id="selectByPrimaryKeys" resultType="com.cskaoyan.bean.vo.WxGoodsVo">
+    select  g.id,  g.name, g.brief,
+    g.pic_url as picUrl,  g.is_new as isNew, g.is_hot as isHot,  g.counter_price as counterPrice, g.retail_price as retailPrice
+    from cskaoyan_mall_goods g
+    WHERE id in
+    <foreach collection="keys" item="key" separator="," open="(" close=")">
+      #{key}
+    </foreach>
+  </select>
+
 </mapper>

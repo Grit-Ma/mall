@@ -35,7 +35,6 @@ public class CartServiceImpl implements CartService{
         return carts;
     }
 
-
     @Override
     public List<Integer> selectAllGoodId(Cart cart) {
         CartExample example = new CartExample();
@@ -148,16 +147,26 @@ public class CartServiceImpl implements CartService{
         CartExample example = new CartExample();
         CartExample.Criteria criteria = example.createCriteria();
 
+<<<<<<< HEAD
+        criteria.andUserIdEqualTo(cart.getUserId()).andProductIdIn(productIds);
+=======
         criteria.andUserIdEqualTo(cart.getUserId()).andProductIdIn((List<Integer>) checked.get("productIds"));
+>>>>>>> 2495088e507ff2ad2f023b0d8c2b3953b5997e3f
 
         List<Cart> carts = cartMapper.selectByExample(example);
         for (Cart c : carts) {
             c.setChecked(((int) checked.get("isChecked") == 1)?true:false);
             cartMapper.updateByPrimaryKey(c);
         }
-
     }
 
+    //根据userId获取所有选中的cart表中条目
+    @Override
+    public List<Cart> getCheckedCartGood(int userId){
+        CartExample cartExample =new CartExample();
+        cartExample.createCriteria().andUserIdEqualTo(userId).andCheckedEqualTo(true);
+        return cartMapper.selectByExample(cartExample);
+    }
 
     //订单确认
     @Override

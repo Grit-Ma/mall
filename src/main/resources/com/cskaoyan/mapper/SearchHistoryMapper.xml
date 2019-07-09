@@ -240,6 +240,6 @@
      from cskaoyan_mall_search_history
   </select>
   <select id="selectKeywordHistory" resultType="com.cskaoyan.bean.wx.keyword.WxKeyword">
-    select keyword from cskaoyan_mall_search_history where user_id = #{userId} and deleted = false
+    select keyword from cskaoyan_mall_search_history where user_id = #{userId} and deleted = false order by add_time desc
   </select>
 </mapper>

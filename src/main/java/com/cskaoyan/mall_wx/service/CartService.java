@@ -33,6 +33,8 @@ public interface CartService {
     //选中商品或者取消选中
     void checked(Cart cart, Map checked);
 
+    List<Cart> getCheckedCartGood(int userId);
+
     //订单确认
     Map checkout(Cart cart);
 
