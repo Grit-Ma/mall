@@ -1,7 +1,11 @@
 spring:
   profiles:
-    active: cdy
+<<<<<<< HEAD
+    active: xfor
 
+=======
+    active: mtan
+>>>>>>> 9fdf6fcbfef6990008000a79318e320b8bdd31c7
 ---
 myoss:
    bucket: project-mall

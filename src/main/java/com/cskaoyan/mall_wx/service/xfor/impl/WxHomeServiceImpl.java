@@ -4,7 +4,7 @@ import com.cskaoyan.bean.*;
 import com.cskaoyan.bean.wx.xfor.FloorGoodsList;
 import com.cskaoyan.bean.wx.xfor.GrouponList;
 import com.cskaoyan.bean.wx.xfor.HomeList;
-import com.cskaoyan.mall_wx.service.xfor.HomeService;
+import com.cskaoyan.mall_wx.service.xfor.WxHomeService;
 import com.cskaoyan.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class HomeServiceImpl implements HomeService {
+public class WxHomeServiceImpl implements WxHomeService {
     @Autowired
     AdMapper adMapper;
 
@@ -76,9 +76,10 @@ public class HomeServiceImpl implements HomeService {
         for (int i = 1; i <= 2; i++) {
             GrouponRules grouponRules = grouponRulesMapper.selectByPrimaryKey(i);
             GrouponList grouponList = new GrouponList();
-            grouponList.setGoods(goodsMapper.selectByPrimaryKey(grouponRules.getGoodsId()));
+            Goods goods = goodsMapper.selectByPrimaryKey(grouponRules.getGoodsId());
+            grouponList.setGoods(goods);
             grouponList.setGroupon_member(grouponRules.getDiscountMember());
-            grouponList.setGroupon_price(grouponRules.getDiscount());
+            grouponList.setGroupon_price(goods.getRetailPrice().doubleValue() - grouponRules.getDiscount().doubleValue());
             grouponLists.add(grouponList);
         }
         return grouponLists;
@@ -86,7 +87,7 @@ public class HomeServiceImpl implements HomeService {
 
     private List<FloorGoodsList> getFloorGoodsList() {
         ArrayList<FloorGoodsList> floorGoodsLists = new ArrayList<>();
-        for (int i = 1005000; i <= 1005002; i++) {
+        for (int i = 1005000; i <= 1005001; i++) {
             GoodsExample goodsExample = new GoodsExample();
             goodsExample.createCriteria().andCategoryIdEqualTo(getCategoryId(i));
             List<Goods> goodsList = goodsMapper.selectByExample(goodsExample);

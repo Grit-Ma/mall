@@ -19,6 +19,7 @@ import java.util.Date;
  */
 
 @Controller
+@RequestMapping("admin")
 public class GroupController {
 
     @Autowired
