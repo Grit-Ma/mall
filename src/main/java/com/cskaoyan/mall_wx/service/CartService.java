@@ -36,12 +36,5 @@ public interface CartService {
     //订单确认
     Map checkout(Cart cart);
 
-    //查询所使用的优惠券byId
-    Coupon coupon(int couponId);
-
-    //下单清空
-
-
-
 
 }

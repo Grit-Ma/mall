@@ -104,7 +104,7 @@ public class CartServiceImpl implements CartService{
             cart.setGoodsSn(goods.getGoodsSn());
             cart.setGoodsName(goods.getName());
             cart.setPrice(goodsProduct.getPrice());
-            //cart.setSpecifications(goodsProduct.getSpecifications().ty);
+            cart.setSpecifications(goodsProduct.getSpecifications());
             cart.setPicUrl(goodsProduct.getUrl());
             cart.setAddTime(goods.getAddTime());
             cart.setUpdateTime(goods.getUpdateTime());
@@ -129,8 +129,9 @@ public class CartServiceImpl implements CartService{
         CartExample example = new CartExample();
         CartExample.Criteria criteria = example.createCriteria();
         criteria.andIdEqualTo(cart.getId()).andUserIdEqualTo(cart.getUserId());
-
-        cartMapper.updateByExample(cart,example);
+        Cart cart1 = cartMapper.selectByPrimaryKey(cart.getId());
+        cart1.setNumber(cart.getNumber());
+        cartMapper.updateByExample(cart1,example);
     }
 
 
@@ -169,15 +170,6 @@ public class CartServiceImpl implements CartService{
     }
 
 
-    //查询优惠券
-    @Override
-    public Coupon coupon(int couponId) {
-        Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
-        return coupon;
-    }
-
-
-    //可用优惠券列表
 
 
 }
