@@ -376,4 +376,8 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectRelated" resultMap="BaseResultMap">
+    select  <include refid="Base_Column_List" /> from cskaoyan_mall_topic limit 4 offset 0
+  </select>
 </mapper>

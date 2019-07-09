@@ -9,11 +9,15 @@ import java.util.HashMap;
 
 public interface WxGoodsService {
 
-    GoodsListVo getWxListData(int categoryId, int page, int size);
+    GoodsListVo getWxListData(int categoryId, int page, int size, String keyword, String sort, String order,Integer userId);
 
     CategoryVo getCategory(int id);
 
-    GoodsDeatil getDetail(int id);
+    GoodsDeatil getDetail(int goodsId, Integer userId);
 
     HashMap getCount();
+
+    HashMap commentCount(int valueId, int type);
+
+    HashMap commentList(int valueId, int type, int size, int page, int showType);
 }

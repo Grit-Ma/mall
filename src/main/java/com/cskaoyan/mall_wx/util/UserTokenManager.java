@@ -1,6 +1,8 @@
 package com.cskaoyan.mall_wx.util;
 
 
+import com.cskaoyan.bean.UserToken;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;

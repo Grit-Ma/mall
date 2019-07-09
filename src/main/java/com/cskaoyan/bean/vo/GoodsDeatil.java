@@ -13,7 +13,7 @@ public class GoodsDeatil {
     private List<Issue> issue;
     private List<GoodsProduct> productList;
     private String shareImage;
-    private List<GoodsSpecification> specificationList;
+    private List<Specification> specificationList;
     private Integer userHasCollect;
 
 
@@ -81,11 +81,11 @@ public class GoodsDeatil {
         this.shareImage = shareImage;
     }
 
-    public List<GoodsSpecification> getSpecificationList() {
+    public List<Specification> getSpecificationList() {
         return specificationList;
     }
 
-    public void setSpecificationList(List<GoodsSpecification> specificationList) {
+    public void setSpecificationList(List<Specification> specificationList) {
         this.specificationList = specificationList;
     }
 

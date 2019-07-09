@@ -2,6 +2,8 @@ package com.cskaoyan.bean.wx.xfor;
 
 import com.cskaoyan.bean.Goods;
 
+import java.math.BigDecimal;
+
 public class GrouponList {
     private int groupon_member;
     private double groupon_price;

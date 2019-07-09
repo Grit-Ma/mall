@@ -29,9 +29,7 @@ public class StatController {
         statVo.setColumns(columns);
         statVo.setRows(rows);
         vo.setData(statVo);
-        vo.setErrno(0);
-        vo.setErrmsg("成功");
-        return vo;
+        return vo.ok(vo);
     }
 
     @RequiresPermissions("admin:stat:order")
@@ -44,10 +42,8 @@ public class StatController {
         statVo.setColumns(columns);
         statVo.setRows(rows);
         vo.setData(statVo);
-        vo.setErrno(0);
-        vo.setErrmsg("成功");
 
-        return vo;
+        return vo.ok(vo);
     }
 
     @RequiresPermissions("admin:stat:goods")
@@ -60,10 +56,7 @@ public class StatController {
         statVo.setColumns(columns);
         statVo.setRows(rows);
         vo.setData(statVo);
-        vo.setErrno(0);
-        vo.setErrmsg("成功");
-
-        return vo;
+        return vo.ok(vo);
     }
 
 }

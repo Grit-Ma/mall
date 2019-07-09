@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("address")
+@RequestMapping("admin/address")
 public class AddressController {
     @Autowired
     AddressService addressService;

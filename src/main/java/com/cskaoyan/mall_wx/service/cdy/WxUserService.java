@@ -8,4 +8,8 @@ public interface WxUserService {
     List<User> queryByUsername(String username);
 
     int updateById(User user);
+
+    List<User> queryByMobile(String mobile);
+
+    int add(User user);
 }
