@@ -30,31 +30,62 @@ public class WxGoodsServiceImpl implements WxGoodsService {
     GoodsProductMapper goodsProductMapper;
     @Autowired
     GoodsSpecificationMapper goodsSpecificationMapper;
+    @Autowired
+    SearchHistoryMapper searchHistoryMapper;
+    @Autowired
+    GrouponRulesMapper grouponRulesMapper;
+    @Autowired
+    CollectMapper collectMapper;
 
     @Override
-    public GoodsListVo getWxListData(int categoryId, int page, int size) {
-        GoodsListVo vo = goodsMapper.getWxGoodsList(categoryId);
+    public GoodsListVo getWxListData(int categoryId, int page, int size, String keyword, String sort, String order, Integer userId) {
+        GoodsListVo vo = new GoodsListVo();
+
+        PageHelper.startPage(page,size);
+        List<WxGoodsVo> goodsList = null;
+        List<Category> categories = null;
+        if(keyword != null && !keyword.isEmpty()){
+            goodsList = goodsMapper.selectLikeGoodsName("%" + keyword + "%", sort + " " + order);
+            categories = categoryMapper.selectLikeGoodsName("%" + keyword + "%");
+            addSearchHistory(keyword, userId);
+        }else {
+            goodsList = goodsMapper.selectWxGoodsByCategoryId(categoryId);
+            categories = categoryMapper.selectFilterCategoryList(categoryId);
+        }
+        PageInfo<WxGoodsVo> pageinfo = new PageInfo(goodsList);
+        vo.setGoodsList(pageinfo.getList());
+        vo.setFilterCategoryList(categories);
+        vo.setCount(pageinfo.getSize());
         return vo;
 
     }
 
     @Override
     public CategoryVo getCategory(int id) {
+        Category parentCategory = null;
         CategoryExample example = new CategoryExample();
-        CategoryExample.Criteria criteria = example.createCriteria().andIdEqualTo(id).andDeletedEqualTo(false);
+        example.createCriteria().andIdEqualTo(id).andDeletedEqualTo(false);
         Category currentCategory = categoryMapper.selectByExample(example).get(0);
+        int pid = currentCategory.getPid();
+        if (currentCategory.getPid() == 0){// 一级
+            parentCategory = currentCategory;
+            pid = parentCategory.getId();
+        }else {
+            parentCategory = categoryMapper.selectByPrimaryKey(currentCategory.getPid());
+        }
         example.clear();
-        criteria = example.createCriteria().andIdEqualTo(currentCategory.getPid()).andDeletedEqualTo(false);
-        Category parentCategory = categoryMapper.selectByExample(example).get(0);
-        example.clear();
-        criteria = example.createCriteria().andPidEqualTo(currentCategory.getPid()).andDeletedEqualTo(false);
+
+        example.createCriteria().andPidEqualTo(pid).andDeletedEqualTo(false);
         List<Category> brotherCategory = categoryMapper.selectByExample(example);
+        if(currentCategory.getPid() == 0){
+            currentCategory = brotherCategory.size() > 0 ? brotherCategory.get(0) : null;
+        }
         CategoryVo vo = new CategoryVo(brotherCategory, currentCategory, parentCategory);
         return vo;
     }
 
     @Override
-    public GoodsDeatil getDetail(int goodsId) {
+    public GoodsDeatil getDetail(int goodsId, Integer userId) {
         GoodsDeatil detail = new GoodsDeatil();
         GoodsAttributeExample example = new GoodsAttributeExample();
         example.createCriteria().andGoodsIdEqualTo(goodsId).andDeletedEqualTo(false);
@@ -84,8 +115,20 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         detail.setProductList(goodsProducts);
         List<Specification> goodsSpecifications = goodsSpecificationMapper.selectSpecificationList(goodsId);
         detail.setSpecificationList(goodsSpecifications);
-        //TODO groupon、shareImage、userHasCollect 不知道是什么 先不写
-
+        detail.setShareImage(detail.getInfo().getShareUrl());
+        GrouponRulesExample grouponRulesExample = new GrouponRulesExample();
+        grouponRulesExample.createCriteria().andGoodsIdEqualTo(goodsId).andDeletedEqualTo(false);
+        List<GrouponRules> grouponRules = grouponRulesMapper.selectByExample(grouponRulesExample);
+        detail.setGroupon(grouponRules);
+        CollectExample collectExample = new CollectExample();
+        if(userId != null){
+            collectExample.createCriteria().andTypeEqualTo(Byte.valueOf("0")).andUserIdEqualTo(userId)
+                    .andValueIdEqualTo(detail.getInfo().getId()).andDeletedEqualTo(false);
+            List<Collect> collects = collectMapper.selectByExample(collectExample);
+            if(collects.size() > 0){
+                detail.setUserHasCollect(1);
+            }
+        }
         return detail;
     }
 
@@ -113,5 +156,15 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         map.put("currentPage",pageinfo.getPageNum());
         map.put("data",pageinfo.getList());
         return map;
+    }
+
+    private void addSearchHistory(String keyword,Integer userId){
+        SearchHistory searchHistory = new SearchHistory();
+        searchHistory.setFrom("wx");
+        searchHistory.setKeyword(keyword);
+        searchHistory.setUserId(userId);
+        if(userId != null){
+            searchHistoryMapper.insert(searchHistory);
+        }
     }
 }

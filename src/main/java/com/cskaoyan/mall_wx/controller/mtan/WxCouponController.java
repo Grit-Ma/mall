@@ -40,4 +40,14 @@ public class WxCouponController {
             return responseVO;
         }
     }
+
+    @RequestMapping("coupon/selectlist")
+    @ResponseBody
+    public ResponseVO selectList(int cartId, int grouponRulesId) {
+        ResponseVO responseVO = new ResponseVO();
+        responseVO.setErrno(0);
+        responseVO.setErrmsg("成功");
+        responseVO.setData(wxCouponService.selectList(cartId, grouponRulesId));
+        return  responseVO;
+    }
 }
