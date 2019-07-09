@@ -1,9 +1,11 @@
 package com.cskaoyan.mall_admin.service.promotion.Impl;
 
 import com.cskaoyan.bean.Coupon;
+import com.cskaoyan.bean.Coupon.Column;
 import com.cskaoyan.bean.CouponExample;
 import com.cskaoyan.bean.CouponUser;
 import com.cskaoyan.bean.CouponUserExample;
+import com.cskaoyan.bean.coupon.CouponConstant;
 import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.mapper.CouponMapper;
@@ -15,6 +17,8 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,6 +33,10 @@ public class CouponServiceImpl implements CouponService {
 
     @Autowired
     CouponUserMapper couponUserMapper;
+
+    private Column[] result = new Column[]{Column.id, Column.name, Column.desc, Column.tag,
+            Column.days, Column.startTime, Column.endTime,
+            Column.discount, Column.min};
 
     @Override
     public PageData getCouponListData(int page, int limit, String sort, String order, String name, Short type, Short status) {
@@ -113,5 +121,12 @@ public class CouponServiceImpl implements CouponService {
         List<CouponUser> coupons = couponUserMapper.selectByExample(example);
         PageInfo<CouponUser> pageinfo = new PageInfo(coupons);
         return new PageData(pageinfo.getList(),pageinfo.getTotal());
+    }
+
+    @Override
+    public List<Coupon> queryExpired() {
+        CouponExample example = new CouponExample();
+        example.or().andStatusEqualTo(CouponConstant.STATUS_NORMAL).andTimeTypeEqualTo(CouponConstant.TIME_TYPE_TIME).andEndTimeLessThan(new Date()).andDeletedEqualTo(false);
+        return couponMapper.selectByExample(example);
     }
 }
