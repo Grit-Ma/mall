@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: cf
+    active: mtan
 ---
 myoss:
    bucket: project-mall
