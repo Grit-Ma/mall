@@ -3,6 +3,7 @@ package com.cskaoyan.mapper;
 import com.cskaoyan.bean.Order;
 import com.cskaoyan.bean.OrderExample;
 import com.cskaoyan.bean.mallmanage.order.OrderDetail;
+import com.cskaoyan.bean.wx.order.WxOrder;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -31,4 +32,6 @@ public interface OrderMapper {
     int updateByPrimaryKey(Order record);
 
     OrderDetail selectOrderDetailById(@Param("id") int id);
+
+    List<WxOrder> showOrdersByStatus(@Param("orderStatus")short orderStatus,@Param("sort") String sort, @Param("order")String order);
 }

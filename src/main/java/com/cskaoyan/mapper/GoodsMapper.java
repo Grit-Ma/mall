@@ -42,4 +42,5 @@ public interface GoodsMapper {
     GoodsListVo getWxGoodsList(int categoryId);
 
     int getGoodsCount();
+
 }

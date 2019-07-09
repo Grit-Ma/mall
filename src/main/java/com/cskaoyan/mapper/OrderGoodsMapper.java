@@ -3,6 +3,7 @@ package com.cskaoyan.mapper;
 import com.cskaoyan.bean.OrderGoods;
 import com.cskaoyan.bean.OrderGoodsExample;
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface OrderGoodsMapper {
@@ -27,4 +28,6 @@ public interface OrderGoodsMapper {
     int updateByPrimaryKeySelective(OrderGoods record);
 
     int updateByPrimaryKey(OrderGoods record);
+
+    List<OrderGoods> selectGoodMeesageForOrder(@Param("oid") Integer oid);
 }

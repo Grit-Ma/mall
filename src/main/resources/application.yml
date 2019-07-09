@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: cdy
+    active: cf
 
 ---
 myoss:
