@@ -7,8 +7,6 @@ import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.mall_wx.service.cdy.WxUserService;
 import com.cskaoyan.mall_wx.util.UserTokenManager;
 import com.cskaoyan.tool.RegexUtil;
-import org.apache.commons.lang.StringUtils;
-import org.apache.tomcat.util.http.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
