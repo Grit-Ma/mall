@@ -103,12 +103,11 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.cskaoyan.bean.SearchHistory">
-    insert into cskaoyan_mall_search_history (id, user_id, keyword, 
-      from, add_time, update_time, 
-      deleted)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{keyword,jdbcType=VARCHAR}, 
-      #{from,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{deleted,jdbcType=BIT})
+    insert into cskaoyan_mall_search_history ( user_id, keyword,
+      `from`,add_time,update_time,deleted)
+    values (#{userId,jdbcType=INTEGER}, #{keyword,jdbcType=VARCHAR},
+      #{from,jdbcType=VARCHAR}, now(), now(),
+      0)
   </insert>
   <insert id="insertSelective" parameterType="com.cskaoyan.bean.SearchHistory">
     insert into cskaoyan_mall_search_history
@@ -125,12 +124,8 @@
       <if test="from != null">
         from,
       </if>
-      <if test="addTime != null">
         add_time,
-      </if>
-      <if test="updateTime != null">
         update_time,
-      </if>
       <if test="deleted != null">
         deleted,
       </if>
@@ -148,15 +143,9 @@
       <if test="from != null">
         #{from,jdbcType=VARCHAR},
       </if>
-      <if test="addTime != null">
-        #{addTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="deleted != null">
-        #{deleted,jdbcType=BIT},
-      </if>
+        now(),
+        now(),
+        0,
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.cskaoyan.bean.SearchHistoryExample" resultType="java.lang.Long">
@@ -250,6 +239,7 @@
      add_time
      from cskaoyan_mall_search_history
   </select>
-
-
+  <select id="selectKeywordHistory" resultType="com.cskaoyan.bean.wx.keyword.WxKeyword">
+    select keyword from cskaoyan_mall_search_history where user_id = #{userId} and deleted = false order by add_time desc
+  </select>
 </mapper>

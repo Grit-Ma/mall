@@ -1,7 +1,7 @@
 package com.cskaoyan.mall_wx.controller.cdy;
 
 import com.cskaoyan.bean.vo.ResponseVO;
-import com.cskaoyan.mall_wx.service.cdy.WxOrderService;
+import com.cskaoyan.mall_wx.service.cf.WxOrderService;
 import com.cskaoyan.mall_wx.util.UserTokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -4,6 +4,7 @@ import com.cskaoyan.bean.Goods;
 import com.cskaoyan.bean.GoodsExample;
 import com.cskaoyan.bean.GoodsInfo;
 import com.cskaoyan.bean.vo.GoodsListVo;
+import com.cskaoyan.bean.vo.WxGoodsVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -42,4 +43,12 @@ public interface GoodsMapper {
     GoodsListVo getWxGoodsList(int categoryId);
 
     int getGoodsCount();
+
+    List<WxGoodsVo> selectWxGoodsByCategoryId(int categoryId);
+
+    List<WxGoodsVo>  selectLikeGoodsName(String goodsName, String orderByClause);
+
+    List<WxGoodsVo> selectRelated(int id);
+
+    List<WxGoodsVo> selectByPrimaryKeys(@Param("keys") int[] keys);
 }

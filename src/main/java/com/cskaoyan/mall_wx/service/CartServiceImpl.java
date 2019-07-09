@@ -19,6 +19,10 @@ public class CartServiceImpl implements CartService{
     CouponMapper couponMapper;
     @Autowired
     CouponUserMapper couponUserMapper;
+    @Autowired
+    GoodsMapper goodsMapper;
+    @Autowired
+    GoodsProductMapper goodsProductMapper;
 
     //获取购物车数据
     @Override
@@ -30,7 +34,7 @@ public class CartServiceImpl implements CartService{
         List<Cart> carts = cartMapper.selectByExample(example);
         return carts;
     }
-    
+
     @Override
     public List<Integer> selectAllGoodId(Cart cart) {
         CartExample example = new CartExample();
@@ -54,14 +58,23 @@ public class CartServiceImpl implements CartService{
         CartExample example1 = new CartExample();
         CartExample.Criteria criteria1 = example1.createCriteria();
         criteria1.andUserIdEqualTo(cart.getUserId());
-        cartTotal.setGoodsAmount(cartMapper.sumAll(cart.getUserId()));    //购物车商品总价格
+        if (cartMapper.sumAll(cart.getUserId()) == null){  //购物车商品总价格
+            cartTotal.setGoodsAmount(0);
+        }else {
+            cartTotal.setGoodsAmount(cartMapper.sumAll(cart.getUserId()));
+        }
         cartTotal.setGoodsCount(cartMapper.countByExample(example1));       //购物车商品总数量
 
 
         CartExample example2 = new CartExample();
         CartExample.Criteria criteria2 = example1.createCriteria();
         criteria2.andUserIdEqualTo(cart.getUserId()).andCheckedEqualTo(true);
-        cartTotal.setCheckedGoodsAmount(cartMapper.sumAllChecked(cart.getUserId()));   //选中商品总价格
+        if (cartMapper.sumAllChecked(cart.getUserId()) == null){  //选中商品总价格
+            cartTotal.setCheckedGoodsAmount(0);
+        }else {
+            int d = cartMapper.sumAllChecked(cart.getUserId());
+            cartTotal.setCheckedGoodsAmount(d);
+        }
         cartTotal.setCheckedGoodsCount(cartMapper.countByExample(example2));     //选中商品总数量
         cartTotal.setCarts(cartMapper.selectByExample(example1));  //选中商品列表
 
@@ -69,14 +82,42 @@ public class CartServiceImpl implements CartService{
         return cartTotal;
     }
 
-    //添加商品进购物车
+    //添加商品进购物车,分别用goodsid，productid取对应数据，填满cart
+    //先判断是否已有此商品
     @Override
     public long addToCart(Cart cart) {
+        int userId = cart.getUserId();
+        int goodsId = cart.getGoodsId();
+        int productId = cart.getProductId();
+        int number = cart.getNumber();
+        //判断是否已存在
         CartExample example = new CartExample();
         CartExample.Criteria criteria = example.createCriteria();
-        criteria.andUserIdEqualTo(cart.getUserId());
+        criteria.andUserIdEqualTo(userId).andGoodsIdEqualTo(goodsId).andProductIdEqualTo(productId);
+        List<Cart> carts = cartMapper.selectByExample(example);
 
-        long num = cartMapper.countByExample(example);
+
+        if (carts.isEmpty()){  //不存在就填满cart存进去
+            Goods goods = goodsMapper.selectByPrimaryKey(goodsId);
+            GoodsProduct goodsProduct = goodsProductMapper.selectByPrimaryKey(productId);
+            cart.setGoodsSn(goods.getGoodsSn());
+            cart.setGoodsName(goods.getName());
+            cart.setPrice(goodsProduct.getPrice());
+            //cart.setSpecifications(goodsProduct.getSpecifications().ty);
+            cart.setPicUrl(goodsProduct.getUrl());
+            cart.setAddTime(goods.getAddTime());
+            cart.setUpdateTime(goods.getUpdateTime());
+            cart.setDeleted(goods.getDeleted());
+            cartMapper.insert(cart);
+        }else {  //存在就找出num，加上number。
+            int cartNumber = carts.get(0).getNumber();
+            carts.get(0).setNumber((short) (cartNumber+number));
+            cartMapper.updateByExampleSelective(carts.get(0),example);
+        }
+        CartExample example1 = new CartExample();
+        CartExample.Criteria criteria2 = example1.createCriteria();
+        criteria2.andUserIdEqualTo(userId);
+        long num = cartMapper.countByExample(example1);
         return num;
     }
 
@@ -94,7 +135,7 @@ public class CartServiceImpl implements CartService{
 
     //删除选中商品
     @Override
-    public void deleteChecked(Cart cart,int[] productsId) {
+    public void deleteChecked(Cart cart,List productsId) {
         cartMapper.deleteChecked(cart.getUserId(),productsId);
     }
 
@@ -102,22 +143,29 @@ public class CartServiceImpl implements CartService{
     //购物车内选中取消选中商品
     @Override
     public void checked(Cart cart, Map checked) {
-        Integer [] productId = (Integer[]) checked.get("productIds");
-        List<Integer> productIds = Arrays.asList(productId);
-
         CartExample example = new CartExample();
         CartExample.Criteria criteria = example.createCriteria();
 
+<<<<<<< HEAD
         criteria.andUserIdEqualTo(cart.getUserId()).andProductIdIn(productIds);
+=======
+        criteria.andUserIdEqualTo(cart.getUserId()).andProductIdIn((List<Integer>) checked.get("productIds"));
+>>>>>>> 2495088e507ff2ad2f023b0d8c2b3953b5997e3f
 
         List<Cart> carts = cartMapper.selectByExample(example);
         for (Cart c : carts) {
             c.setChecked(((int) checked.get("isChecked") == 1)?true:false);
             cartMapper.updateByPrimaryKey(c);
         }
-
     }
 
+    //根据userId获取所有选中的cart表中条目
+    @Override
+    public List<Cart> getCheckedCartGood(int userId){
+        CartExample cartExample =new CartExample();
+        cartExample.createCriteria().andUserIdEqualTo(userId).andCheckedEqualTo(true);
+        return cartMapper.selectByExample(cartExample);
+    }
 
     //订单确认
     @Override

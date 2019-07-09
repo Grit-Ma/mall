@@ -377,4 +377,15 @@
   <select id="getCategoryIds" resultMap="ids">
     select id,pid from cskaoyan_mall_category where id = #{categoryId}
   </select>
+
+  <select id="selectLikeGoodsName" resultMap="BaseResultMap">
+    SELECT * FROM cskaoyan_mall_category WHERE id in
+    (
+    select DISTINCT category_id
+        from cskaoyan_mall_goods g
+            LEFT JOIN cskaoyan_mall_category c
+            ON g.category_id = c.id
+        where g.name like #{goodsName}
+        and g.deleted = false )
+  </select>
 </mapper>

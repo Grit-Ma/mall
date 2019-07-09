@@ -1,17 +1,17 @@
 package com.cskaoyan.mall_wx.controller.goods;
 
-import com.cskaoyan.bean.vo.CategoryVo;
-import com.cskaoyan.bean.vo.GoodsDeatil;
-import com.cskaoyan.bean.vo.GoodsListVo;
-import com.cskaoyan.bean.vo.ResponseVO;
+import com.cskaoyan.bean.vo.*;
 import com.cskaoyan.mall_wx.service.goods.WxGoodsService;
+import com.cskaoyan.mall_wx.util.UserTokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 
 @RequestMapping("wx")
 @Controller
@@ -32,9 +32,15 @@ public class WxGoodsController {
 
     @RequestMapping("goods/list")
     @ResponseBody
-    public ResponseVO list(int categoryId, int page, int size){
+    public ResponseVO list(Integer categoryId, Integer page, Integer size, String keyword,
+                           String sort,
+                           String order,
+                           Integer brandId,
+                           HttpServletRequest request){
         ResponseVO vo = new ResponseVO();
-        GoodsListVo data = wxGoodsService.getWxListData(categoryId,page,size);
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        Integer userId = UserTokenManager.getUserId(tokenKey);
+        GoodsListVo data = wxGoodsService.getWxListData(categoryId,page,size,keyword,sort,order,userId,brandId);
         vo.setErrmsg("成功");
         vo.setData(data);
         return vo;
@@ -52,9 +58,11 @@ public class WxGoodsController {
 
     @RequestMapping("goods/detail")
     @ResponseBody
-    public ResponseVO detail(@RequestParam(name = "id") int id){
+    public ResponseVO detail(@RequestParam(name = "id") int id, HttpServletRequest request){
         ResponseVO vo = new ResponseVO();
-        GoodsDeatil data = wxGoodsService.getDetail(id);
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        Integer userId = UserTokenManager.getUserId(tokenKey);
+        GoodsDeatil data = wxGoodsService.getDetail(id,userId);
         vo.setData(data);
         vo.setErrmsg("成功");
         return vo;
@@ -65,17 +73,22 @@ public class WxGoodsController {
     @ResponseBody
     public ResponseVO related(@RequestParam(name = "id") int id){
         ResponseVO vo = new ResponseVO();
-        //GoodsDeatil data = wxGoodsService.getDetail(id);
-        //vo.setData(data);
-
-        //vo.setErrmsg("成功");
+        List<WxGoodsVo> data = wxGoodsService.getRelated(id);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("goodsList",data);
+        vo.setData(map);
+        vo.setErrmsg("成功");
         return vo;
     }
 
 
     @RequestMapping("comment/list")
     @ResponseBody
-    public ResponseVO commentList(@RequestParam(name = "valueId")int valueId,@RequestParam(name = "type")int type,int size,int page,int showType){
+    public ResponseVO commentList(int valueId,
+                                  int type,
+                                  int size,
+                                  int page,
+                                  int showType){
         ResponseVO<Object> vo = new ResponseVO<>();
         HashMap map = wxGoodsService.commentList(valueId,type,size,page,showType);
         vo.setData(map);
@@ -85,7 +98,7 @@ public class WxGoodsController {
 
     @RequestMapping("comment/count")
     @ResponseBody
-    public ResponseVO commentCount(@RequestParam(name = "valueId")int valueId,int type){
+    public ResponseVO commentCount(@RequestParam(name = "valueId")int valueId, int type){
         ResponseVO<Object> vo = new ResponseVO<>();
         HashMap map = wxGoodsService.commentCount(valueId,type);
         vo.setData(map);

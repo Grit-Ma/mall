@@ -3,6 +3,7 @@ package com.cskaoyan.tool;
 import com.cskaoyan.bean.sys.Admin;
 import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.bean.vo.ResponseVO;
+import com.cskaoyan.bean.wx.pagedata.OrderListPageData;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -41,5 +42,17 @@ public class WrapTool {
     }
 
 
+    public static OrderListPageData setOrderListPageData(int page, int limit, List list){
+        PageHelper.startPage(page,limit);
+        PageInfo<Admin> pageInfo = new PageInfo<>(list);
+        OrderListPageData pageData = new OrderListPageData();
+        pageData.setData(pageInfo.getList());
+        pageData.setCount(list.size());
+        pageData.setTotalPages(pageInfo.getPageNum());
+        return pageData;
+    }
 
+    public static HashMap unlogin() {
+        return setResponseFailure(501, "请登录");
+    }
 }

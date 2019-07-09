@@ -4,16 +4,14 @@ import com.cskaoyan.bean.Keyword;
 import com.cskaoyan.bean.KeywordExample;
 import com.cskaoyan.bean.SearchHistory;
 import com.cskaoyan.bean.SearchHistoryExample;
+import com.cskaoyan.bean.wx.keyword.WxKeyword;
 import com.cskaoyan.mall_wx.service.zhe.WxSearchService;
 import com.cskaoyan.mapper.KeywordMapper;
 import com.cskaoyan.mapper.SearchHistoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class WxSearchServiceImpl implements WxSearchService {
@@ -32,15 +30,9 @@ public class WxSearchServiceImpl implements WxSearchService {
         example2.createCriteria().andIsHotEqualTo(true).andDeletedEqualTo(false);
         List<Keyword> hotKeywordList = keywordMapper.selectByExample(example2);
         map.put("hotKeywordList",hotKeywordList);
-        List<String> historyKeywordList = new ArrayList<>();
+        List<WxKeyword> historyKeywordList = new ArrayList<>();
         if(userId != null){
-            SearchHistoryExample historyExample = new SearchHistoryExample();
-            historyExample.createCriteria().andUserIdEqualTo(userId).andDeletedEqualTo(false);
-            List<SearchHistory> historyList = searchHistoryMapper.selectByExample(historyExample);
-            for (SearchHistory searchHistory : historyList) {
-                String keyword = searchHistory.getKeyword();
-                historyKeywordList.add(keyword);
-            }
+            historyKeywordList = searchHistoryMapper.selectKeywordHistory(userId);
         }
         map.put("historyKeywordList",historyKeywordList);
         return map;

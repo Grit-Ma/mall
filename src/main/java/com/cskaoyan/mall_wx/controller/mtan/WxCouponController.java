@@ -2,6 +2,7 @@ package com.cskaoyan.mall_wx.controller.mtan;
 
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.bean.wx.pagedata.CouponPageData;
+import com.cskaoyan.mall_admin.service.promotion.CouponService;
 import com.cskaoyan.mall_wx.service.mtan.WxCouponService;
 import com.cskaoyan.mall_wx.util.UserTokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ public class WxCouponController {
     @Autowired
     WxCouponService wxCouponService;
 
+
     @RequestMapping("coupon/mylist")
     @ResponseBody
     public ResponseVO couponList(int page, int size, Short status, HttpServletRequest request){
@@ -39,5 +41,15 @@ public class WxCouponController {
             responseVO.setErrmsg("failure");
             return responseVO;
         }
+    }
+
+    @RequestMapping("coupon/selectlist")
+    @ResponseBody
+    public ResponseVO selectList(int cartId, int grouponRulesId) {
+        ResponseVO responseVO = new ResponseVO();
+        responseVO.setErrno(0);
+        responseVO.setErrmsg("成功");
+        responseVO.setData(wxCouponService.selectList(cartId, grouponRulesId));
+        return  responseVO;
     }
 }

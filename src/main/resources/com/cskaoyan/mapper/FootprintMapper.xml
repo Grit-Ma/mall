@@ -102,11 +102,11 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.cskaoyan.bean.Footprint">
-    insert into cskaoyan_mall_footprint (id, user_id, goods_id,
+    insert into cskaoyan_mall_footprint ( user_id, goods_id,
       add_time, update_time, deleted
       )
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER},
-      #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}
+    values ( #{userId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER},
+      now(), now(), 0
       )
   </insert>
   <insert id="insertSelective" parameterType="com.cskaoyan.bean.Footprint">
@@ -251,5 +251,11 @@
           and goods_id = #{goodsId}
       </if>
     </where>
+  </select>
+
+  <select id="selectRelated" resultType="int" >
+  SELECT goods_id from cskaoyan_mall_footprint
+  GROUP BY goods_id ORDER BY count(*) DESC
+  LIMIT 6
   </select>
 </mapper>

@@ -20,6 +20,7 @@ public interface CartService {
     //获取购物车数据
     CartTotalVO getCartTotal(Cart cart,Map checked);
 
+
     //添加商品进购物车
     long addToCart(Cart cart);
 
@@ -27,10 +28,12 @@ public interface CartService {
     void updateCart(Cart cart);
 
     //编辑删除选中商品
-    void deleteChecked(Cart cart,int[] productsId);
+    void deleteChecked(Cart cart,List productsId);
 
     //选中商品或者取消选中
     void checked(Cart cart, Map checked);
+
+    List<Cart> getCheckedCartGood(int userId);
 
     //订单确认
     Map checkout(Cart cart);
@@ -39,6 +42,7 @@ public interface CartService {
     Coupon coupon(int couponId);
 
     //下单清空
+
 
 
 

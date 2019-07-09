@@ -5,19 +5,22 @@ import com.cskaoyan.bean.Coupon;
 import com.cskaoyan.bean.vo.CartTotalVO;
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.mall_wx.service.CartService;
+import com.cskaoyan.mall_wx.util.UserTokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Controller()
-@RequestMapping("cart")
+@RequestMapping("wx/cart")
 public class CartController {
 
     @Autowired
@@ -28,10 +31,11 @@ public class CartController {
     //需要传入用户id，未写
     @RequestMapping("index")
     @ResponseBody
-    public ResponseVO cartIndex() {
-
+    public ResponseVO cartIndex(HttpServletRequest request) {
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        Integer userId = UserTokenManager.getUserId(tokenKey);
         Cart cart = new Cart();
-        cart.setUserId(1);
+        cart.setUserId(userId);
         Map check = new HashMap();
 
         List<Cart> carts = cartService.selectAll(cart);
@@ -52,9 +56,10 @@ public class CartController {
     //添加商品到购物车，商品详情页点击加入购物车,返回data为购物车商品数量
     @RequestMapping("add")
     @ResponseBody
-    public ResponseVO addToCart(@RequestBody Cart cart){
-
-        cart.setUserId(1);
+    public ResponseVO addToCart(@RequestBody Cart cart,HttpServletRequest request){
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        Integer userId = UserTokenManager.getUserId(tokenKey);
+        cart.setUserId(userId);
 
         long num = cartService.addToCart(cart);
         ResponseVO vo = new ResponseVO();
@@ -75,9 +80,10 @@ public class CartController {
     //更新购物车的商品，购物车内编辑，增加或者减少已有商品的数量
     @RequestMapping("update")
     @ResponseBody
-    public ResponseVO updateCart(@RequestBody Cart cart){
-
-        cart.setUserId(1);
+    public ResponseVO updateCart(@RequestBody Cart cart, HttpServletRequest request){
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        Integer userId = UserTokenManager.getUserId(tokenKey);
+        cart.setUserId(userId);
 
         cartService.updateCart(cart);
         ResponseVO vo = new ResponseVO();
@@ -89,10 +95,12 @@ public class CartController {
     //删除购物车的商品，购物车内编辑，选中商品，删除所有选中商品，返回删除后index
     @RequestMapping("delete")
     @ResponseBody
-    public ResponseVO deleteCart(@RequestBody int[] productsId){
-
+    public ResponseVO deleteCart(@RequestBody Map productsIdMap, HttpServletRequest request){
+        List productsId = ((List) productsIdMap.get("productIds"));
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        Integer userId = UserTokenManager.getUserId(tokenKey);
         Cart cart = new Cart();
-        cart.setUserId(1);
+        cart.setUserId(userId);
         Map check = new HashMap();
 
         //删除操作
@@ -120,10 +128,11 @@ public class CartController {
     //返回购物车list
     @RequestMapping("checked")
     @ResponseBody
-    public ResponseVO checked(@RequestBody Map checked){
-
+    public ResponseVO checked(@RequestBody Map checked, HttpServletRequest request){
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        Integer userId = UserTokenManager.getUserId(tokenKey);
         Cart cart = new Cart();
-        cart.setUserId(1);
+        cart.setUserId(userId);
         cartService.checked(cart,checked);
 
         //返回购物车list
@@ -140,45 +149,67 @@ public class CartController {
 
 
     //获取购物车商品件数,暂无
-    //@RequestMapping("goodscount")
-    //@ResponseBody
-
-
-    /*//下单前信息确认，购物车结算或者立即购买都会发送此请求
-    //cartId获取购物车的id，address地址id，couponId优惠券id，grouponRulesId团购id
-    @RequestMapping("checkout")
+    @RequestMapping("goodscount")
     @ResponseBody
-    public ResponseVO checkOut(@RequestBody Map check){
-
+    public ResponseVO goodScount(HttpServletRequest request){
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        Integer userId = UserTokenManager.getUserId(tokenKey);
         Cart cart = new Cart();
-        cart.setUserId(1);
+        cart.setUserId(userId);
+        Map check = new HashMap();
 
-        //商品总价格，list--checkedGoodsList--goodsTotalPrice
-        CartTotalVO cartTotalVO = cartService.getCartTotal(cart,check);
-        //优惠券金额-couponPrice
-        BigDecimal couponPrice = cartService.coupon(cart,(int) check.get("couponId")).getDiscount();
-        //actualPrice与orderTotalPrice
-        BigDecimal actualPrice = BigDecimal.valueOf(cartTotalVO.getCheckedGoodsAmount()).subtract(couponPrice);
-        //可用于优惠券数量-availableCouponLength
-        List<Coupon> coupons = cartService.coupons(actualPrice);
-
-        Map data = new HashMap();
-        data.put("actualPrice",actualPrice);  //订单总价
-        data.put("addressId",check.get("addressId"));  //收货地追id
-        data.put("availableCouponLength",coupons.size());  //可用
-        //data.put("checkedAddress",);
-        data.put("checkedGoodsList",cartTotalVO.getCarts());
-        data.put("couponId",check.get("couponId"));
-        data.put("couponPrice",couponPrice);
-        //data.put("freightPrice",);
-        data.put("goodsTotalPrice",cartTotalVO.getCheckedGoodsAmount());
-        data.put("grouponPrice",0);
-        data.put("grouponRulesId",check.get("grouponRulesId"));
-        data.put("orderTotalPrice",actualPrice);
+        CartTotalVO cartTotal = cartService.getCartTotal(cart,check);
+        long data = cartTotal.getGoodsCount();
         ResponseVO vo = new ResponseVO();
         vo.setData(data);
         vo.setErrmsg("成功");
         return vo;
-    }*/
+    }
+
+
+    //下单前信息确认，购物车结算或者立即购买都会发送此请求
+    //cartId获取购物车的id，address地址id，couponId优惠券id，grouponRulesId团购id
+    @RequestMapping("checkout")
+    @ResponseBody
+    public ResponseVO checkOut(int cartId, int addressId, int couponId, int grouponRulesId,HttpServletRequest request){
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        Integer userId = UserTokenManager.getUserId(tokenKey);
+        Cart cart = new Cart();
+        cart.setUserId(userId);
+
+        Map check = new HashMap();
+        check.put("cartId",cartId);
+        check.put("addressId",addressId);
+        check.put("couponId",couponId);
+        check.put("grouponRulesId",grouponRulesId);
+
+
+        //商品总价格，list--checkedGoodsList--goodsTotalPrice
+        CartTotalVO cartTotalVO = cartService.getCartTotal(cart,check);
+        //优惠券金额-couponPrice
+        //BigDecimal couponPrice = cartService.coupon(cart,(int) check.get("couponId")).getDiscount();
+        //actualPrice与orderTotalPrice
+        //BigDecimal actualPrice = BigDecimal.valueOf(cartTotalVO.getCheckedGoodsAmount()).subtract(couponPrice);
+        //可用于优惠券数量-availableCouponLength
+        //List<Coupon> coupons = cartService.coupons(actualPrice);
+
+        Map data = new HashMap();
+        data.put("actualPrice",cartTotalVO.getCheckedGoodsAmount());  //订单总价
+        data.put("addressId",check.get("addressId"));  //收货地追id
+        data.put("availableCouponLength",0);  //可用优惠券数量
+        data.put("checkedAddress",null);
+        data.put("checkedGoodsList",cartTotalVO.getCarts());
+        data.put("couponId",check.get("couponId"));
+        data.put("couponPrice",0);
+        data.put("freightPrice",null);
+        data.put("goodsTotalPrice",cartTotalVO.getCheckedGoodsAmount());
+        data.put("grouponPrice",0);
+        data.put("grouponRulesId",check.get("grouponRulesId"));
+        data.put("orderTotalPrice",0);
+        ResponseVO vo = new ResponseVO();
+        vo.setData(data);
+        vo.setErrmsg("成功");
+        return vo;
+    }
 
 }

@@ -1,9 +1,9 @@
-package com.cskaoyan.mall_wx.service.xfor;
+package com.cskaoyan.mall_wx.service.cdy;
 
 import com.cskaoyan.bean.Region;
 
 import java.util.List;
 
 public interface WxRegionService {
-    List<Region> getRegionList(int pid);
+    List<Region> queryByPid(Integer pid);
 }
