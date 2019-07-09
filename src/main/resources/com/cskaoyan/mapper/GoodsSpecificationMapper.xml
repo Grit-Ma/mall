@@ -242,4 +242,21 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByGoodsIdAndSpecification" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from cskaoyan_mall_goods_specification
+    where goods_id = #{goodsId} and specification = #{spec} and deleted = false
+  </select>
+  <resultMap id="specificationMap" type="com.cskaoyan.bean.vo.Specification">
+    <result column="specification" jdbcType="VARCHAR" property="name" />
+    <collection property="valueList" column="{goodsId=goods_id,spec=specification}" select="selectByGoodsIdAndSpecification" />
+  </resultMap>
+  <select id="selectSpecificationList" resultMap="specificationMap" parameterType="int">
+    select goods_id, specification
+    from cskaoyan_mall_goods_specification
+    where goods_id = #{goodsId}
+    and deleted = false
+    group by specification
+  </select>
 </mapper>

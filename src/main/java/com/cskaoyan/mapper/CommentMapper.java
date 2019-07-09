@@ -2,7 +2,11 @@ package com.cskaoyan.mapper;
 
 import com.cskaoyan.bean.Comment;
 import com.cskaoyan.bean.CommentExample;
+
+import java.util.HashMap;
 import java.util.List;
+
+import com.cskaoyan.bean.vo.GoodsCommentVo;
 import org.apache.ibatis.annotations.Param;
 
 public interface CommentMapper {
@@ -27,4 +31,8 @@ public interface CommentMapper {
     int updateByPrimaryKeySelective(Comment record);
 
     int updateByPrimaryKey(Comment record);
+
+    HashMap<String, Object> getCommentCount(int valueId, int type);
+
+    List<GoodsCommentVo> selectCommentByValueIdAndTypeAndShowType(int valueId, int type,int hasPic);
 }

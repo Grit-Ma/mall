@@ -4,12 +4,14 @@ import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.bean.wx.collect.TypeAndValueId;
 import com.cskaoyan.bean.wx.pagedata.CollectPageData;
 import com.cskaoyan.mall_wx.service.zhe.WxCollectService;
+import com.cskaoyan.mall_wx.util.UserTokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 @Controller
@@ -20,10 +22,10 @@ public class WxCollectController {
     //wx/collect/list?type=0&page=1&size=10
     @RequestMapping("collect/list")
     @ResponseBody
-    public ResponseVO collectList(int page, int size, Integer type){
+    public ResponseVO collectList(int page, int size, Integer type, HttpServletRequest request){
         ResponseVO<Object> responseVO = new ResponseVO<>();
-        //获取userid
-        Integer userId = 1;
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        Integer userId = UserTokenManager.getUserId(tokenKey);
         CollectPageData data = collectService.collectList(page,size,type,userId);
         if(data != null){
             responseVO.setErrno(0);
@@ -39,9 +41,10 @@ public class WxCollectController {
     //wx/collect/addordelete
     @RequestMapping("collect/addordelete")
     @ResponseBody
-    public ResponseVO collectAddOrDelete(@RequestBody TypeAndValueId typeAndValueId){
+    public ResponseVO collectAddOrDelete(@RequestBody TypeAndValueId typeAndValueId,HttpServletRequest request){
         ResponseVO<Object> responseVO = new ResponseVO<>();
-        Integer userId = 1;
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        Integer userId = UserTokenManager.getUserId(tokenKey);
         String result = collectService.collectAddOrDelete(typeAndValueId,userId);
         responseVO.setErrno(0);
         responseVO.setErrmsg("成功");

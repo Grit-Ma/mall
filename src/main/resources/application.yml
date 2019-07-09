@@ -1,7 +1,6 @@
 spring:
   profiles:
-    active: cdy
-
+    active: xfor
 ---
 myoss:
    bucket: project-mall

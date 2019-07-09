@@ -2,8 +2,9 @@ package com.cskaoyan.mapper;
 
 import com.cskaoyan.bean.Topic;
 import com.cskaoyan.bean.TopicExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface TopicMapper {
     long countByExample(TopicExample example);
@@ -33,4 +34,7 @@ public interface TopicMapper {
     int updateByPrimaryKeyWithBLOBs(Topic record);
 
     int updateByPrimaryKey(Topic record);
+
+    List<Topic> selectRelated();
+
 }

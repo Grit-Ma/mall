@@ -1,10 +1,10 @@
-package com.cskaoyan.mall_wx.service.login.impl;
+package com.cskaoyan.mall_wx.service.xfor.impl;
 
 import com.cskaoyan.bean.*;
 import com.cskaoyan.bean.wx.xfor.FloorGoodsList;
 import com.cskaoyan.bean.wx.xfor.GrouponList;
 import com.cskaoyan.bean.wx.xfor.HomeList;
-import com.cskaoyan.mall_wx.service.login.HomeService;
+import com.cskaoyan.mall_wx.service.xfor.WxHomeService;
 import com.cskaoyan.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class HomeServiceImpl implements HomeService {
+public class WxHomeServiceImpl implements WxHomeService {
     @Autowired
     AdMapper adMapper;
 
@@ -29,10 +29,16 @@ public class HomeServiceImpl implements HomeService {
     @Autowired
     GoodsMapper goodsMapper;
 
+    @Autowired
+    GrouponRulesMapper grouponRulesMapper;
+
+    @Autowired
+    TopicMapper topicMapper;
+
     @Override
     public HomeList getHomeList() {
         HomeList homeList = new HomeList();
-        homeList.setBannerList(getBannerList());
+        homeList.setBanner(getBannerList());
         homeList.setBrandList(getBrandList());
         homeList.setChannel(getChannel());
         homeList.setCouponList(getCouponList());
@@ -44,36 +50,46 @@ public class HomeServiceImpl implements HomeService {
         return homeList;
     }
 
-    private List<Goods> getTopicList() {
-        GoodsExample goodsExample = new GoodsExample();
-        goodsExample.createCriteria().andBrandIdBetween(1010000, 1011004);
-        List<Goods> goodsList = goodsMapper.selectByExample(goodsExample);
-        return goodsList;
+    private List<Topic> getTopicList() {
+        TopicExample topicExample = new TopicExample();
+        topicExample.createCriteria().andIdBetween(264, 268);
+        List<Topic> topicList = topicMapper.selectByExample(topicExample);
+        return topicList;
     }
 
     private List<Goods> getNewGoodsList() {
         GoodsExample goodsExample = new GoodsExample();
-        goodsExample.createCriteria().andBrandIdBetween(1009009, 1009027);
+        goodsExample.createCriteria().andIsNewEqualTo(true).andIsHotEqualTo(false);
         List<Goods> goodsList = goodsMapper.selectByExample(goodsExample);
         return goodsList;
     }
 
     private List<Goods> getHotGoodsList() {
         GoodsExample goodsExample = new GoodsExample();
-        goodsExample.createCriteria().andBrandIdBetween(1006002, 1006051);
+        goodsExample.createCriteria().andIsHotEqualTo(true).andIsNewEqualTo(false);
         List<Goods> goodsList = goodsMapper.selectByExample(goodsExample);
         return goodsList;
     }
 
     private List<GrouponList> getGrouponList() {
-        return null;
+        ArrayList<GrouponList> grouponLists = new ArrayList<>();
+        for (int i = 1; i <= 2; i++) {
+            GrouponRules grouponRules = grouponRulesMapper.selectByPrimaryKey(i);
+            GrouponList grouponList = new GrouponList();
+            Goods goods = goodsMapper.selectByPrimaryKey(grouponRules.getGoodsId());
+            grouponList.setGoods(goods);
+            grouponList.setGroupon_member(grouponRules.getDiscountMember());
+            grouponList.setGroupon_price(goods.getRetailPrice().doubleValue() - grouponRules.getDiscount().doubleValue());
+            grouponLists.add(grouponList);
+        }
+        return grouponLists;
     }
 
     private List<FloorGoodsList> getFloorGoodsList() {
         ArrayList<FloorGoodsList> floorGoodsLists = new ArrayList<>();
-        for (int i = 1005007; i <= 1005010; i++) {
+        for (int i = 1005000; i <= 1005001; i++) {
             GoodsExample goodsExample = new GoodsExample();
-            goodsExample.createCriteria().andCategoryIdEqualTo(i);
+            goodsExample.createCriteria().andCategoryIdEqualTo(getCategoryId(i));
             List<Goods> goodsList = goodsMapper.selectByExample(goodsExample);
             FloorGoodsList floorGoodsList = new FloorGoodsList();
             floorGoodsList.setId(i);
@@ -82,6 +98,13 @@ public class HomeServiceImpl implements HomeService {
             floorGoodsLists.add(floorGoodsList);
         }
         return floorGoodsLists;
+    }
+
+    private int getCategoryId(int i) {
+        CategoryExample categoryExample = new CategoryExample();
+        categoryExample.createCriteria().andPidEqualTo(i);
+        List<Category> categories = categoryMapper.selectByExample(categoryExample);
+        return categories.get(0).getId();
     }
 
     private List<Coupon> getCouponList() {
