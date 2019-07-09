@@ -604,4 +604,28 @@
         LEFT JOIN cskaoyan_mall_order_goods as ordergoods on ordergoods.order_id = mallorder.id
         where mallorder.deleted = false and mallorder.id = #{id}
   </select>
+
+  <resultMap id="OderdersByStatus" type="com.cskaoyan.bean.wx.order.WxOrder">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
+    <result column="order_status" jdbcType="SMALLINT" property="orderStatus" />
+    <result column="actual_price" jdbcType="DECIMAL" property="actualPrice" />
+  </resultMap>
+
+  <select id="showOrdersByStatus" resultMap="OderdersByStatus">
+    select
+    actual_price,id,order_sn,order_status
+    from cskaoyan_mall_order
+    where 1=1
+    <if test="order_status!=1">
+      and order_status = #{orderStatus}
+    </if>
+    <if test="sort!=null and sort!=''">
+      order by ${sort}
+      <if test="order!=null and order!=''">
+        ${order}
+      </if>
+    </if>
+
+  </select>
 </mapper>

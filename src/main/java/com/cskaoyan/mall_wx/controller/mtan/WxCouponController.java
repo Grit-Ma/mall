@@ -49,17 +49,7 @@ public class WxCouponController {
         ResponseVO responseVO = new ResponseVO();
         responseVO.setErrno(0);
         responseVO.setErrmsg("成功");
-        responseVO.setData(wxCouponService.selectList(cartId, grouponRulesId));
+git        responseVO.setData(wxCouponService.selectList(cartId, grouponRulesId));
         return  responseVO;
     }
-
-/*    @RequestMapping("coupon/list")
-    @ResponseBody
-    public ResponseVO list() {
-        ResponseVO responseVO = new ResponseVO();
-        responseVO.setErrno(0);
-        responseVO.setErrmsg("成功");
-        responseVO.setData(wxCouponService.couponList());
-        return  responseVO;
-    }*/
 }

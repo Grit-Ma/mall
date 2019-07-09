@@ -31,4 +31,5 @@ public interface RegionMapper {
     int updateByPrimaryKey(Region record);
 
     List<Province> selectRegion();
+
 }

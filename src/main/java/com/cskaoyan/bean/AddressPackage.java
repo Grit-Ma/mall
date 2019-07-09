@@ -2,7 +2,7 @@ package com.cskaoyan.bean;
 
 import java.util.Date;
 
-public class Address {
+public class AddressPackage {
     private Integer id;
 
     private String name;
@@ -11,13 +11,17 @@ public class Address {
 
     private Integer provinceId;
 
+    private String provinceName;
+
     private Integer cityId;
+
+    private String cityName;
 
     private Integer areaId;
 
-    private String address;
+    private String areaName;
 
-    private String detailedAddress;
+    private String address;
 
     private String mobile;
 
@@ -125,11 +129,27 @@ public class Address {
         this.deleted = deleted;
     }
 
-    public String getDetailedAddress() {
-        return detailedAddress;
+    public String getProvinceName() {
+        return provinceName;
     }
 
-    public void setDetailedAddress(String detailedAddress) {
-        this.detailedAddress = detailedAddress;
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
     }
 }

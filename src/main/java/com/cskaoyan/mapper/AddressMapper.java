@@ -3,6 +3,7 @@ package com.cskaoyan.mapper;
 import com.cskaoyan.bean.Address;
 import com.cskaoyan.bean.AddressExample;
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface AddressMapper {
@@ -27,4 +28,5 @@ public interface AddressMapper {
     int updateByPrimaryKeySelective(Address record);
 
     int updateByPrimaryKey(Address record);
+
 }

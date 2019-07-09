@@ -39,4 +39,8 @@ public interface CategoryMapper {
     int createCategory(@Param("category") Category category);
 
     HashMap getCategoryIds(Integer categoryId);
+
+    List<Category> selectLikeGoodsName(String goodsName);
+
+    List<Category> selectFilterCategoryList(int categoryId);
 }

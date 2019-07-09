@@ -263,4 +263,36 @@ public class Order {
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
+
+    public Order() {
+    }
+
+    public Order(Integer id, Integer userId, String orderSn, Short orderStatus, String consignee, String mobile, String address, String message, BigDecimal goodsPrice, BigDecimal freightPrice, BigDecimal couponPrice, BigDecimal integralPrice, BigDecimal grouponPrice, BigDecimal orderPrice, BigDecimal actualPrice, String payId, Date payTime, String shipSn, String shipChannel, Date shipTime, Date confirmTime, Short comments, Date endTime, Date addTime, Date updateTime, Boolean deleted) {
+        this.id = id;
+        this.userId = userId;
+        this.orderSn = orderSn;
+        this.orderStatus = orderStatus;
+        this.consignee = consignee;
+        this.mobile = mobile;
+        this.address = address;
+        this.message = message;
+        this.goodsPrice = goodsPrice;
+        this.freightPrice = freightPrice;
+        this.couponPrice = couponPrice;
+        this.integralPrice = integralPrice;
+        this.grouponPrice = grouponPrice;
+        this.orderPrice = orderPrice;
+        this.actualPrice = actualPrice;
+        this.payId = payId;
+        this.payTime = payTime;
+        this.shipSn = shipSn;
+        this.shipChannel = shipChannel;
+        this.shipTime = shipTime;
+        this.confirmTime = confirmTime;
+        this.comments = comments;
+        this.endTime = endTime;
+        this.addTime = addTime;
+        this.updateTime = updateTime;
+        this.deleted = deleted;
+    }
 }

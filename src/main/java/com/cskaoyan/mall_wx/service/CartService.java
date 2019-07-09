@@ -28,7 +28,7 @@ public interface CartService {
     void updateCart(Cart cart);
 
     //编辑删除选中商品
-    void deleteChecked(Cart cart,int[] productsId);
+    void deleteChecked(Cart cart,List productsId);
 
     //选中商品或者取消选中
     void checked(Cart cart, Map checked);
