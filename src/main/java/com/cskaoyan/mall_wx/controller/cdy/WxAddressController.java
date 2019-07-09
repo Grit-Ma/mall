@@ -3,7 +3,7 @@ package com.cskaoyan.mall_wx.controller.cdy;
 import com.cskaoyan.bean.Address;
 import com.cskaoyan.bean.Region;
 import com.cskaoyan.bean.vo.ResponseVO;
-import com.cskaoyan.bean.wx.WxAddress;
+import com.cskaoyan.bean.AddressPackage;
 import com.cskaoyan.mall_wx.service.cdy.WxAddressService;
 import com.cskaoyan.mall_wx.service.cdy.WxRegionService;
 import com.cskaoyan.mall_wx.util.UserTokenManager;
@@ -47,7 +47,7 @@ public class WxAddressController {
         if (userId == null) {
             return vo.unlogin(vo);
         }
-        WxAddress data = wxAddressService.query(userId, id);
+        AddressPackage data = wxAddressService.query(userId, id);
         if (data == null) {
             return vo.errParmValue(vo);
         }

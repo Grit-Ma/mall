@@ -1,8 +1,8 @@
-package com.cskaoyan.bean.wx;
+package com.cskaoyan.bean;
 
 import java.util.Date;
 
-public class WxAddress {
+public class AddressPackage {
     private Integer id;
 
     private String name;

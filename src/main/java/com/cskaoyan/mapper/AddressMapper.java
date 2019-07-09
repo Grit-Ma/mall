@@ -4,9 +4,7 @@ import com.cskaoyan.bean.Address;
 import com.cskaoyan.bean.AddressExample;
 import java.util.List;
 
-import com.cskaoyan.bean.wx.WxAddress;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.security.core.parameters.P;
 
 public interface AddressMapper {
     long countByExample(AddressExample example);

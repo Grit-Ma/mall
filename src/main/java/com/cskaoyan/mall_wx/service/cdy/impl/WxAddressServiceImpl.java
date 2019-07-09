@@ -3,7 +3,7 @@ package com.cskaoyan.mall_wx.service.cdy.impl;
 import com.cskaoyan.bean.Address;
 import com.cskaoyan.bean.AddressExample;
 import com.cskaoyan.bean.Region;
-import com.cskaoyan.bean.wx.WxAddress;
+import com.cskaoyan.bean.AddressPackage;
 import com.cskaoyan.mall_wx.service.cdy.WxAddressService;
 import com.cskaoyan.mapper.AddressMapper;
 import com.cskaoyan.mapper.RegionMapper;
@@ -27,7 +27,7 @@ public class WxAddressServiceImpl implements WxAddressService {
         addressExample.or().andUserIdEqualTo(userId).andDeletedEqualTo(false);
         List<Address> addressList = addressMapper.selectByExample(addressExample);
         for (Address address : addressList) {
-            WxAddress query = query(userId, address.getId());
+            AddressPackage query = query(userId, address.getId());
             address.setDetailedAddress(
                     query.getProvinceName() + query.getCityName() + query.getAreaName()
                     + " " + query.getAddress());
@@ -36,33 +36,33 @@ public class WxAddressServiceImpl implements WxAddressService {
     }
 
     @Override
-    public WxAddress query(Integer userId, Integer id) {
+    public AddressPackage query(Integer userId, Integer id) {
         AddressExample addressExample = new AddressExample();
         addressExample.or().andIdEqualTo(id).andUserIdEqualTo(userId).andDeletedEqualTo(false);
         Address address = addressMapper.selectByExample(addressExample).get(0);
 
-        return getWxAddress(address);
+        return getAddressPackage(address);
     }
 
-    private WxAddress getWxAddress(Address address) {
-        WxAddress wxAddress = new WxAddress();
-        wxAddress.setAddress(address.getAddress());
-        wxAddress.setIsDefault(address.getIsDefault());
-        wxAddress.setProvinceId(address.getProvinceId());
-        wxAddress.setCityId(address.getCityId());
-        wxAddress.setAreaId(address.getAreaId());
-        wxAddress.setId(address.getId());
-        wxAddress.setMobile(address.getMobile());
-        wxAddress.setName(address.getName());
-        wxAddress.setDeleted(address.getDeleted());
+    private AddressPackage getAddressPackage(Address address) {
+        AddressPackage addressPackage = new AddressPackage();
+        addressPackage.setAddress(address.getAddress());
+        addressPackage.setIsDefault(address.getIsDefault());
+        addressPackage.setProvinceId(address.getProvinceId());
+        addressPackage.setCityId(address.getCityId());
+        addressPackage.setAreaId(address.getAreaId());
+        addressPackage.setId(address.getId());
+        addressPackage.setMobile(address.getMobile());
+        addressPackage.setName(address.getName());
+        addressPackage.setDeleted(address.getDeleted());
 
         Region r1 = regionMapper.selectByPrimaryKey(address.getProvinceId());
-        wxAddress.setProvinceName(r1.getName());
+        addressPackage.setProvinceName(r1.getName());
         Region r2 = regionMapper.selectByPrimaryKey(address.getCityId());
-        wxAddress.setCityName(r2.getName());
+        addressPackage.setCityName(r2.getName());
         Region r3 = regionMapper.selectByPrimaryKey(address.getAreaId());
-        wxAddress.setAreaName(r3.getName());
-        return wxAddress;
+        addressPackage.setAreaName(r3.getName());
+        return addressPackage;
     }
 
     @Override
