@@ -352,8 +352,8 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="sumAll" resultType="long">
-    select sum (price*number) from cskaoyan_mall_cart where user_id = #{userId}
+  <select id="sumAll" resultType="Integer">
+    select sum(price*number) from cskaoyan_mall_cart where user_id = #{userId}
   </select>
   
   <delete id="deleteChecked">
@@ -363,8 +363,8 @@
       </foreach>
   </delete>
 
-  <select id="sumAllChecked" resultType="long">
-    select sum (price*number) from cskaoyan_mall_cart where user_id = #{userId} and checked = 1
+  <select id="sumAllChecked" resultType="Integer">
+    select sum(price*number) from cskaoyan_mall_cart where user_id = #{userId} and checked = 1
   </select>
 
 </mapper>

@@ -30,7 +30,8 @@ public class CartServiceImpl implements CartService{
         List<Cart> carts = cartMapper.selectByExample(example);
         return carts;
     }
-    
+
+
     @Override
     public List<Integer> selectAllGoodId(Cart cart) {
         CartExample example = new CartExample();
@@ -54,14 +55,22 @@ public class CartServiceImpl implements CartService{
         CartExample example1 = new CartExample();
         CartExample.Criteria criteria1 = example1.createCriteria();
         criteria1.andUserIdEqualTo(cart.getUserId());
-        cartTotal.setGoodsAmount(cartMapper.sumAll(cart.getUserId()));    //购物车商品总价格
+        if (cartMapper.sumAll(cart.getUserId()) == null){  //购物车商品总价格
+            cartTotal.setGoodsAmount(0);
+        }else {
+            cartTotal.setGoodsAmount(cartMapper.sumAll(cart.getUserId()));
+        }
         cartTotal.setGoodsCount(cartMapper.countByExample(example1));       //购物车商品总数量
 
 
         CartExample example2 = new CartExample();
         CartExample.Criteria criteria2 = example1.createCriteria();
         criteria2.andUserIdEqualTo(cart.getUserId()).andCheckedEqualTo(true);
-        cartTotal.setCheckedGoodsAmount(cartMapper.sumAllChecked(cart.getUserId()));   //选中商品总价格
+        if (cartMapper.sumAll(cart.getUserId()) == null){  //选中商品总价格
+            cartTotal.setCheckedGoodsAmount(0);
+        }else {
+            cartTotal.setCheckedGoodsAmount(cartMapper.sumAllChecked(cart.getUserId()));
+        }
         cartTotal.setCheckedGoodsCount(cartMapper.countByExample(example2));     //选中商品总数量
         cartTotal.setCarts(cartMapper.selectByExample(example1));  //选中商品列表
 
@@ -75,7 +84,7 @@ public class CartServiceImpl implements CartService{
         CartExample example = new CartExample();
         CartExample.Criteria criteria = example.createCriteria();
         criteria.andUserIdEqualTo(cart.getUserId());
-
+        cartMapper.insert(cart);
         long num = cartMapper.countByExample(example);
         return num;
     }
@@ -108,7 +117,7 @@ public class CartServiceImpl implements CartService{
         CartExample example = new CartExample();
         CartExample.Criteria criteria = example.createCriteria();
 
-        criteria.andUserIdEqualTo(cart.getUserId()).andProductIdIn(productIds).;
+        criteria.andUserIdEqualTo(cart.getUserId()).andProductIdIn(productIds);
 
         List<Cart> carts = cartMapper.selectByExample(example);
         for (Cart c : carts) {

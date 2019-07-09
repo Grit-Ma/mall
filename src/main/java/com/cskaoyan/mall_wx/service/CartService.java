@@ -20,6 +20,7 @@ public interface CartService {
     //获取购物车数据
     CartTotalVO getCartTotal(Cart cart,Map checked);
 
+
     //添加商品进购物车
     long addToCart(Cart cart);
 
@@ -39,6 +40,7 @@ public interface CartService {
     Coupon coupon(int couponId);
 
     //下单清空
+
 
 
 
