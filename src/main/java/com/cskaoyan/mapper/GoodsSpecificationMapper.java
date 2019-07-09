@@ -3,6 +3,8 @@ package com.cskaoyan.mapper;
 import com.cskaoyan.bean.GoodsSpecification;
 import com.cskaoyan.bean.GoodsSpecificationExample;
 import java.util.List;
+
+import com.cskaoyan.bean.vo.Specification;
 import org.apache.ibatis.annotations.Param;
 
 public interface GoodsSpecificationMapper {
@@ -29,4 +31,6 @@ public interface GoodsSpecificationMapper {
     int updateByPrimaryKey(GoodsSpecification record);
 
     List<GoodsSpecification> selectNotDeletedByGoodsId(int goodsId);
+
+    List<Specification> selectSpecificationList(int goodsId);
 }

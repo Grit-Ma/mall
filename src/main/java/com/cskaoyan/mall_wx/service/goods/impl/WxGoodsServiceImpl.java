@@ -1,13 +1,9 @@
 package com.cskaoyan.mall_wx.service.goods.impl;
 
 import com.cskaoyan.bean.*;
-import com.cskaoyan.bean.vo.CategoryVo;
-import com.cskaoyan.bean.vo.CommentVo;
-import com.cskaoyan.bean.vo.GoodsDeatil;
-import com.cskaoyan.bean.vo.GoodsListVo;
+import com.cskaoyan.bean.vo.*;
 import com.cskaoyan.mall_wx.service.goods.WxGoodsService;
 import com.cskaoyan.mapper.*;
-import org.apache.shiro.crypto.hash.Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,7 +72,6 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         List<Comment> comments = commentMapper.selectByExample(commentExample);
         commentVo.setData(comments);
         commentVo.setCount(comments.size());
-        //TODO groupon 不知道是什么 先不写
         IssueExample issueExample = new IssueExample();
         issueExample.createCriteria().andDeletedEqualTo(false);
         List<Issue> issues = issueMapper.selectByExample(issueExample);
@@ -85,11 +80,9 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         goodsProductExample.createCriteria().andGoodsIdEqualTo(goodsId).andDeletedEqualTo(false);
         List<GoodsProduct> goodsProducts = goodsProductMapper.selectByExample(goodsProductExample);
         detail.setProductList(goodsProducts);
-        GoodsSpecificationExample goodsSpecificationExample = new GoodsSpecificationExample();
-        goodsSpecificationExample.createCriteria().andGoodsIdEqualTo(goodsId).andDeletedEqualTo(false);
-        List<GoodsSpecification> goodsSpecifications = goodsSpecificationMapper.selectByExample(goodsSpecificationExample);
+        List<Specification> goodsSpecifications = goodsSpecificationMapper.selectSpecificationList(goodsId);
         detail.setSpecificationList(goodsSpecifications);
-        //TODO shareImage、userHasCollect 不知道是什么 先不写
+        //TODO groupon、shareImage、userHasCollect 不知道是什么 先不写
 
         return detail;
     }
@@ -100,5 +93,19 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         HashMap<String, Object> map = new HashMap<>();
         map.put("goodsCount",cnt);
         return map;
+    }
+
+    @Override
+    public HashMap commentCount(int valueId, int type) {
+        HashMap<String,Object> comments = commentMapper.getCommentCount(valueId,type);
+        return comments;
+    }
+
+    @Override
+    public HashMap commentList(int valueId, int type, int size, int page, int showType) {
+        HashMap<String, Object> map = new HashMap<>();
+
+
+        return null;
     }
 }
