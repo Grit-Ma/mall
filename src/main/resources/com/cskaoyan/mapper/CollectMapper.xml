@@ -241,4 +241,20 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <resultMap id="SelectCollectMap" type="com.cskaoyan.bean.wx.collect.WxCollect">
+    <result column="brief" property="brief"/>
+    <result column="id" property="id"/>
+    <result column="name" property="name"/>
+    <result column="picUrl" property="picUrl"/>
+    <result column="retailPrice" property="retailPrice"/>
+    <result column="valueId" property="valueId"/>
+    <result column="type" property="type"/>
+  </resultMap>
+
+  <select id="selectCollectByTypeAndUserId" resultMap="SelectCollectMap">
+    select goods.brief, collect.id, goods.name, goods.pic_url,goods.retail_price, collect.type, collect.value_id
+    from cskaoyan_mall_collect as collect  LEFT JOIN cskaoyan_mall_goods as goods on collect.value_id = goods.id
+    where collect.user_id = #{userId} and collect.deleted = 0 and collect.type = #{type}
+  </select>
 </mapper>

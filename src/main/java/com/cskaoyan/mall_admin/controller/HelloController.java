@@ -46,6 +46,7 @@ public class HelloController {
         }
     }
 
+
     @RequiresAuthentication
     @GetMapping("auth/info")
     public HashMap hello2() {
@@ -94,4 +95,8 @@ public class HelloController {
         return vo;
     }
 
+//    @RequestMapping("auth/401")
+//    public HashMap log(){
+//        return WrapTool.setResponseFailure(501,"登陆错误");
+//    }
 }

@@ -1,11 +1,11 @@
-package com.cskaoyan.mall_admin.service.good.impl;
+package com.cskaoyan.mall_admin.service.goods.impl;
 
 import com.cskaoyan.bean.*;
 import com.cskaoyan.bean.vo.CatAndBrandVo;
 import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.bean.vo.ProductVo;
 import com.cskaoyan.mapper.*;
-import com.cskaoyan.mall_admin.service.good.GoodService;
+import com.cskaoyan.mall_admin.service.goods.GoodsService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.security.InvalidParameterException;
 import java.util.*;
 
 @Service
-public class GoodServiceImpl implements GoodService {
+public class GoodsServiceImpl implements GoodsService {
     @Autowired
     GoodsMapper goodsMapper;
     @Autowired

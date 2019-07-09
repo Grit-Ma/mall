@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
+@RequestMapping("admin")
 public class CategoryController {
     @Autowired
     CategoryService categoryService;
