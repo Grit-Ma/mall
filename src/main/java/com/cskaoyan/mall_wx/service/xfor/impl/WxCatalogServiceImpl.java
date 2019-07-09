@@ -4,7 +4,7 @@ import com.cskaoyan.bean.Category;
 import com.cskaoyan.bean.CategoryExample;
 import com.cskaoyan.bean.wx.xfor.CatalogList;
 import com.cskaoyan.bean.wx.xfor.CurrentCatalogList;
-import com.cskaoyan.mall_wx.service.xfor.CatalogService;
+import com.cskaoyan.mall_wx.service.xfor.WxCatalogService;
 import com.cskaoyan.mapper.CategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CatalogServiceImpl implements CatalogService {
+public class WxCatalogServiceImpl implements WxCatalogService {
     @Autowired
     CategoryMapper categoryMapper;
 
     @Autowired
-    HomeServiceImpl homeService;
+    WxHomeServiceImpl homeService;
 
     @Override
     public CatalogList getCatalogList() {

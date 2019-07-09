@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 public class GrouponList {
     private int groupon_member;
-    private BigDecimal groupon_price;
+    private double groupon_price;
     private Goods goods;
 
     public int getGroupon_member() {
@@ -17,11 +17,11 @@ public class GrouponList {
         this.groupon_member = groupon_member;
     }
 
-    public BigDecimal getGroupon_price() {
+    public double getGroupon_price() {
         return groupon_price;
     }
 
-    public void setGroupon_price(BigDecimal groupon_price) {
+    public void setGroupon_price(double groupon_price) {
         this.groupon_price = groupon_price;
     }
 
