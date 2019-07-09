@@ -5,6 +5,7 @@ import com.cskaoyan.bean.System;
 import com.cskaoyan.bean.wx.order.*;
 import com.cskaoyan.bean.wx.pagedata.OrderListPageData;
 import com.cskaoyan.mall_admin.service.promotion.CouponService;
+import com.cskaoyan.mall_wx.service.CartService;
 import com.cskaoyan.mall_wx.service.cf.WxOrderService;
 import com.cskaoyan.mall_wx.util.CharUtil;
 import com.cskaoyan.mall_wx.util.UserTokenManager;
@@ -53,8 +54,8 @@ public class WxOrderServiceImpl implements WxOrderService {
     CouponUserMapper couponUserMapper;
     @Autowired
     CouponService couponService;
-//    @Autowired
-//    CartService cartService;
+    @Autowired
+    CartService cartService;
 
     //这里开启了事务
     @Override
@@ -82,8 +83,7 @@ public class WxOrderServiceImpl implements WxOrderService {
         }
 
         //检验购物车
-        List<Cart> carts = new ArrayList<>();
-//                goodIds=cartMapper.selectByExample();
+        List<Cart> carts = cartService.getCheckedCartGood(userId);
         if (carts == null) return WrapTool.setResponseFailure(401, "参数不对");
 
 
