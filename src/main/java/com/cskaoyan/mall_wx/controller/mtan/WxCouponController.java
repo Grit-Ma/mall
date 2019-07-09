@@ -49,7 +49,7 @@ public class WxCouponController {
         ResponseVO responseVO = new ResponseVO();
         responseVO.setErrno(0);
         responseVO.setErrmsg("成功");
-git        responseVO.setData(wxCouponService.selectList(cartId, grouponRulesId));
+        responseVO.setData(wxCouponService.selectList(cartId, grouponRulesId));
         return  responseVO;
     }
 }
