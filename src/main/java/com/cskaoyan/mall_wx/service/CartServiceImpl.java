@@ -108,7 +108,7 @@ public class CartServiceImpl implements CartService{
         CartExample example = new CartExample();
         CartExample.Criteria criteria = example.createCriteria();
 
-        criteria.andUserIdEqualTo(cart.getUserId()).andProductIdIn(productIds).;
+        criteria.andUserIdEqualTo(cart.getUserId()).andProductIdIn(productIds);
 
         List<Cart> carts = cartMapper.selectByExample(example);
         for (Cart c : carts) {
