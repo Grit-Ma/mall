@@ -113,6 +113,7 @@ public class WxGoodsController {
     public ResponseVO commentPost(@RequestBody Comment comment){
         ResponseVO<Object> vo = new ResponseVO<>();
         Comment ret = wxGoodsService.commentPost(comment);
+        vo.setData(ret);
         vo.setErrmsg("成功");
         return vo;
     }
