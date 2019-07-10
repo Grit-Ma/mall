@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping("wx/footprint")
 public class WxFootprintController {
@@ -17,8 +19,8 @@ public class WxFootprintController {
 
     @GetMapping("list")
     @ResponseBody
-    public ResponseVO getFootprintList(int page, int size) {
-        FootprintList footprintList = footprintService.getFootprintList(page, size);
+    public ResponseVO getFootprintList(HttpServletRequest request, int page, int size) {
+        FootprintList footprintList = footprintService.getFootprintList(request, page, size);
         ResponseVO<FootprintList> footprintListResponseVO = new ResponseVO<>(0, footprintList, "成功");
         return footprintListResponseVO;
     }
