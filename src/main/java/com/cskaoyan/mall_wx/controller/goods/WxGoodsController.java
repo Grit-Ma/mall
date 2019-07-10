@@ -1,10 +1,12 @@
 package com.cskaoyan.mall_wx.controller.goods;
 
+import com.cskaoyan.bean.Comment;
 import com.cskaoyan.bean.vo.*;
 import com.cskaoyan.mall_wx.service.goods.WxGoodsService;
 import com.cskaoyan.mall_wx.util.UserTokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -108,7 +110,10 @@ public class WxGoodsController {
 
     @RequestMapping("comment/post")
     @ResponseBody
-    public ResponseVO commentPost(){
-        return null;
+    public ResponseVO commentPost(@RequestBody Comment comment){
+        ResponseVO<Object> vo = new ResponseVO<>();
+        Comment ret = wxGoodsService.commentPost(comment);
+        vo.setErrmsg("成功");
+        return vo;
     }
 }

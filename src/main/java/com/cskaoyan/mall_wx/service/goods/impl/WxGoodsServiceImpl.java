@@ -178,6 +178,13 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         return list;
     }
 
+    @Override
+    public Comment commentPost(Comment comment) {
+        commentMapper.insertSelective(comment);
+        Comment ret = commentMapper.selectByPrimaryKey(comment.getId());
+        return ret;
+    }
+
     private void addSearchHistory(String keyword,Integer userId){
         SearchHistory searchHistory = new SearchHistory();
         searchHistory.setFrom("wx");
