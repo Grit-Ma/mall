@@ -195,7 +195,7 @@ public class CartController {
 
         Map data = new HashMap();
         data.put("actualPrice",cartTotalVO.getCheckedGoodsAmount());  //订单总价
-        data.put("addressId",check.get("addressId"));  //收货地追id
+        data.put("addressId",check.get("addressId"));  //收货地址id
         data.put("availableCouponLength",0);  //可用优惠券数量
         data.put("checkedAddress",null);
         data.put("checkedGoodsList",cartTotalVO.getCarts());

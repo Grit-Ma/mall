@@ -1,14 +1,18 @@
 package com.cskaoyan.mall_wx.service;
 
-import com.cskaoyan.bean.*;
+import com.cskaoyan.bean.Cart;
+import com.cskaoyan.bean.CartExample;
+import com.cskaoyan.bean.Goods;
+import com.cskaoyan.bean.GoodsProduct;
 import com.cskaoyan.bean.vo.CartTotalVO;
 import com.cskaoyan.mapper.*;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class CartServiceImpl implements CartService{
@@ -103,7 +107,7 @@ public class CartServiceImpl implements CartService{
             cart.setGoodsSn(goods.getGoodsSn());
             cart.setGoodsName(goods.getName());
             cart.setPrice(goodsProduct.getPrice());
-            //cart.setSpecifications(goodsProduct.getSpecifications().ty);
+            cart.setSpecifications(goodsProduct.getSpecifications());
             cart.setPicUrl(goodsProduct.getUrl());
             cart.setAddTime(goods.getAddTime());
             cart.setUpdateTime(goods.getUpdateTime());
@@ -128,8 +132,9 @@ public class CartServiceImpl implements CartService{
         CartExample example = new CartExample();
         CartExample.Criteria criteria = example.createCriteria();
         criteria.andIdEqualTo(cart.getId()).andUserIdEqualTo(cart.getUserId());
-
-        cartMapper.updateByExample(cart,example);
+        Cart cart1 = cartMapper.selectByPrimaryKey(cart.getId());
+        cart1.setNumber(cart.getNumber());
+        cartMapper.updateByExample(cart1,example);
     }
 
 
@@ -145,9 +150,7 @@ public class CartServiceImpl implements CartService{
     public void checked(Cart cart, Map checked) {
         CartExample example = new CartExample();
         CartExample.Criteria criteria = example.createCriteria();
-
         criteria.andUserIdEqualTo(cart.getUserId()).andProductIdIn((List<Integer>) checked.get("productIds"));
-
         List<Cart> carts = cartMapper.selectByExample(example);
         for (Cart c : carts) {
             c.setChecked(((int) checked.get("isChecked") == 1)?true:false);
@@ -183,15 +186,6 @@ public class CartServiceImpl implements CartService{
     }
 
 
-    //查询优惠券
-    @Override
-    public Coupon coupon(int couponId) {
-        Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
-        return coupon;
-    }
-
-
-    //可用优惠券列表
 
 
 }
