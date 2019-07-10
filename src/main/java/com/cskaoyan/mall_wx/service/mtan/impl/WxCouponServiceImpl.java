@@ -1,9 +1,6 @@
 package com.cskaoyan.mall_wx.service.mtan.impl;
 
-import com.cskaoyan.bean.Cart;
-import com.cskaoyan.bean.Coupon;
-import com.cskaoyan.bean.CouponUser;
-import com.cskaoyan.bean.CouponUserExample;
+import com.cskaoyan.bean.*;
 import com.cskaoyan.bean.coupon.CouponUserConstant;
 
 import com.cskaoyan.bean.wx.pagedata.CouponPageData;
@@ -19,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -122,5 +120,43 @@ public class WxCouponServiceImpl implements WxCouponService {
     public int update(CouponUser couponUser) {
         couponUser.setUpdateTime(new Date());
         return couponUserMapper.updateByPrimaryKeySelective(couponUser);
+    }
+
+    @Override
+    public List<CouponUser> queryAll(Integer userId) {
+        return queryList(userId, null, CouponUserConstant.STATUS_USABLE, null, null, "add_time", "desc");
+    }
+
+    @Override
+    public List<Cart> queryByUidAndChecked(Integer userId) {
+        CartExample example = new CartExample();
+        example.or().andUserIdEqualTo(userId).andCheckedEqualTo(true).andDeletedEqualTo(false);
+        return cartMapper.selectByExample(example);
+    }
+
+    @Override
+    public Cart findById(Integer id) {
+        return cartMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public Integer countCoupon(Integer couponId) {
+        CouponUserExample example = new CouponUserExample();
+        example.or().andCouponIdEqualTo(couponId).andDeletedEqualTo(false);
+        return (int)couponUserMapper.countByExample(example);
+    }
+
+    @Override
+    public Integer countUserAndCoupon(Integer userId, Integer couponId) {
+        CouponUserExample example = new CouponUserExample();
+        example.or().andUserIdEqualTo(userId).andCouponIdEqualTo(couponId).andDeletedEqualTo(false);
+        return (int)couponUserMapper.countByExample(example);
+    }
+
+    @Override
+    public void add(CouponUser couponUser) {
+        couponUser.setAddTime(new Date());
+        couponUser.setUpdateTime(new Date());
+        couponUserMapper.insertSelective(couponUser);
     }
 }

@@ -115,4 +115,9 @@ public class GroupServiceImpl implements GroupService {
         PageInfo<GroupActivity> pageinfo = new PageInfo(groupActivities);
         return new PageData(pageinfo.getList(),pageinfo.getTotal());
     }
+
+    @Override
+    public GrouponRules searchRulesById(int id) {
+        return grouponRulesMapper.selectByPrimaryKey(id);
+    }
 }

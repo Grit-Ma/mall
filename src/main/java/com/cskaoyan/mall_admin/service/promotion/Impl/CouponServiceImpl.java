@@ -17,9 +17,9 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * created by ZengWei
@@ -33,10 +33,6 @@ public class CouponServiceImpl implements CouponService {
 
     @Autowired
     CouponUserMapper couponUserMapper;
-
-    private Column[] result = new Column[]{Column.id, Column.name, Column.desc, Column.tag,
-            Column.days, Column.startTime, Column.endTime,
-            Column.discount, Column.min};
 
     @Override
     public PageData getCouponListData(int page, int limit, String sort, String order, String name, Short type, Short status) {
@@ -128,5 +124,49 @@ public class CouponServiceImpl implements CouponService {
         CouponExample example = new CouponExample();
         example.or().andStatusEqualTo(CouponConstant.STATUS_NORMAL).andTimeTypeEqualTo(CouponConstant.TIME_TYPE_TIME).andEndTimeLessThan(new Date()).andDeletedEqualTo(false);
         return couponMapper.selectByExample(example);
+    }
+
+    @Override
+    public String getRandomNum(Integer num) {
+        String base = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        base += "0123456789";
+
+        Random random = new Random();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < num; i++) {
+            int number = random.nextInt(base.length());
+            sb.append(base.charAt(number));
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public String generateCode() {
+        String code = getRandomNum(8);
+        while(findByCode(code) != null){
+            code = getRandomNum(8);
+        }
+        return code;
+    }
+
+    @Override
+    public Coupon findByCode(String code) {
+        CouponExample example = new CouponExample();
+        example.or().andCodeEqualTo(code).andTypeEqualTo(CouponConstant.TYPE_CODE).andStatusEqualTo(CouponConstant.STATUS_NORMAL).andDeletedEqualTo(false);
+        List<Coupon> couponList =  couponMapper.selectByExample(example);
+        if(couponList.size() > 1){
+            throw new RuntimeException("");
+        }
+        else if(couponList.size() == 0){
+            return null;
+        }
+        else {
+            return couponList.get(0);
+        }
+    }
+
+    @Override
+    public List<Coupon> findAllCoupon(int page, int size){
+        return couponMapper.selectByExample(new CouponExample());
     }
 }
