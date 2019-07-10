@@ -1,14 +1,18 @@
 package com.cskaoyan.mall_wx.service;
 
-import com.cskaoyan.bean.*;
+import com.cskaoyan.bean.Cart;
+import com.cskaoyan.bean.CartExample;
+import com.cskaoyan.bean.Goods;
+import com.cskaoyan.bean.GoodsProduct;
 import com.cskaoyan.bean.vo.CartTotalVO;
 import com.cskaoyan.mapper.*;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class CartServiceImpl implements CartService{
@@ -146,13 +150,7 @@ public class CartServiceImpl implements CartService{
     public void checked(Cart cart, Map checked) {
         CartExample example = new CartExample();
         CartExample.Criteria criteria = example.createCriteria();
-
-<<<<<<< HEAD
-        criteria.andUserIdEqualTo(cart.getUserId()).andProductIdIn(productIds);
-=======
         criteria.andUserIdEqualTo(cart.getUserId()).andProductIdIn((List<Integer>) checked.get("productIds"));
->>>>>>> 2495088e507ff2ad2f023b0d8c2b3953b5997e3f
-
         List<Cart> carts = cartMapper.selectByExample(example);
         for (Cart c : carts) {
             c.setChecked(((int) checked.get("isChecked") == 1)?true:false);
