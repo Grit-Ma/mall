@@ -17,9 +17,9 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
+import static com.cskaoyan.bean.coupon.CouponConstant.TIME_TYPE_DAYS;
 
 /**
  * created by ZengWei
@@ -167,6 +167,18 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public List<Coupon> findAllCoupon(int page, int size){
-        return couponMapper.selectByExample(new CouponExample());
+        List<Coupon> coupons = couponMapper.selectByExample(new CouponExample());
+        for (Coupon coupon : coupons) {
+            Date date = new Date();
+            if (coupon.getTimeType() == TIME_TYPE_DAYS) {
+                coupon.setStartTime(coupon.getAddTime());
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(coupon.getAddTime());
+                calendar.add(Calendar.DATE, coupon.getDays());
+                date = calendar.getTime();
+                coupon.setEndTime(date);
+            }
+        }
+        return coupons;
     }
 }
