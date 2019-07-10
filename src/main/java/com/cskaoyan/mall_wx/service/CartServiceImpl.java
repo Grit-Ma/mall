@@ -1,11 +1,14 @@
 package com.cskaoyan.mall_wx.service;
 
 import com.cskaoyan.bean.*;
+import com.cskaoyan.bean.System;
 import com.cskaoyan.bean.vo.CartTotalVO;
 import com.cskaoyan.mapper.*;
+import com.cskaoyan.mapper.config.SystemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +27,8 @@ public class CartServiceImpl implements CartService{
     GoodsMapper goodsMapper;
     @Autowired
     GoodsProductMapper goodsProductMapper;
+    @Autowired
+    SystemMapper systemMapper;
 
     //获取购物车数据
     @Override
@@ -76,9 +81,9 @@ public class CartServiceImpl implements CartService{
         CartExample.Criteria criteria2 = example2.createCriteria();
         criteria2.andUserIdEqualTo(cart.getUserId()).andCheckedEqualTo(true).andDeletedEqualTo(false);
         if (cartMapper.sumAllChecked(cart.getUserId()) == null){  //选中商品总价格
-            cartTotal.setCheckedGoodsAmount(0);
+            cartTotal.setCheckedGoodsAmount(new BigDecimal(0));
         }else {
-            int d = cartMapper.sumAllChecked(cart.getUserId());
+            BigDecimal d = cartMapper.sumAllChecked(cart.getUserId());
             cartTotal.setCheckedGoodsAmount(d);
         }
         List<Cart> carts2 = cartMapper.selectByExample(example2);
@@ -212,14 +217,22 @@ public class CartServiceImpl implements CartService{
         }
     }
 
-    //订单确认
+
+    //计算运费
     @Override
-    public Map checkout(Cart cart) {
+    public BigDecimal freightPrice(BigDecimal goodsPrice) {
+        SystemExample e = new SystemExample();
+        e.createCriteria().andKeyNameEqualTo("cskaoyan_mall_express_freight_min");
+        List<System> systems = systemMapper.selectByExample(e);
+        BigDecimal freightPrice = new BigDecimal(0.00);
+        if (goodsPrice.compareTo(new BigDecimal(systems.get(0).getKeyValue())) < 0) {
+            e = new SystemExample();
+            e.createCriteria().andKeyNameEqualTo("cskaoyan_mall_express_freight_value");
+            freightPrice = new BigDecimal(systemMapper.selectByExample(e).get(0).getKeyValue());
+        }
 
-        return null;
+        return  freightPrice;
     }
-
-
 
 
 }

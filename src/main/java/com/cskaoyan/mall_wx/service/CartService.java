@@ -37,8 +37,9 @@ public interface CartService {
 
     void clearCart(int userId);
 
-    //订单确认
-    Map checkout(Cart cart);
+
+    //计算邮费
+    BigDecimal freightPrice(BigDecimal goodsPrice);
 
 
 }

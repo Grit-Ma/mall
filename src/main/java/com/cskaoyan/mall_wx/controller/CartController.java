@@ -1,10 +1,10 @@
 package com.cskaoyan.mall_wx.controller;
-import com.cskaoyan.bean.Cart;
-import com.cskaoyan.bean.CartExample;
-import com.cskaoyan.bean.Coupon;
+import com.cskaoyan.bean.*;
+import com.cskaoyan.bean.System;
 import com.cskaoyan.bean.vo.CartTotalVO;
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.mall_wx.service.CartService;
+import com.cskaoyan.mall_wx.service.cdy.WxAddressService;
 import com.cskaoyan.mall_wx.util.UserTokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +25,8 @@ public class CartController {
 
     @Autowired
     CartService cartService;
+    @Autowired
+    WxAddressService wxAddressService;
 
 
     //获取购物车数据，返回购物车list，cartTotal
@@ -198,26 +200,33 @@ public class CartController {
 
         //商品总价格，list--checkedGoodsList--goodsTotalPrice
         CartTotalVO cartTotalVO = cartService.getCartTotal(cart,check);
-        //优惠券金额-couponPrice
-        //BigDecimal couponPrice = cartService.coupon(cart,(int) check.get("couponId")).getDiscount();
-        //actualPrice与orderTotalPrice
-        //BigDecimal actualPrice = BigDecimal.valueOf(cartTotalVO.getCheckedGoodsAmount()).subtract(couponPrice);
-        //可用于优惠券数量-availableCouponLength
-        //List<Coupon> coupons = cartService.coupons(actualPrice);
+        BigDecimal goodsPrice = cartTotalVO.getCheckedGoodsAmount();
+        //当前使用的地址的信息
+        AddressPackage address = wxAddressService.query(userId, addressId);
 
+        //优惠券金额-couponPrice
+        //可用于优惠券数量-availableCouponLength
+
+        //团购硬编码
+        BigDecimal grouponPrice = new BigDecimal(0);
+        //计算邮费,(goodsPrice)满设定值包邮
+        BigDecimal freightPrice = cartService.freightPrice(goodsPrice);
+        //实付价格与订单价格actualPrice与orderTotalPrice
+        BigDecimal orderPrice = cartTotalVO.getCheckedGoodsAmount().add(freightPrice).subtract(couponPrice);
+        BigDecimal actualPrice = orderPrice.subtract(grouponPrice);
         Map data = new HashMap();
-        data.put("actualPrice",cartTotalVO.getCheckedGoodsAmount());  //订单总价
+        data.put("actualPrice",actualPrice);  //订单总价：订单价格-团购优惠
         data.put("addressId",check.get("addressId"));  //收货地址id
-        data.put("availableCouponLength",0);  //可用优惠券数量
-        data.put("checkedAddress",null);
-        data.put("checkedGoodsList",cartTotalVO.getCarts());
-        data.put("couponId",check.get("couponId"));
-        data.put("couponPrice",0);
-        data.put("freightPrice",null);
-        data.put("goodsTotalPrice",cartTotalVO.getCheckedGoodsAmount());
-        data.put("grouponPrice",0);
-        data.put("grouponRulesId",check.get("grouponRulesId"));
-        data.put("orderTotalPrice",0);
+        //data.put("availableCouponLength",0);  //可用优惠券数量
+        data.put("checkedAddress",address);    //当前使用地址信息
+        data.put("checkedGoodsList",cartTotalVO.getCarts());  //需要购买的商品列表
+        data.put("couponId",check.get("couponId"));  //当前使用优惠券id，无则为-1
+        //data.put("couponPrice",);    //当前使用优惠券价格
+        data.put("freightPrice",freightPrice);  //运费
+        data.put("goodsTotalPrice",goodsPrice);  //商品总价
+        data.put("grouponPrice",grouponPrice);  //团购减免
+        data.put("grouponRulesId",check.get("grouponRulesId"));  //团购规则id
+        data.put("orderTotalPrice",orderPrice);  //订单价格：商品价格+运费-优惠券
         ResponseVO vo = new ResponseVO();
         vo.setData(data);
         vo.setErrmsg("成功");
