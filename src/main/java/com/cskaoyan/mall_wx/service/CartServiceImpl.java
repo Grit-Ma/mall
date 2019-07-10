@@ -98,6 +98,28 @@ public class CartServiceImpl implements CartService{
         return cartTotal;
     }
 
+
+    //立即购买，获取当前商品cart
+    public CartTotalVO getCurrentCartTotal(int cartId,Map checked){
+        CartTotalVO cartTotal = new CartTotalVO();
+
+        CartExample example = new CartExample();
+        CartExample.Criteria criteria = example.createCriteria();
+        criteria.andIdEqualTo(cartId);
+        List<Cart> cart1 = cartMapper.selectByExample(example);
+        Cart cart2 = cart1.get(0);
+
+        BigDecimal number = new BigDecimal(cart2.getNumber());
+        cartTotal.setCheckedGoodsCount(cart2.getNumber());
+        cartTotal.setCheckedGoodsAmount(cart2.getPrice().multiply(number));
+        cartTotal.setCarts(cart1);
+        return cartTotal;
+    }
+
+
+
+
+
     //添加商品进购物车,分别用goodsid，productid取对应数据，填满cart
     //先判断是否已有此商品
     @Override
@@ -118,10 +140,12 @@ public class CartServiceImpl implements CartService{
             GoodsExample.Criteria criteria1 = example2.createCriteria();
             criteria1.andIdEqualTo(goodsId).andDeletedEqualTo(false);
             Goods goods = goodsMapper.selectByExample(example2).get(0);
+
             GoodsProductExample example3 = new GoodsProductExample();
             GoodsProductExample.Criteria criteria3 = example3.createCriteria();
-            criteria1.andIdEqualTo(productId).andDeletedEqualTo(false);
+            criteria3.andIdEqualTo(productId).andDeletedEqualTo(false);
             GoodsProduct goodsProduct = goodsProductMapper.selectByExample(example3).get(0);
+
             cart.setGoodsSn(goods.getGoodsSn());
             cart.setGoodsName(goods.getName());
             cart.setPrice(goodsProduct.getPrice());
