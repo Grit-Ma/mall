@@ -2,7 +2,6 @@ package com.cskaoyan.mall_wx.service.cf;
 
 import com.cskaoyan.bean.wx.order.SubmitInfo;
 import com.cskaoyan.bean.wx.order.SubmitResponse;
-import com.cskaoyan.bean.wx.pagedata.OrderListPageData;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +17,9 @@ public interface WxOrderService {
 
     //获取订单详情
     HashMap detail(HttpServletRequest request, Integer orderId);
+
+    @Transactional
+    HashMap cancelOrder(HttpServletRequest request, SubmitResponse submitResponse);
 
     Map<String, Integer> orderInfo(Integer userId);
 }
