@@ -51,9 +51,9 @@ public class WxCouponServiceImpl implements WxCouponService {
         for (CouponUser couponUser : list1) {
             Coupon coupon = couponMapper.selectByPrimaryKey(couponUser.getCouponId());
             if(coupon.getTimeType() == TIME_TYPE_DAYS) {
-                coupon.setStartTime(coupon.getAddTime());
+                coupon.setStartTime(couponUser.getAddTime());
                 Calendar calendar = new GregorianCalendar();
-                calendar.setTime(coupon.getAddTime());
+                calendar.setTime(couponUser.getAddTime());
                 calendar.add(Calendar.DATE,coupon.getDays());
                 date=calendar.getTime();
                 coupon.setEndTime(date);

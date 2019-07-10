@@ -110,17 +110,6 @@ public class WxHomeServiceImpl implements WxHomeService {
 
     private List<Coupon> getCouponList() {
         List<Coupon> couponList = couponMapper.selectByExample(new CouponExample());
-        for (Coupon coupon : couponList) {
-            Date date = new Date();
-            if (coupon.getTimeType() == TIME_TYPE_DAYS) {
-                coupon.setStartTime(coupon.getAddTime());
-                Calendar calendar = new GregorianCalendar();
-                calendar.setTime(coupon.getAddTime());
-                calendar.add(Calendar.DATE, coupon.getDays());
-                date = calendar.getTime();
-                coupon.setEndTime(date);
-            }
-        }
         return couponList;
     }
 

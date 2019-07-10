@@ -1,7 +1,6 @@
 package com.cskaoyan.mall_admin.service.promotion.Impl;
 
 import com.cskaoyan.bean.Coupon;
-import com.cskaoyan.bean.Coupon.Column;
 import com.cskaoyan.bean.CouponExample;
 import com.cskaoyan.bean.CouponUser;
 import com.cskaoyan.bean.CouponUserExample;
@@ -58,6 +57,7 @@ public class CouponServiceImpl implements CouponService {
     public ResponseVO updateCoupon(Coupon coupon) {
         ResponseVO vo = new ResponseVO();
         try{
+            coupon.setUpdateTime(new Date());
             couponMapper.updateByPrimaryKey(coupon);
             vo.setErrmsg("修改成功");
             vo.setErrno(0);
@@ -86,6 +86,8 @@ public class CouponServiceImpl implements CouponService {
     public ResponseVO insertCoupon(Coupon coupon) {
         ResponseVO vo = new ResponseVO();
         try{
+            coupon.setAddTime(new Date());
+            coupon.setUpdateTime(new Date());
             couponMapper.insert(coupon);
             vo.setErrmsg("添加成功");
             vo.setErrno(0);
@@ -170,14 +172,6 @@ public class CouponServiceImpl implements CouponService {
         List<Coupon> coupons = couponMapper.selectByExample(new CouponExample());
         for (Coupon coupon : coupons) {
             Date date = new Date();
-            if (coupon.getTimeType() == TIME_TYPE_DAYS) {
-                coupon.setStartTime(coupon.getAddTime());
-                Calendar calendar = new GregorianCalendar();
-                calendar.setTime(coupon.getAddTime());
-                calendar.add(Calendar.DATE, coupon.getDays());
-                date = calendar.getTime();
-                coupon.setEndTime(date);
-            }
         }
         return coupons;
     }
