@@ -1,16 +1,13 @@
 package com.cskaoyan.mall_wx.controller.xfor;
 
-import com.cskaoyan.bean.Feedback;
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.bean.wx.xfor.WxFeedback;
 import com.cskaoyan.mall_wx.service.xfor.WxFeedbackService;
-import com.cskaoyan.mall_wx.util.UserTokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 
 @Controller
 @RequestMapping("wx/feedback")

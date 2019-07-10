@@ -61,7 +61,7 @@ public class CartController {
         Integer userId = UserTokenManager.getUserId(tokenKey);
         cart.setUserId(userId);
 
-        long num = cartService.addToCart(cart);
+        long num = (long) cartService.addToCart(cart,0).get("num");  //添加进购物车flag为0
         ResponseVO vo = new ResponseVO();
         vo.setData(num);
         vo.setErrmsg("成功");
@@ -72,21 +72,21 @@ public class CartController {
 
 
 
-    /*//立即购买商品，商品详情页面点击立即购买。
-    //@RequestMapping("fastadd")
-    //@ResponseBody
+    //立即购买商品，商品详情页面点击立即购买,会与购物车内该商品合并，number以立即购买时选取的为准
+    @RequestMapping("fastadd")
+    @ResponseBody
     public ResponseVO fastadd(@RequestBody Cart cart, HttpServletRequest request){
         String tokenKey = request.getHeader("X-Litemall-Token");
         Integer userId = UserTokenManager.getUserId(tokenKey);
         cart.setUserId(userId);
         //添加进cart
-        cartService.addToCart(cart);
+        int cartId = (int) cartService.addToCart(cart,1).get("currentCartId");  //立即购买flag为1
 
         ResponseVO vo = new ResponseVO();
-        vo.setData(data);
+        vo.setData(cartId);
         vo.setErrmsg("成功");
         return vo;
-    }*/
+    }
 
 
     //更新购物车的商品，购物车内编辑，增加或者减少已有商品的数量
