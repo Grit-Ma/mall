@@ -57,11 +57,26 @@ public class WxAddressServiceImpl implements WxAddressService {
         addressPackage.setDeleted(address.getDeleted());
 
         Region r1 = regionMapper.selectByPrimaryKey(address.getProvinceId());
-        addressPackage.setProvinceName(r1.getName());
+        if (r1 != null) {
+            addressPackage.setProvinceName(r1.getName());
+        } else {
+            addressPackage.setProvinceName(null);
+        }
+
         Region r2 = regionMapper.selectByPrimaryKey(address.getCityId());
-        addressPackage.setCityName(r2.getName());
+        if (r2 != null) {
+            addressPackage.setCityName(r2.getName());
+        } else {
+            addressPackage.setCityName(null);
+        }
+
         Region r3 = regionMapper.selectByPrimaryKey(address.getAreaId());
-        addressPackage.setAreaName(r3.getName());
+        if (r3 != null) {
+            addressPackage.setAreaName(r3.getName());
+        } else {
+            addressPackage.setAreaName(null);
+        }
+
         return addressPackage;
     }
 
