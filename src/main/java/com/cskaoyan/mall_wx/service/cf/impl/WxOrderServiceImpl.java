@@ -56,8 +56,11 @@ public class WxOrderServiceImpl implements WxOrderService {
     @Autowired
     CartService cartService;
 
-    //这里开启了事务
+    /*
+        提交订单
+     */
     @Override
+    @Transactional
     public HashMap submitOrder(HttpServletRequest request, SubmitInfo submitInfo) {
 
         //判user信息空
@@ -239,6 +242,158 @@ public class WxOrderServiceImpl implements WxOrderService {
         return WrapTool.setResponseSuccess(new OrderListPageData());
     }
 
+    //获取订单详情
+    @Override
+    public HashMap detail(HttpServletRequest request, Integer orderId) {
+        //判user信息空
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        if (tokenKey == null || "".equals(tokenKey.trim()))
+            return WrapTool.unlogin();
+        //获取userId
+        Integer userId = UserTokenManager.getUserId(tokenKey);
+
+
+        // 订单信息
+        Order order = orderMapper.selectByPrimaryKey(orderId);
+        if (null == order) {
+            return WrapTool.setResponseFailure(ORDER_UNKNOWN, "订单不存在");
+        }
+        if (!order.getUserId().equals(userId)) {
+            return WrapTool.setResponseFailure(ORDER_INVALID, "不是当前用户的订单");
+        }
+        Map<String, Object> orderInfo = new HashMap<String, Object>();
+        orderInfo.put("id", order.getId());
+        orderInfo.put("orderSn", order.getOrderSn());
+        orderInfo.put("addTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(order.getAddTime()));
+        orderInfo.put("consignee", order.getConsignee());
+        orderInfo.put("mobile", order.getMobile());
+        orderInfo.put("address", order.getAddress());
+        orderInfo.put("goodsPrice", order.getGoodsPrice());
+        orderInfo.put("couponPrice", order.getCouponPrice());
+        orderInfo.put("freightPrice", order.getFreightPrice());
+        orderInfo.put("actualPrice", order.getActualPrice());
+        orderInfo.put("orderStatusText", getStatusText(order.getOrderStatus()));
+        orderInfo.put("handleOption", build(order.getOrderStatus()));
+        orderInfo.put("expCode", order.getShipChannel());
+        orderInfo.put("expNo", order.getShipSn());
+
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("orderInfo", orderInfo);
+        result.put("orderGoods", getGoodList(orderId));
+
+        //物流信息？？？？
+
+        return WrapTool.setResponseSuccess(result);
+
+    }
+
+    //取消订单
+    @Override
+    @Transactional
+    public HashMap cancelOrder(HttpServletRequest request, SubmitResponse submitResponse) {
+
+        //判user信息空
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        if (tokenKey == null || "".equals(tokenKey.trim()))
+            return WrapTool.unlogin();
+        //获取userId
+        Integer userId = UserTokenManager.getUserId(tokenKey);
+
+
+        if(submitResponse==null)return WrapTool.setResponseFailure(401,"参数错误");
+        if(submitResponse.getOrderId()==null)return WrapTool.setResponseFailure(401,"参数错误");
+
+        int orderId = submitResponse.getOrderId();
+        int status= orderMapper.selectByPrimaryKey(orderId).getOrderStatus().intValue();
+        HandleOption handleOption = build(status);
+        if(handleOption.getCancel()) {
+           return cancelThisOrder(orderId);
+        }
+        return WrapTool.setResponseFailure(ORDER_INVALID_OPERATION,"订单不能被取消");
+    }
+
+
+    //获取订单的几个不同状态的计数（用在首页）
+    @Override
+    public Map<String, Integer> orderInfo(Integer userId) {
+        OrderExample orderExample = new OrderExample();
+        orderExample.or().andUserIdEqualTo(userId).andDeletedEqualTo(false);
+        List<Order> orders = orderMapper.selectByExample(orderExample);
+        int unpaid = 0;
+        int unship = 0;
+        int unrecv = 0;
+        int uncomment = 0;
+        if (null == orders) {
+            return null;
+        } else {
+            Map<String, Integer> map = new HashMap<>();
+            for (Order order : orders) {
+                if (order.getOrderStatus() == 101) {
+                    unpaid++;
+                } else if (order.getOrderStatus() == 201) {
+                    unship++;
+                } else if (order.getOrderStatus() == 301) {
+                    unrecv++;
+                } else if (order.getOrderStatus() == 401) {
+                    uncomment++;
+                }
+            }
+            map.put("unpaid", unpaid);
+            map.put("unship", unship);
+            map.put("unrecv", unrecv);
+            map.put("uncomment", uncomment);
+
+            return map;
+        }
+    }
+
+
+
+    //获取订单编码 时间+随机数
+    public String getOrderSn(int userId) {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String now = df.format(LocalDate.now());
+        String orderSn = now + CharUtil.getRandomNum(6);
+        while (countByOrderSn(userId, orderSn) != 0) {
+            orderSn = now + CharUtil.getRandomNum(6);
+        }
+        return orderSn;
+    }
+
+    //判断订单编码没有重复
+    public int countByOrderSn(Integer userId, String orderSn) {
+        OrderExample example = new OrderExample();
+        example.or().andUserIdEqualTo(userId).andOrderSnEqualTo(orderSn).andDeletedEqualTo(false);
+        return (int) orderMapper.countByExample(example);
+    }
+
+    @Transactional
+    protected HashMap cancelThisOrder(int orderId) {
+        //改变订单表状态
+        Order order = orderMapper.selectByPrimaryKey(orderId);
+        short s=102;
+        order.setOrderStatus(s);
+        order.setEndTime(new Date());
+        orderMapper.updateByPrimaryKey(order);
+
+        //增加对应商品的数量
+        List<OrderGoods> goodList = getGoodList(orderId);
+        for (OrderGoods orderGood : goodList) {
+            //更新orderGoods表
+            orderGood.setDeleted(true);
+            orderGoodsMapper.updateByPrimaryKey(orderGood);
+
+            Integer productId = orderGood.getProductId();
+            GoodsProduct product = goodsProductMapper.selectByPrimaryKey(productId);
+            Integer remainNumber = product.getNumber() +orderGood.getNumber();
+            GoodsProduct goodsProduct = goodsProductMapper.selectByPrimaryKey(productId);
+            goodsProduct.setNumber(remainNumber);
+            goodsProductMapper.updateByPrimaryKey(goodsProduct);
+        }
+        return WrapTool.setResponseSuccessWithNoData();
+    }
+
 
     //封装订单页面信息
     private OrderListPageData showOrdersByStatus(short orderStatus, int page, int size, String sort, String order) {
@@ -312,141 +467,6 @@ public class WxOrderServiceImpl implements WxOrderService {
             throw new IllegalStateException("status不支持");
         }
         return handleOption;
-    }
-
-    //获取订单编码 时间+随机数
-    public String getOrderSn(int userId) {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String now = df.format(LocalDate.now());
-        String orderSn = now + CharUtil.getRandomNum(6);
-        while (countByOrderSn(userId, orderSn) != 0) {
-            orderSn = now + CharUtil.getRandomNum(6);
-        }
-        return orderSn;
-    }
-
-    //判断订单编码没有重复
-    public int countByOrderSn(Integer userId, String orderSn) {
-        OrderExample example = new OrderExample();
-        example.or().andUserIdEqualTo(userId).andOrderSnEqualTo(orderSn).andDeletedEqualTo(false);
-        return (int) orderMapper.countByExample(example);
-    }
-
-
-    //获取订单详情
-    @Override
-    public HashMap detail(HttpServletRequest request, Integer orderId) {
-        //判user信息空
-        String tokenKey = request.getHeader("X-Litemall-Token");
-        if (tokenKey == null || "".equals(tokenKey.trim()))
-            return WrapTool.unlogin();
-        //获取userId
-        Integer userId = UserTokenManager.getUserId(tokenKey);
-
-
-        // 订单信息
-        Order order = orderMapper.selectByPrimaryKey(orderId);
-        if (null == order) {
-            return WrapTool.setResponseFailure(ORDER_UNKNOWN, "订单不存在");
-        }
-        if (!order.getUserId().equals(userId)) {
-            return WrapTool.setResponseFailure(ORDER_INVALID, "不是当前用户的订单");
-        }
-        Map<String, Object> orderInfo = new HashMap<String, Object>();
-        orderInfo.put("id", order.getId());
-        orderInfo.put("orderSn", order.getOrderSn());
-        orderInfo.put("addTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(order.getAddTime()));
-        orderInfo.put("consignee", order.getConsignee());
-        orderInfo.put("mobile", order.getMobile());
-        orderInfo.put("address", order.getAddress());
-        orderInfo.put("goodsPrice", order.getGoodsPrice());
-        orderInfo.put("couponPrice", order.getCouponPrice());
-        orderInfo.put("freightPrice", order.getFreightPrice());
-        orderInfo.put("actualPrice", order.getActualPrice());
-        orderInfo.put("orderStatusText", getStatusText(order.getOrderStatus()));
-        orderInfo.put("handleOption", build(order.getOrderStatus()));
-        orderInfo.put("expCode", order.getShipChannel());
-        orderInfo.put("expNo", order.getShipSn());
-
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("orderInfo", orderInfo);
-        result.put("orderGoods", getGoodList(orderId));
-
-        //物流信息？？？？
-
-        return WrapTool.setResponseSuccess(result);
-
-    }
-
-    //取消订单
-    @Override
-    public HashMap cancelOrder(HttpServletRequest request, SubmitResponse submitResponse) {
-
-        //判user信息空
-        String tokenKey = request.getHeader("X-Litemall-Token");
-        if (tokenKey == null || "".equals(tokenKey.trim()))
-            return WrapTool.unlogin();
-        //获取userId
-        Integer userId = UserTokenManager.getUserId(tokenKey);
-
-
-        if(submitResponse==null)return WrapTool.setResponseFailure(401,"参数错误");
-        if(submitResponse.getOrderId()==null)return WrapTool.setResponseFailure(401,"参数错误");
-
-        int orderId = submitResponse.getOrderId();
-        int status= orderMapper.selectByPrimaryKey(orderId).getOrderStatus().intValue();
-        HandleOption handleOption = build(status);
-        if(handleOption.getCancel())
-            cancelThisOrder(orderId);
-        return null;
-    }
-
-    @Transactional
-    protected void cancelThisOrder(int orderId) {
-        //改变订单表状态
-        Order order = orderMapper.selectByPrimaryKey(orderId);
-        short s=102;
-        order.setOrderStatus(s);
-        orderMapper.updateByPrimaryKey(order);
-
-        //
-
-    }
-
-
-    //获取订单的几个不同状态的计数（用在首页）
-    @Override
-    public Map<String, Integer> orderInfo(Integer userId) {
-        OrderExample orderExample = new OrderExample();
-        orderExample.or().andUserIdEqualTo(userId).andDeletedEqualTo(false);
-        List<Order> orders = orderMapper.selectByExample(orderExample);
-        int unpaid = 0;
-        int unship = 0;
-        int unrecv = 0;
-        int uncomment = 0;
-        if (null == orders) {
-            return null;
-        } else {
-            Map<String, Integer> map = new HashMap<>();
-            for (Order order : orders) {
-                if (order.getOrderStatus() == 101) {
-                    unpaid++;
-                } else if (order.getOrderStatus() == 201) {
-                    unship++;
-                } else if (order.getOrderStatus() == 301) {
-                    unrecv++;
-                } else if (order.getOrderStatus() == 401) {
-                    uncomment++;
-                }
-            }
-            map.put("unpaid", unpaid);
-            map.put("unship", unship);
-            map.put("unrecv", unrecv);
-            map.put("uncomment", uncomment);
-
-            return map;
-        }
     }
 
 }

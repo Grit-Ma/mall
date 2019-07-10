@@ -42,7 +42,7 @@ public class WxOrderController {
 //    }
 
     @PostMapping("order/cancel")
-    public HashMap orderCancel(HttpServletRequest request, SubmitResponse submitResponse){
+    public HashMap orderCancel(HttpServletRequest request, @RequestBody SubmitResponse submitResponse){
         return wxOrderService.cancelOrder(request,submitResponse);
     }
 
