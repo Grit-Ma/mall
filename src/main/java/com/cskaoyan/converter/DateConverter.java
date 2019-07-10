@@ -20,4 +20,10 @@ public class DateConverter implements Converter<String, Date> {
         }
         return null;
     }
+
+    public static String getStringDate(Date currentTime) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(currentTime);
+        return dateString;
+    }
 }

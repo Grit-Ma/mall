@@ -4,6 +4,7 @@ import com.cskaoyan.bean.Footprint;
 import com.cskaoyan.bean.FootprintExample;
 import com.cskaoyan.bean.Goods;
 import com.cskaoyan.bean.wx.xfor.FootprintList;
+import com.cskaoyan.converter.DateConverter;
 import com.cskaoyan.mall_wx.service.xfor.WxFootprintService;
 import com.cskaoyan.mall_wx.util.UserTokenManager;
 import com.cskaoyan.mapper.FootprintMapper;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -32,11 +34,17 @@ public class WxFootprintServiceImpl implements WxFootprintService {
         footprintExample.createCriteria().andUserIdEqualTo(userId);
         PageHelper.startPage(page, size);
         List<Footprint> footprints = footprintMapper.selectByExample(footprintExample);
-        ArrayList<Goods> goodsArrayList = new ArrayList<>();
+        ArrayList goodsArrayList = new ArrayList<>();
         for (Footprint fp : footprints) {
             Goods goods = goodsMapper.selectByPrimaryKey(fp.getGoodsId());
-            goods.setAddTime(fp.getAddTime());
-            goodsArrayList.add(goods);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("addTime", DateConverter.getStringDate(fp.getAddTime()));
+            map.put("brief",goods.getBrief());
+            map.put("goodsId",goods.getId());
+            map.put("name",goods.getName());
+            map.put("picUrl",goods.getPicUrl());
+            map.put("retailPrice",goods.getRetailPrice());
+            goodsArrayList.add(map);
         }
         FootprintList footprintList = new FootprintList();
         footprintList.setFootprintList(goodsArrayList);
