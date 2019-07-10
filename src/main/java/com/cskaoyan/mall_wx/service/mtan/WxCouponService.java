@@ -1,5 +1,6 @@
 package com.cskaoyan.mall_wx.service.mtan;
 
+import com.cskaoyan.bean.Cart;
 import com.cskaoyan.bean.Coupon;
 import com.cskaoyan.bean.CouponUser;
 import com.cskaoyan.bean.wx.pagedata.CouponPageData;
@@ -23,4 +24,16 @@ public interface WxCouponService {
     CouponUser queryOne(Integer userId, Integer couponId);
 
     int update(CouponUser couponUser);
+
+    List<CouponUser> queryAll(Integer userId);
+
+    List<Cart> queryByUidAndChecked(Integer userId);
+
+    Cart findById(Integer id);
+
+    Integer countCoupon(Integer couponId);
+
+    Integer countUserAndCoupon(Integer userId, Integer couponId);
+
+    void add(CouponUser couponUser);
 }

@@ -25,4 +25,13 @@ public interface CouponService {
     PageData getCouponUserList(int page, int limit, String sort, String order, Integer userId, Integer couponId, Short status);
 
     List<Coupon> queryExpired();
+
+
+    String getRandomNum(Integer num);
+
+    String generateCode();
+
+    Coupon findByCode(String code);
+
+    List<Coupon> findAllCoupon(int page, int size);
 }
