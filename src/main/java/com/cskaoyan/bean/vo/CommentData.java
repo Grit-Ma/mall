@@ -13,6 +13,9 @@ public class CommentData {
 
     private String nickname;
 
+    private String[] picList;
+
+
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date addTime;
 
@@ -54,5 +57,13 @@ public class CommentData {
 
     public void setAddTime(Date addTime) {
         this.addTime = addTime;
+    }
+
+    public String[] getPicList() {
+        return picList;
+    }
+
+    public void setPicList(String[] picList) {
+        this.picList = picList;
     }
 }
