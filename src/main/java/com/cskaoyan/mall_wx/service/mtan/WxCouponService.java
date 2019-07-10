@@ -16,7 +16,7 @@ public interface WxCouponService {
 
     CouponPageData couponList(int page, int size, Short status, Integer userId);
 
-    List<Coupon> selectList(int cartId, int grouponRulesId);
+//    List<Coupon> selectList(int cartId, int grouponRulesId);
 
     List<CouponUser> queryExpired();
 
