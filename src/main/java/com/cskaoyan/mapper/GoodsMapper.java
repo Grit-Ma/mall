@@ -51,4 +51,6 @@ public interface GoodsMapper {
     List<WxGoodsVo> selectRelated(int id);
 
     List<WxGoodsVo> selectByPrimaryKeys(@Param("keys") int[] keys);
+
+    GoodsListVo selectGoodsListByBrandId(Integer brandId);
 }

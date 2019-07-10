@@ -3,7 +3,13 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mall
+    url: jdbc:mysql://localhost:3306/mall?characterEncoding=utf-8
+
+myoss:
+  bucket: xfor
+  end-point: oss-cn-shenzhen.aliyuncs.com
+  access-key: LTAIO5qvCfMxUHqt
+  secret: Tks0mrDZicbo5h9IndPWHNjG28h0v9
 
 server:
   servlet:
