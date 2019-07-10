@@ -7,6 +7,7 @@ import com.cskaoyan.mall_admin.service.sys.RoleService;
 import com.cskaoyan.tool.WrapTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional
     public int updateRole(Role role) {
         if (checkName(role)) {
             return roleMapper.updateByPrimaryKeySelective(role);

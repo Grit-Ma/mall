@@ -27,13 +27,14 @@ public class PermissionServiceImpl implements PermissionService {
     public int updateRolePermissions(int roleId, List<String> permissions) {
         PermissionExample example = new PermissionExample();
 
-        //当获取的权限list是空
+        //当获取的权限list是空;对原先的已经授权的进行取消
         if(permissions==null||permissions.isEmpty()){
             example.createCriteria().andRoleIdEqualTo(roleId);
             permissionMapper.deleteByExample(example);
             return 1;
         }
 
+        //对于原先有的，但是没有在更新后的权限列表里的，进行取消授权
         example= new PermissionExample();
         example.createCriteria().andRoleIdEqualTo(roleId).andPermissionNotIn(permissions);
         Permission permission = new Permission();
@@ -41,13 +42,15 @@ public class PermissionServiceImpl implements PermissionService {
         permission.setUpdateTime(new Date());
         permissionMapper.updateByExampleSelective(permission, example);
 
+
+        //循环添加不在原先权限表中的权限
         for(String s:permissions){
             example = new PermissionExample();
             example.createCriteria().andPermissionEqualTo(s).andRoleIdEqualTo(roleId);
             List<Permission> permissions1 = permissionMapper.selectByExample(example);
             if(permissions1.isEmpty()){
                 Permission p = new Permission(roleId, s, new Date(), new Date(), false);
-                permissionMapper.insertSelective(p);
+                permissionMapper.insert(p);
             }
         }
         return 1;

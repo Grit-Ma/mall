@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: xfor
+    active: cf
 
 ---
 myoss:

@@ -44,4 +44,5 @@ public class LogRecording {
             logService.addLog(admin,ADMIN_LOGOUT,true);
         }
     }
+
 }
