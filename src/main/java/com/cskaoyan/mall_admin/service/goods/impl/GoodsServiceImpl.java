@@ -39,7 +39,7 @@ public class GoodsServiceImpl implements GoodsService {
         example.setOrderByClause(sort+" "+order);
         GoodsExample.Criteria criteria = example.createCriteria();
         criteria.andGoodsSnLike("%"+goodsSn+"%").andNameLike("%"+name+"%").andDeletedEqualTo(false);
-        List<Goods> goods = goodsMapper.selectByExample(example);
+        List<Goods> goods = goodsMapper.selectByExampleWithBLOBs(example);
         PageInfo<Goods> pageinfo = new PageInfo(goods);
         return new PageData(pageinfo.getList(),pageinfo.getTotal());
     }
