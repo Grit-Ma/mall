@@ -48,6 +48,7 @@ public class CouponController {
     @ResponseBody
     public ResponseVO update(@RequestBody Coupon coupon) {
         ResponseVO vo = new ResponseVO();
+        couponCheck.checkCouponExpired();
         vo = couponService.updateCoupon(coupon);
         return vo;
     }
@@ -56,6 +57,7 @@ public class CouponController {
     @ResponseBody
     public ResponseVO delete(@RequestBody Coupon coupon) {
         ResponseVO vo = new ResponseVO();
+        couponCheck.checkCouponExpired();
         vo = couponService.deleteCoupon(coupon);
         return vo;
     }
@@ -64,6 +66,7 @@ public class CouponController {
     @ResponseBody
     public ResponseVO insert(@RequestBody Coupon coupon) {
         ResponseVO vo = new ResponseVO();
+        couponCheck.checkCouponExpired();
         if (coupon.getType().equals(CouponConstant.TYPE_CODE)) {
             String code = couponService.generateCode();
             coupon.setCode(code);
@@ -76,6 +79,7 @@ public class CouponController {
     @ResponseBody
     public ResponseVO read(int id){
         ResponseVO vo = new ResponseVO();
+        couponCheck.checkCouponExpired();
         vo.setErrmsg("成功");
         vo.setData(couponService.searchCouponById(id));
         return vo;
@@ -85,6 +89,7 @@ public class CouponController {
     @ResponseBody
     public ResponseVO list(int page, int limit, String sort, String order, Integer userId, Integer couponId, Short status) {
         ResponseVO vo = new ResponseVO();
+        couponCheck.checkCouponExpired();
         PageData data = couponService.getCouponUserList(page, limit, sort, order, userId, couponId, status);
         vo.setErrmsg("成功");
         vo.setData(data);

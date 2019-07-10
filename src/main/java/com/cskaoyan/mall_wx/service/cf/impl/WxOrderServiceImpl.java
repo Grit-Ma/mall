@@ -25,6 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static com.cskaoyan.bean.coupon.CouponUserConstant.STATUS_USED;
+import static com.cskaoyan.mall_wx.util.CouponUserConstant.STATUS_USABLE;
 import static com.cskaoyan.mall_wx.util.OrderStatusConstant.*;
 import static com.cskaoyan.mall_wx.util.WxResponseCode.*;
 
@@ -514,22 +515,20 @@ public class WxOrderServiceImpl implements WxOrderService {
             goodsProductMapper.updateByPrimaryKey(goodsProduct);
         }
 
-//        //会退优惠券
-//        //如果使用了优惠券，更新优惠券用户列表
-//        CouponUserExample couponUserExample = new CouponUserExample();
-//        couponUserExample.createCriteria().andUserIdEqualTo(userId);
-//        List<CouponUser> couponUsers = couponUserMapper.selectByExample(couponUserExample);
-//        if (couponUsers != null && !(couponUsers.size() == 0)) {
-//            CouponUser couponUser = couponUsers.get(0);
-//            couponUser.setOrderId(orderId);
-//            couponUser.setUsedTime(new Date());
-//            couponUser.setStatus(STATUS_USED);
-//            couponUserMapper.updateByPrimaryKeySelective(couponUser);
-//        }
-//
-//        return WrapTool.setResponseSuccess(new SubmitResponse(orderId));
-
-
+        //回退优惠券
+        //如果使用了优惠券，更新优惠券用户列表
+        if(order.getCouponPrice().compareTo(new BigDecimal(0))>0) {
+            CouponUserExample couponUserExample = new CouponUserExample();
+            couponUserExample.createCriteria().andUserIdEqualTo(userId).andUsedTimeEqualTo(order.getAddTime());
+            List<CouponUser> couponUsers = couponUserMapper.selectByExample(couponUserExample);
+            if (couponUsers != null && !(couponUsers.size() == 0)) {
+                CouponUser couponUser = couponUsers.get(0);
+                couponUser.setStatus(STATUS_USABLE);
+                couponUser.setUsedTime(null);
+                couponUser.setUpdateTime(new Date());
+                couponUserMapper.updateByPrimaryKey(couponUser);
+            }
+        }
         return WrapTool.setResponseSuccessWithNoData();
     }
 
