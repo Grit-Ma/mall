@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
+import static com.cskaoyan.mall_wx.util.WxResponseCode.ORDER_PAY_FAIL;
+
 @RestController
 @RequestMapping("wx")
 public class WxOrderController {
@@ -22,8 +24,9 @@ public class WxOrderController {
                              @RequestParam(defaultValue = "1") Integer page,
                              @RequestParam(defaultValue = "10") Integer size,
                              @RequestParam(defaultValue = "add_time") String sort,
-                             @RequestParam(defaultValue = "desc") String order){
-        return wxOrderService.showOrderList(showType, page, size,sort,order);
+                             @RequestParam(defaultValue = "desc") String order,
+                             HttpServletRequest request){
+        return wxOrderService.showOrderList(showType, page, size,sort,order,request);
     }
 
     @GetMapping("order/detail")
@@ -36,10 +39,10 @@ public class WxOrderController {
         return wxOrderService.submitOrder(request,submitInfo);
     }
 
-//    @PostMapping("order/prepay")
-//    public HashMap orderPrePay(){
-//
-//    }
+    @PostMapping("order/prepay")
+    public HashMap orderPrePay(){
+        return WrapTool.setResponseFailure(ORDER_PAY_FAIL,"订单不能支付");
+    }
 
     @PostMapping("order/cancel")
     public HashMap orderCancel(HttpServletRequest request, @RequestBody SubmitResponse submitResponse){

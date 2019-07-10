@@ -222,22 +222,30 @@ public class WxOrderServiceImpl implements WxOrderService {
         return WrapTool.setResponseSuccess(orderId);
     }
 
-
+    /*
+        获取订单列表
+     */
     @Override
-    public HashMap showOrderList(int showTpe, int page, int size, String sort, String order) {
+    public HashMap showOrderList(int showTpe, int page, int size, String sort, String order, HttpServletRequest request) {
+        //判user信息空
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        if (tokenKey == null || "".equals(tokenKey.trim()))
+            return WrapTool.unlogin();
+        //获取userId
+        Integer userId = UserTokenManager.getUserId(tokenKey);
         sort = sort.trim();
         order = order.trim();
         switch (showTpe) {
             case 0:
-                return WrapTool.setResponseSuccess(showOrdersByStatus((short) 1, page, size, sort, order));
+                return WrapTool.setResponseSuccess(showOrdersByStatus((short) 1, page, size, sort, order,userId));
             case 1:
-                return WrapTool.setResponseSuccess(showOrdersByStatus((short) 101, page, size, sort, order));
+                return WrapTool.setResponseSuccess(showOrdersByStatus((short) 101, page, size, sort, order,userId));
             case 2:
-                return WrapTool.setResponseSuccess(showOrdersByStatus((short) 201, page, size, sort, order));
+                return WrapTool.setResponseSuccess(showOrdersByStatus((short) 201, page, size, sort, order,userId));
             case 3:
-                return WrapTool.setResponseSuccess(showOrdersByStatus((short) 301, page, size, sort, order));
+                return WrapTool.setResponseSuccess(showOrdersByStatus((short) 301, page, size, sort, order,userId));
             case 4:
-                return WrapTool.setResponseSuccess(showOrdersByStatus((short) 401, page, size, sort, order));
+                return WrapTool.setResponseSuccess(showOrdersByStatus((short) 401, page, size, sort, order,userId));
         }
         return WrapTool.setResponseSuccess(new OrderListPageData());
     }
@@ -350,6 +358,10 @@ public class WxOrderServiceImpl implements WxOrderService {
 
 
 
+    /*
+        以下为调用的方法：
+     */
+
     //获取订单编码 时间+随机数
     public String getOrderSn(int userId) {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -396,8 +408,8 @@ public class WxOrderServiceImpl implements WxOrderService {
 
 
     //封装订单页面信息
-    private OrderListPageData showOrdersByStatus(short orderStatus, int page, int size, String sort, String order) {
-        List<WxOrder> orders = orderMapper.showOrdersByStatus(orderStatus, sort, order);
+    private OrderListPageData showOrdersByStatus(short orderStatus, int page, int size, String sort, String order,int userId) {
+        List<WxOrder> orders = orderMapper.showOrdersByStatus(orderStatus, sort, order,userId);
         for (WxOrder o : orders) {
             o.setOrderStatusText(getStatusText(o.getOrder_status()));
             o.setGoodList(getGoodList(o.getId()));
