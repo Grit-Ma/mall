@@ -33,5 +33,5 @@ public interface OrderMapper {
 
     OrderDetail selectOrderDetailById(@Param("id") int id);
 
-    List<WxOrder> showOrdersByStatus(@Param("orderStatus")short orderStatus,@Param("sort") String sort, @Param("order")String order);
+    List<WxOrder> showOrdersByStatus(@Param("orderStatus") short orderStatus, @Param("sort") String sort, @Param("order") String order,  @Param("userId")int userId);
 }

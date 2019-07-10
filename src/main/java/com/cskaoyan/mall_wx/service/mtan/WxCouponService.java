@@ -5,6 +5,7 @@ import com.cskaoyan.bean.Coupon;
 import com.cskaoyan.bean.CouponUser;
 import com.cskaoyan.bean.wx.pagedata.CouponPageData;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -36,4 +37,7 @@ public interface WxCouponService {
     Integer countUserAndCoupon(Integer userId, Integer couponId);
 
     void add(CouponUser couponUser);
+
+    //传入couponId,获取couponPrice By cart
+    BigDecimal couponPriceBycouponId(int couponId);
 }

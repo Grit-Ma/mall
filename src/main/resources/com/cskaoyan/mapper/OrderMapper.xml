@@ -619,7 +619,7 @@
     select
     actual_price,id,order_sn,order_status
     from cskaoyan_mall_order
-    where 1=1
+    where deleted = 0 and user_id=#{userId}
     <if test="orderStatus!=1">
       and order_status = #{orderStatus}
     </if>

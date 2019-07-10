@@ -2,6 +2,8 @@ package com.cskaoyan.mapper;
 
 import com.cskaoyan.bean.Cart;
 import com.cskaoyan.bean.CartExample;
+
+import java.math.BigDecimal;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -32,7 +34,7 @@ public interface CartMapper {
 
     void deleteChecked(@Param("userId")int userId, @Param("list")List productsId);
 
-    Integer sumAllChecked(@Param("userId")int userId);
+    BigDecimal sumAllChecked(@Param("userId")int userId);
 
     int countAllCart(@Param("userId")int userId);
 }

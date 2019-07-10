@@ -1,11 +1,14 @@
 package com.cskaoyan.mall_wx.service;
 
 import com.cskaoyan.bean.*;
+import com.cskaoyan.bean.System;
 import com.cskaoyan.bean.vo.CartTotalVO;
 import com.cskaoyan.mapper.*;
+import com.cskaoyan.mapper.config.SystemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +27,8 @@ public class CartServiceImpl implements CartService{
     GoodsMapper goodsMapper;
     @Autowired
     GoodsProductMapper goodsProductMapper;
+    @Autowired
+    SystemMapper systemMapper;
 
     //获取购物车数据
     @Override
@@ -75,11 +80,11 @@ public class CartServiceImpl implements CartService{
         CartExample example2 = new CartExample();
         CartExample.Criteria criteria2 = example2.createCriteria();
         criteria2.andUserIdEqualTo(cart.getUserId()).andCheckedEqualTo(true).andDeletedEqualTo(false);
-        if (cartMapper.sumAllChecked(cart.getUserId()) == null){  //选中商品总价格
-            cartTotal.setCheckedGoodsAmount(0);
+        BigDecimal sumAllChecked = cartMapper.sumAllChecked(cart.getUserId());
+        if (sumAllChecked == null){  //选中商品总价格
+            cartTotal.setCheckedGoodsAmount(new BigDecimal(0));
         }else {
-            int d = cartMapper.sumAllChecked(cart.getUserId());
-            cartTotal.setCheckedGoodsAmount(d);
+            cartTotal.setCheckedGoodsAmount(sumAllChecked);
         }
         List<Cart> carts2 = cartMapper.selectByExample(example2);
         int num2 = 0;
@@ -92,6 +97,28 @@ public class CartServiceImpl implements CartService{
 
         return cartTotal;
     }
+
+
+    //立即购买，获取当前商品cart
+    public CartTotalVO getCurrentCartTotal(int cartId,Map checked){
+        CartTotalVO cartTotal = new CartTotalVO();
+
+        CartExample example = new CartExample();
+        CartExample.Criteria criteria = example.createCriteria();
+        criteria.andIdEqualTo(cartId);
+        List<Cart> cart1 = cartMapper.selectByExample(example);
+        Cart cart2 = cart1.get(0);
+
+        BigDecimal number = new BigDecimal(cart2.getNumber());
+        cartTotal.setCheckedGoodsCount(cart2.getNumber());
+        cartTotal.setCheckedGoodsAmount(cart2.getPrice().multiply(number));
+        cartTotal.setCarts(cart1);
+        return cartTotal;
+    }
+
+
+
+
 
     //添加商品进购物车,分别用goodsid，productid取对应数据，填满cart
     //先判断是否已有此商品
@@ -113,10 +140,12 @@ public class CartServiceImpl implements CartService{
             GoodsExample.Criteria criteria1 = example2.createCriteria();
             criteria1.andIdEqualTo(goodsId).andDeletedEqualTo(false);
             Goods goods = goodsMapper.selectByExample(example2).get(0);
+
             GoodsProductExample example3 = new GoodsProductExample();
             GoodsProductExample.Criteria criteria3 = example3.createCriteria();
-            criteria1.andIdEqualTo(productId).andDeletedEqualTo(false);
+            criteria3.andIdEqualTo(productId).andDeletedEqualTo(false);
             GoodsProduct goodsProduct = goodsProductMapper.selectByExample(example3).get(0);
+
             cart.setGoodsSn(goods.getGoodsSn());
             cart.setGoodsName(goods.getName());
             cart.setPrice(goodsProduct.getPrice());
@@ -212,14 +241,22 @@ public class CartServiceImpl implements CartService{
         }
     }
 
-    //订单确认
+
+    //计算运费
     @Override
-    public Map checkout(Cart cart) {
+    public BigDecimal freightPrice(BigDecimal goodsPrice) {
+        SystemExample e = new SystemExample();
+        e.createCriteria().andKeyNameEqualTo("cskaoyan_mall_express_freight_min");
+        List<System> systems = systemMapper.selectByExample(e);
+        BigDecimal freightPrice = new BigDecimal(0.00);
+        if (goodsPrice.compareTo(new BigDecimal(systems.get(0).getKeyValue())) < 0) {
+            e = new SystemExample();
+            e.createCriteria().andKeyNameEqualTo("cskaoyan_mall_express_freight_value");
+            freightPrice = new BigDecimal(systemMapper.selectByExample(e).get(0).getKeyValue());
+        }
 
-        return null;
+        return  freightPrice;
     }
-
-
 
 
 }

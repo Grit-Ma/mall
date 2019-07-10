@@ -129,7 +129,7 @@ public class WxAuthController {
 		user.setPassword(securityPassword);
 		user.setMobile(mobile);
 		user.setWeixinOpenid("");
-		user.setAvatar("");
+		user.setAvatar("https://yanxuan.nosdn.127.net/80841d741d7fa3073e0ae27bf487339f.jpg?imageView&quality=90&thumbnail=64x64");
 		user.setNickname(username);
 		user.setGender((byte) 0);
 		user.setUserLevel((byte) 0);

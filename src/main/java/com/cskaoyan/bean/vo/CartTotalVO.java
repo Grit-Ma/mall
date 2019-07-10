@@ -2,11 +2,12 @@ package com.cskaoyan.bean.vo;
 
 import com.cskaoyan.bean.Cart;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class CartTotalVO {
 
-    long checkedGoodsAmount;
+    BigDecimal checkedGoodsAmount;
 
     long checkedGoodsCount;
 
@@ -28,7 +29,7 @@ public class CartTotalVO {
     }
 
 
-    public CartTotalVO(long checkedGoodsAmount, long checkedGoodsCount, long goodsAmount, long goodsCount) {
+    public CartTotalVO(BigDecimal checkedGoodsAmount, long checkedGoodsCount, long goodsAmount, long goodsCount) {
         this.checkedGoodsAmount = checkedGoodsAmount;
         this.checkedGoodsCount = checkedGoodsCount;
         this.goodsAmount = goodsAmount;
@@ -46,11 +47,11 @@ public class CartTotalVO {
                 '}';
     }
 
-    public double getCheckedGoodsAmount() {
+    public BigDecimal getCheckedGoodsAmount() {
         return checkedGoodsAmount;
     }
 
-    public void setCheckedGoodsAmount(long checkedGoodsAmount) {
+    public void setCheckedGoodsAmount(BigDecimal checkedGoodsAmount) {
         this.checkedGoodsAmount = checkedGoodsAmount;
     }
 
