@@ -110,8 +110,11 @@ public class WxGoodsController {
 
     @RequestMapping("comment/post")
     @ResponseBody
-    public ResponseVO commentPost(@RequestBody Comment comment){
+    public ResponseVO commentPost(@RequestBody Comment comment,  HttpServletRequest request){
         ResponseVO<Object> vo = new ResponseVO<>();
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        Integer userId = UserTokenManager.getUserId(tokenKey);
+        comment.setUserId(userId);
         Comment ret = wxGoodsService.commentPost(comment);
         vo.setData(ret);
         vo.setErrmsg("成功");
