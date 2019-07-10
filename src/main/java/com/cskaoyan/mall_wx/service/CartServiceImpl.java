@@ -1,9 +1,6 @@
 package com.cskaoyan.mall_wx.service;
 
-import com.cskaoyan.bean.Cart;
-import com.cskaoyan.bean.CartExample;
-import com.cskaoyan.bean.Goods;
-import com.cskaoyan.bean.GoodsProduct;
+import com.cskaoyan.bean.*;
 import com.cskaoyan.bean.vo.CartTotalVO;
 import com.cskaoyan.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +30,7 @@ public class CartServiceImpl implements CartService{
     public List<Cart> selectAll(Cart cart) {
         CartExample example = new CartExample();
         CartExample.Criteria criteria = example.createCriteria();
-        criteria.andUserIdEqualTo(cart.getUserId());
+        criteria.andUserIdEqualTo(cart.getUserId()).andDeletedEqualTo(true);
 
         List<Cart> carts = cartMapper.selectByExample(example);
         return carts;
@@ -43,7 +40,7 @@ public class CartServiceImpl implements CartService{
     public List<Integer> selectAllGoodId(Cart cart) {
         CartExample example = new CartExample();
         CartExample.Criteria criteria = example.createCriteria();
-        criteria.andUserIdEqualTo(cart.getUserId());
+        criteria.andUserIdEqualTo(cart.getUserId()).andDeletedEqualTo(true);
 
         List<Cart> carts = cartMapper.selectByExample(example);
         List<Integer> goodIds = new ArrayList<>();
@@ -61,7 +58,7 @@ public class CartServiceImpl implements CartService{
 
         CartExample example1 = new CartExample();
         CartExample.Criteria criteria1 = example1.createCriteria();
-        criteria1.andUserIdEqualTo(cart.getUserId());
+        criteria1.andUserIdEqualTo(cart.getUserId()).andDeletedEqualTo(true);
         if (cartMapper.sumAll(cart.getUserId()) == null){  //购物车商品总价格
             cartTotal.setGoodsAmount(0);
         }else {
@@ -72,7 +69,7 @@ public class CartServiceImpl implements CartService{
 
         CartExample example2 = new CartExample();
         CartExample.Criteria criteria2 = example1.createCriteria();
-        criteria2.andUserIdEqualTo(cart.getUserId()).andCheckedEqualTo(true);
+        criteria2.andUserIdEqualTo(cart.getUserId()).andCheckedEqualTo(true).andDeletedEqualTo(true);
         if (cartMapper.sumAllChecked(cart.getUserId()) == null){  //选中商品总价格
             cartTotal.setCheckedGoodsAmount(0);
         }else {
@@ -102,8 +99,14 @@ public class CartServiceImpl implements CartService{
 
 
         if (carts.isEmpty()){  //不存在就填满cart存进去
-            Goods goods = goodsMapper.selectByPrimaryKey(goodsId);
-            GoodsProduct goodsProduct = goodsProductMapper.selectByPrimaryKey(productId);
+            GoodsExample example2 = new GoodsExample();
+            GoodsExample.Criteria criteria1 = example2.createCriteria();
+            criteria1.andIdEqualTo(goodsId).andDeletedEqualTo(true);
+            Goods goods = goodsMapper.selectByExample(example2).get(0);
+            GoodsProductExample example3 = new GoodsProductExample();
+            GoodsProductExample.Criteria criteria3 = example3.createCriteria();
+            criteria1.andIdEqualTo(productId).andDeletedEqualTo(true);
+            GoodsProduct goodsProduct = goodsProductMapper.selectByExample(example3).get(0);
             cart.setGoodsSn(goods.getGoodsSn());
             cart.setGoodsName(goods.getName());
             cart.setPrice(goodsProduct.getPrice());
@@ -113,14 +116,17 @@ public class CartServiceImpl implements CartService{
             cart.setUpdateTime(goods.getUpdateTime());
             cart.setDeleted(goods.getDeleted());
             cartMapper.insert(cart);
-        }else {  //存在就找出num，加上number。
+        }else if (carts.get(0).getDeleted().equals(false)){    //存在且逻辑已删除
+            carts.get(0).setNumber((short) (number));
+            cartMapper.updateByExampleSelective(carts.get(0),example);
+        }else {    //存在且逻辑尚未删除就找出num，加上number。
             int cartNumber = carts.get(0).getNumber();
             carts.get(0).setNumber((short) (cartNumber+number));
             cartMapper.updateByExampleSelective(carts.get(0),example);
         }
         CartExample example1 = new CartExample();
         CartExample.Criteria criteria2 = example1.createCriteria();
-        criteria2.andUserIdEqualTo(userId);
+        criteria2.andUserIdEqualTo(userId).andDeletedEqualTo(true);
         long num = cartMapper.countByExample(example1);
         return num;
     }
@@ -141,7 +147,11 @@ public class CartServiceImpl implements CartService{
     //删除选中商品
     @Override
     public void deleteChecked(Cart cart,List productsId) {
-        cartMapper.deleteChecked(cart.getUserId(),productsId);
+        cart.setDeleted(false);
+        CartExample example = new CartExample();
+        CartExample.Criteria criteria = example.createCriteria();
+        criteria.andProductIdIn(productsId);
+        cartMapper.updateByExampleSelective(cart,example);
     }
 
 
@@ -150,7 +160,7 @@ public class CartServiceImpl implements CartService{
     public void checked(Cart cart, Map checked) {
         CartExample example = new CartExample();
         CartExample.Criteria criteria = example.createCriteria();
-        criteria.andUserIdEqualTo(cart.getUserId()).andProductIdIn((List<Integer>) checked.get("productIds"));
+        criteria.andUserIdEqualTo(cart.getUserId()).andProductIdIn((List<Integer>) checked.get("productIds")).andDeletedEqualTo(true);
         List<Cart> carts = cartMapper.selectByExample(example);
         for (Cart c : carts) {
             c.setChecked(((int) checked.get("isChecked") == 1)?true:false);
@@ -169,9 +179,6 @@ public class CartServiceImpl implements CartService{
     //订单确认
     @Override
     public Map checkout(Cart cart) {
-        Map check = new HashMap();
-        CartExample example = new CartExample();
-        CartExample.Criteria criteria = example.createCriteria();
 
         return null;
     }
