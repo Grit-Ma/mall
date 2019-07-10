@@ -289,7 +289,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="getCommentCount" resultType="map">
-    SELECT count(*) as total,
+    SELECT count(*) as allCount,
         (
           select count(*) from cskaoyan_mall_comment a
           WHERE value_id = #{valueId}
@@ -297,7 +297,7 @@
           and a.type = #{type}
           and a.deleted = false
         )
-         as hasPic
+         as hasPicCount
     from cskaoyan_mall_comment b
     where value_id = #{valueId}
     and type = #{type}
@@ -317,5 +317,24 @@
     SELECT c.content,c.pic_urls,c.add_time,u.nickname,u.avatar
     from cskaoyan_mall_comment c LEFT JOIN cskaoyan_mall_user u ON c.user_id = u.id
     WHERE c.value_id = #{valueId} and c.type = #{type} and c.has_picture = #{hasPic} and c.deleted = false
+  </select>
+
+  <resultMap id="commentVo" type="com.cskaoyan.bean.vo.CommentVo">
+    <result property="count" column="zero"/>
+    <collection property="data" ofType="com.cskaoyan.bean.vo.CommentData">
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="content" jdbcType="VARCHAR" property="content" />
+      <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+      <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+      <result column="pic_urls" typeHandler="com.cskaoyan.mybatis.StringArrayStringTypeHandler" property="picList" />
+      <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    </collection>
+  </resultMap>
+  <select id="selectCommentVoByValueId" resultMap="commentVo">
+    SELECT c.id, c.content, c.pic_urls, c.add_time,u.avatar,u.nickname, 0 as zero
+    from cskaoyan_mall_comment c
+    LEFT JOIN cskaoyan_mall_user u
+    ON c.user_id = u.id
+    WHERE value_id = #{valueId} and c.deleted = false
   </select>
 </mapper>

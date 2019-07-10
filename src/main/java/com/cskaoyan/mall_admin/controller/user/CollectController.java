@@ -4,6 +4,7 @@ import com.cskaoyan.bean.Collect;
 import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.mall_admin.service.user.CollectService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ public class CollectController {
      */
     @GetMapping("/list")
     @ResponseBody
+    @RequiresPermissions(value = "admin:collect:list")
     public ResponseVO collectQuery(int page, int limit, String sort, String order,
                                    @RequestParam(defaultValue = "")String userId, @RequestParam(defaultValue = "") String valueId) {
         PageData pageData = collectService.getCollect(page, limit, userId, valueId, sort, order);

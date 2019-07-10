@@ -22,7 +22,7 @@ public interface CartService {
 
 
     //添加商品进购物车
-    long addToCart(Cart cart);
+    Map addToCart(Cart cart, int flag);
 
     //更新购物车商品
     void updateCart(Cart cart);
@@ -33,15 +33,12 @@ public interface CartService {
     //选中商品或者取消选中
     void checked(Cart cart, Map checked);
 
+    List<Cart> getCheckedCartGood(int userId);
+
+    void clearCart(int userId);
+
     //订单确认
     Map checkout(Cart cart);
-
-    //查询所使用的优惠券byId
-    Coupon coupon(int couponId);
-
-    //下单清空
-
-
 
 
 }

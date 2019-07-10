@@ -6,12 +6,12 @@ import java.util.List;
 
 public class CommentVo {
     private int count;
-    private List<Comment> data;
+    private List<CommentData> data;
 
     public CommentVo() {
     }
 
-    public CommentVo(int count, List<Comment> data) {
+    public CommentVo(int count, List<CommentData> data) {
         this.count = count;
         this.data = data;
     }
@@ -24,11 +24,11 @@ public class CommentVo {
         this.count = count;
     }
 
-    public List<Comment> getData() {
+    public List<CommentData> getData() {
         return data;
     }
 
-    public void setData(List<Comment> data) {
+    public void setData(List<CommentData> data) {
         this.data = data;
     }
 }
