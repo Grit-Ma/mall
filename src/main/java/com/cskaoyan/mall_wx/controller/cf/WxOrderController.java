@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
+import static com.cskaoyan.mall_wx.util.WxResponseCode.ORDER_PAY_FAIL;
+
 
 @RestController
 @RequestMapping("wx")
@@ -41,7 +43,8 @@ public class WxOrderController {
 
     @PostMapping("order/prepay")
     public HashMap orderPrePay(HttpServletRequest request, @RequestBody SubmitResponse submitResponse){
-        return wxOrderService.prePay(request, submitResponse);
+//        return wxOrderService.prePay(request, submitResponse);
+        return WrapTool.setResponseFailure(ORDER_PAY_FAIL, "订单不能支付");
     }
 
     @PostMapping("order/cancel")
