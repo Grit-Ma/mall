@@ -43,10 +43,11 @@ public class WxGoodsServiceImpl implements WxGoodsService {
     @Override
     public GoodsListVo getWxListData(Integer categoryId, Integer page, Integer size, String keyword, String sort, String order, Integer userId, Integer brandId) {
         GoodsListVo vo = new GoodsListVo();
+        PageHelper.startPage(page,size);
         if(brandId != null){
+            vo = goodsMapper.selectGoodsListByBrandId(brandId);
             return vo;
         }
-        PageHelper.startPage(page,size);
         List<WxGoodsVo> goodsList = null;
         List<Category> categories = null;
         if(keyword != null && !keyword.isEmpty()){
