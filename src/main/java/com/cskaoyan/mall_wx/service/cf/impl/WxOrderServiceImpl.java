@@ -661,8 +661,4 @@ public class WxOrderServiceImpl implements WxOrderService {
         }
     }
 
-    //回退优惠券的通用更新
-    public void returnCoupon() {
-
-    }
 }
