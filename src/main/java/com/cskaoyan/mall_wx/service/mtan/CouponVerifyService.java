@@ -43,8 +43,8 @@ public class CouponVerifyService {
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(couponUser.getAddTime());
             calendar.add(Calendar.DATE,days);//把日期往后增加
-            date=calendar.getTime();
-            if (date.compareTo(couponUser.getAddTime()) > 0) {
+            Date date1 = calendar.getTime();
+            if (date.compareTo(date1) > 0) {
                 return null;
             }
         }

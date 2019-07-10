@@ -5,7 +5,8 @@ import com.cskaoyan.bean.Coupon;
 import com.cskaoyan.bean.CouponUser;
 import com.cskaoyan.bean.GrouponRules;
 import com.cskaoyan.bean.coupon.CouponConstant;
-import com.cskaoyan.bean.coupon.CouponVo;
+import com.cskaoyan.bean.coupon.CouponPlus;
+
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.bean.wx.pagedata.CouponPageData;
 import com.cskaoyan.mall_admin.service.promotion.CouponService;
@@ -13,7 +14,9 @@ import com.cskaoyan.mall_admin.service.promotion.GroupService;
 import com.cskaoyan.mall_wx.service.CartService;
 import com.cskaoyan.mall_wx.service.mtan.CouponVerifyService;
 import com.cskaoyan.mall_wx.service.mtan.WxCouponService;
+import com.cskaoyan.mall_wx.util.CouponCheck;
 import com.cskaoyan.mall_wx.util.UserTokenManager;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,10 +52,13 @@ public class WxCouponController {
     @Autowired
     CouponService couponService;
 
+    @Autowired
+    CouponCheck couponCheck;
 
     @RequestMapping("coupon/mylist")
     @ResponseBody
     public ResponseVO couponList(int page, int size, Short status, HttpServletRequest request){
+        couponCheck.checkCouponExpired();
         ResponseVO<Object> responseVO = new ResponseVO<>();
         String tokenKey = request.getHeader("X-Litemall-Token");
         Integer userId = UserTokenManager.getUserId(tokenKey);
@@ -71,14 +77,22 @@ public class WxCouponController {
     @RequestMapping("coupon/list")
     @ResponseBody
     public ResponseVO list(int page, int size){
+        couponCheck.checkCouponExpired();
         ResponseVO responseVO = new ResponseVO();
-        responseVO.setData(couponService.findAllCoupon(page, size));
-        return  responseVO;
+        List<Coupon> coupons = couponService.findAllCoupon(page, size);
+        int count = coupons.size();
+        CouponPlus couponPlus = new CouponPlus();
+        couponPlus.setCount(count);
+        couponPlus.setData(coupons);
+        responseVO.setData(couponPlus);
+        responseVO.setErrmsg("成功");
+        return responseVO;
     }
 
     @RequestMapping("coupon/selectlist")
     @ResponseBody
     public ResponseVO selectList(Integer userId, Integer cartId, Integer grouponRulesId, HttpServletRequest request) {
+        couponCheck.checkCouponExpired();
         ResponseVO responseVO = new ResponseVO();
         String tokenKey = request.getHeader("X-Litemall-Token");
         userId = UserTokenManager.getUserId(tokenKey);
@@ -125,6 +139,7 @@ public class WxCouponController {
     @RequestMapping("coupon/receive")
     @ResponseBody
     public ResponseVO receive(@RequestBody Map<String, Object>data , HttpServletRequest request) {
+        couponCheck.checkCouponExpired();
         String tokenKey = request.getHeader("X-Litemall-Token");
         Integer userId = UserTokenManager.getUserId(tokenKey);
         Integer couponId = (Integer) data.get("couponId");
@@ -208,6 +223,7 @@ public class WxCouponController {
     @RequestMapping("coupon/exchange")
     @ResponseBody
     public ResponseVO exchange(@RequestBody Map<String, Object>data , HttpServletRequest request) {
+        couponCheck.checkCouponExpired();
         ResponseVO responseVO = new ResponseVO();
         String tokenKey = request.getHeader("X-Litemall-Token");
         Integer userId = UserTokenManager.getUserId(tokenKey);
