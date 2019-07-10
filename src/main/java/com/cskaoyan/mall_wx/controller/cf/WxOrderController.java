@@ -49,5 +49,9 @@ public class WxOrderController {
         return wxOrderService.cancelOrder(request,submitResponse);
     }
 
+    @PostMapping("order/delete")
+    public HashMap orderDelete(HttpServletRequest request, @RequestBody SubmitResponse submitResponse){
+        return wxOrderService.deleteOrder(request,submitResponse);
+    }
 
 }

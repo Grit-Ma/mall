@@ -250,7 +250,9 @@ public class WxOrderServiceImpl implements WxOrderService {
         return WrapTool.setResponseSuccess(new OrderListPageData());
     }
 
-    //获取订单详情
+    /*
+        获取订单详情
+     */
     @Override
     public HashMap detail(HttpServletRequest request, Integer orderId) {
         //判user信息空
@@ -296,7 +298,9 @@ public class WxOrderServiceImpl implements WxOrderService {
 
     }
 
-    //取消订单
+    /*
+        取消订单
+     */
     @Override
     @Transactional
     public HashMap cancelOrder(HttpServletRequest request, SubmitResponse submitResponse) {
@@ -315,14 +319,41 @@ public class WxOrderServiceImpl implements WxOrderService {
         int orderId = submitResponse.getOrderId();
         int status= orderMapper.selectByPrimaryKey(orderId).getOrderStatus().intValue();
         HandleOption handleOption = build(status);
-        if(handleOption.getCancel()) {
+        if(handleOption.getCancel()==true) {
            return cancelThisOrder(orderId);
         }
         return WrapTool.setResponseFailure(ORDER_INVALID_OPERATION,"订单不能被取消");
     }
 
+    /*
+        删除订单
+     */
+    @Override
+    public HashMap deleteOrder(HttpServletRequest request, SubmitResponse submitResponse) {
+        //判user信息空
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        if (tokenKey == null || "".equals(tokenKey.trim()))
+            return WrapTool.unlogin();
+        //获取userId
+        Integer userId = UserTokenManager.getUserId(tokenKey);
 
-    //获取订单的几个不同状态的计数（用在首页）
+        if (submitResponse == null) return WrapTool.setResponseFailure(401, "参数错误");
+        if (submitResponse.getOrderId() == null) return WrapTool.setResponseFailure(401, "参数错误");
+
+        int orderId = submitResponse.getOrderId();
+
+        int status = orderMapper.selectByPrimaryKey(orderId).getOrderStatus().intValue();
+        HandleOption handleOption = build(status);
+        if (handleOption.getDelete()) {
+            return deleteThisOrder(orderId);
+        }
+        return WrapTool.setResponseFailure(ORDER_INVALID_OPERATION, "订单不能删除");
+
+    }
+
+    /*
+        获取订单的几个不同状态的计数（用在首页）
+     */
     @Override
     public Map<String, Integer> orderInfo(Integer userId) {
         OrderExample orderExample = new OrderExample();
@@ -479,6 +510,14 @@ public class WxOrderServiceImpl implements WxOrderService {
             throw new IllegalStateException("status不支持");
         }
         return handleOption;
+    }
+
+    //删除订单
+    private HashMap deleteThisOrder(int orderId) {
+        Order order =orderMapper.selectByPrimaryKey(orderId);
+        order.setDeleted(true);
+        orderMapper.updateByPrimaryKey(order);
+        return WrapTool.setResponseSuccessWithNoData();
     }
 
 }
