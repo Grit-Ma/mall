@@ -16,5 +16,8 @@ public interface WxOrderService {
 
     HashMap showOrderList(int showTpe, int page, int size, String sort, String order);
 
+    //获取订单详情
+    HashMap detail(HttpServletRequest request, Integer orderId);
+
     Map<String, Integer> orderInfo(Integer userId);
 }

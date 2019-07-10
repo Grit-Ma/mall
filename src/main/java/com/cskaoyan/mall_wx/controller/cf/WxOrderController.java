@@ -25,9 +25,25 @@ public class WxOrderController {
         return wxOrderService.showOrderList(showType, page, size,sort,order);
     }
 
+    @GetMapping("order/detail")
+    public HashMap orderDetail(HttpServletRequest request,@RequestParam int orderId){
+        return wxOrderService.detail(request,orderId);
+    }
+
     @PostMapping("order/submit")
     public HashMap orderSubmit(@RequestBody SubmitInfo submitInfo, HttpServletRequest request){
         return wxOrderService.submitOrder(request,submitInfo);
     }
+
+//    @PostMapping("order/prepay")
+//    public HashMap orderPrePay(){
+//
+//    }
+
+//    @PostMapping("order/cancel")
+//    public HashMap orderCancel(){
+//
+//    }
+
 
 }
