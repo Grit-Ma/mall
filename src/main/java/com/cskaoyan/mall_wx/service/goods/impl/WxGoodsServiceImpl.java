@@ -100,7 +100,7 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         detail.setAttributes(goodsAttributeMapper.selectByExample(example));
         GoodsExample goodsExample = new GoodsExample();
         goodsExample.createCriteria().andIdEqualTo(goodsId).andDeletedEqualTo(false);
-        List<Goods> goods = this.goodsMapper.selectByExample(goodsExample);
+        List<Goods> goods = this.goodsMapper.selectByExampleWithBLOBs(goodsExample);
         if(goods.size() > 0){
             detail.setInfo(goods.get(0));
         }
@@ -173,7 +173,6 @@ public class WxGoodsServiceImpl implements WxGoodsService {
 
     @Override
     public List<WxGoodsVo> getRelated(int id) {
-        PageHelper.startPage(1,6);
         int[] keys = footprintMapper.selectRelated();
         List<WxGoodsVo> list = goodsMapper.selectByPrimaryKeys(keys);
         return list;
