@@ -1,5 +1,6 @@
 package com.cskaoyan.mall_wx.service.goods;
 
+import com.cskaoyan.bean.Comment;
 import com.cskaoyan.bean.vo.CategoryVo;
 import com.cskaoyan.bean.vo.GoodsDeatil;
 import com.cskaoyan.bean.vo.GoodsListVo;
@@ -24,4 +25,5 @@ public interface WxGoodsService {
 
     List<WxGoodsVo> getRelated(int id);
 
+    Comment commentPost(Comment comment);
 }
