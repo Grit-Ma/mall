@@ -4,6 +4,7 @@ import com.cskaoyan.bean.User;
 import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.mall_admin.service.user.UserService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ public class UserController {
      */
     @GetMapping("/list")
     @ResponseBody
+    @RequiresPermissions(value = "admin:user:list")
     public ResponseVO getUser(int page, int limit, String sort, String order,
                                 @RequestParam(defaultValue = "")String username, @RequestParam(defaultValue = "") String mobile) {
         PageData pageData = userService.getUser(page, limit, username, mobile, sort, order);
