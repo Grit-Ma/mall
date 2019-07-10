@@ -173,6 +173,7 @@ public class WxGoodsServiceImpl implements WxGoodsService {
 
     @Override
     public List<WxGoodsVo> getRelated(int id) {
+        PageHelper.clearPage();
         int[] keys = footprintMapper.selectRelated();
         List<WxGoodsVo> list = goodsMapper.selectByPrimaryKeys(keys);
         return list;

@@ -29,6 +29,8 @@ public class CartServiceImpl implements CartService{
     GoodsProductMapper goodsProductMapper;
     @Autowired
     SystemMapper systemMapper;
+    @Autowired
+    GrouponRulesMapper grouponRulesMapper;
 
     //获取购物车数据
     @Override
@@ -256,6 +258,15 @@ public class CartServiceImpl implements CartService{
         }
 
         return  freightPrice;
+    }
+
+
+    //计算团购
+    @Override
+    public BigDecimal GrouponPrice(int grouponRulesId) {
+        GrouponRules grouponRules = grouponRulesMapper.selectByPrimaryKey(grouponRulesId);
+        BigDecimal disCount = grouponRules.getDiscount();
+        return disCount;
     }
 
 
