@@ -441,7 +441,7 @@ public class WxOrderServiceImpl implements WxOrderService {
         HandleOption handleOption = build(status);
 
         if (handleOption.getRefund()) {
-            return refundOrder(orderId);
+            return refundOrder(orderId,userId);
         }
         return WrapTool.setResponseFailure(ORDER_INVALID_OPERATION, "订单不能取消");
     }
@@ -491,6 +491,50 @@ public class WxOrderServiceImpl implements WxOrderService {
         return (int) orderMapper.countByExample(example);
     }
 
+    //申请退款
+    @Transactional
+    public HashMap refundOrder(int orderId,int userId) {
+        Order order = orderMapper.selectByPrimaryKey(orderId);
+        order.setOrderStatus(STATUS_REFUND_CONFIRM);
+        order.setUpdateTime(new Date());
+        orderMapper.updateByPrimaryKey(order);
+
+        //增加对应商品的数量
+        List<OrderGoods> goodList = getGoodList(orderId);
+        for (OrderGoods orderGood : goodList) {
+            //更新orderGoods表
+            orderGood.setDeleted(true);
+            orderGoodsMapper.updateByPrimaryKey(orderGood);
+
+            Integer productId = orderGood.getProductId();
+            GoodsProduct product = goodsProductMapper.selectByPrimaryKey(productId);
+            Integer remainNumber = product.getNumber() + orderGood.getNumber();
+            GoodsProduct goodsProduct = goodsProductMapper.selectByPrimaryKey(productId);
+            goodsProduct.setNumber(remainNumber);
+            goodsProductMapper.updateByPrimaryKey(goodsProduct);
+        }
+
+        //回退优惠券
+        //如果使用了优惠券，更新优惠券用户列表
+        if(order.getCouponPrice().compareTo(new BigDecimal(0))>0) {
+            CouponUserExample couponUserExample = new CouponUserExample();
+            couponUserExample.createCriteria().andUserIdEqualTo(userId).andOrderIdEqualTo(orderId);
+            List<CouponUser> couponUsers = couponUserMapper.selectByExample(couponUserExample);
+            if (couponUsers != null && !(couponUsers.size() == 0)) {
+                CouponUser couponUser = couponUsers.get(0);
+                couponUser.setStatus(STATUS_USABLE);
+                couponUser.setUsedTime(null);
+                couponUser.setUpdateTime(new Date());
+                couponUser.setOrderId(null);
+                couponUserMapper.updateByPrimaryKey(couponUser);
+            }
+        }
+
+
+        return WrapTool.setResponseSuccessWithNoData();
+    }
+
+    //取消订单方法
     @Transactional
     protected HashMap cancelThisOrder(int orderId,int userId) {
         //改变订单表状态
@@ -573,14 +617,6 @@ public class WxOrderServiceImpl implements WxOrderService {
         return WrapTool.setResponseSuccessWithNoData();
     }
 
-    //申请退款
-    private HashMap refundOrder(int orderId) {
-        Order order = orderMapper.selectByPrimaryKey(orderId);
-        order.setOrderStatus(STATUS_REFUND_CONFIRM);
-        order.setUpdateTime(new Date());
-        orderMapper.updateByPrimaryKey(order);
-        return WrapTool.setResponseSuccessWithNoData();
-    }
 
     //确认订单
     private HashMap comfirmOrder(int orderId) {

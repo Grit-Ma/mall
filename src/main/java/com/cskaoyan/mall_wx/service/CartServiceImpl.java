@@ -133,7 +133,7 @@ public class CartServiceImpl implements CartService{
         //判断是否已存在
         CartExample example = new CartExample();
         CartExample.Criteria criteria = example.createCriteria();
-        criteria.andUserIdEqualTo(userId).andGoodsIdEqualTo(goodsId).andProductIdEqualTo(productId).andDeletedEqualTo(false);
+        criteria.andUserIdEqualTo(userId).andGoodsIdEqualTo(goodsId).andProductIdEqualTo(productId);
         List<Cart> carts = cartMapper.selectByExample(example);
 
 
@@ -151,6 +151,7 @@ public class CartServiceImpl implements CartService{
             cart.setGoodsSn(goods.getGoodsSn());
             cart.setGoodsName(goods.getName());
             cart.setPrice(goodsProduct.getPrice());
+            cart.setChecked(true);
             cart.setSpecifications(goodsProduct.getSpecifications());
             cart.setPicUrl(goodsProduct.getUrl());
             cart.setAddTime(goods.getAddTime());
@@ -159,10 +160,13 @@ public class CartServiceImpl implements CartService{
             cartMapper.insert(cart);
         }else if (carts.get(0).getDeleted().equals(true)){    //存在且逻辑已删除
             carts.get(0).setNumber((short) (number));
+            carts.get(0).setChecked(true);
+            carts.get(0).setDeleted(false);
             cartMapper.updateByExampleSelective(carts.get(0),example);
         }else {    //存在且逻辑尚未删除就判断，是添加进购物车还是立即购买，
                    //进购物车就是找出num，加上number。
                    //立即购买则是更新number
+            carts.get(0).setChecked(true);
             if (flag == 0) {
                 int cartNumber = carts.get(0).getNumber();
                 carts.get(0).setNumber((short) (cartNumber+number));
