@@ -41,11 +41,12 @@ public class WxGoodsServiceImpl implements WxGoodsService {
 
 
     @Override
-    public GoodsListVo getWxListData(Integer categoryId, Integer page, Integer size, String keyword, String sort, String order, Integer userId, Integer brandId) {
+    public GoodsListVo getWxListData(Integer categoryId, int page, int size, String keyword, String sort, String order, Integer userId, Integer brandId) {
         GoodsListVo vo = new GoodsListVo();
         PageHelper.startPage(page,size);
-        if(brandId != null){
+        if(brandId != null){// 专题页面
             vo = goodsMapper.selectGoodsListByBrandId(brandId);
+            vo.setCount(vo.getGoodsList().size());
             return vo;
         }
         List<WxGoodsVo> goodsList = null;
@@ -65,7 +66,6 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         return vo;
 
     }
-
 
 
     @Override
