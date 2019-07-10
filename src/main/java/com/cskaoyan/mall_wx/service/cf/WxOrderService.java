@@ -13,7 +13,7 @@ public interface WxOrderService {
     @Transactional
     HashMap submitOrder(HttpServletRequest request, SubmitInfo submitInfo) ;
 
-    HashMap showOrderList(int showTpe, int page, int size, String sort, String order);
+    HashMap showOrderList(int showTpe, int page, int size, String sort, String order, HttpServletRequest request);
 
     //获取订单详情
     HashMap detail(HttpServletRequest request, Integer orderId);

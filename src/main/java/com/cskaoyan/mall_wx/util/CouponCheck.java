@@ -38,6 +38,8 @@ public class CouponCheck {
             couponUser.setStatus(CouponUserConstant.STATUS_EXPIRED);
             wxCouponService.update(couponUser);
         }
+
+        System.out.println("更新优惠券状态...");
     }
 
 }

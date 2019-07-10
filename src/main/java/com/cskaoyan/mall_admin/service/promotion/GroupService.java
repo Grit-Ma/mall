@@ -1,5 +1,6 @@
 package com.cskaoyan.mall_admin.service.promotion;
 
+import com.cskaoyan.bean.Coupon;
 import com.cskaoyan.bean.Goods;
 import com.cskaoyan.bean.GrouponRules;
 import com.cskaoyan.bean.vo.PageData;
@@ -22,4 +23,6 @@ public interface GroupService {
     Goods getGoodsById(int id);
 
     PageData getListRecordData(int page, int limit, String sort, String order);
+
+    GrouponRules searchRulesById(int id);
 }

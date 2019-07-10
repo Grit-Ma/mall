@@ -110,12 +110,10 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         if(!brands.isEmpty()){
             detail.setBrand(brands.get(0));
         }
-        CommentVo commentVo = new CommentVo();
-        CommentExample commentExample = new CommentExample();
-        commentExample.createCriteria().andValueIdEqualTo(goodsId).andDeletedEqualTo(false);
-        List<Comment> comments = commentMapper.selectByExample(commentExample);
-        commentVo.setData(comments);
-        commentVo.setCount(comments.size());
+        CommentVo commentVo = commentMapper.selectCommentVoByValueId(goodsId);
+        if(commentVo != null){
+            commentVo.setCount(commentVo.getData().size());
+        }
         detail.setComment(commentVo);
         IssueExample issueExample = new IssueExample();
         issueExample.createCriteria().andDeletedEqualTo(false);

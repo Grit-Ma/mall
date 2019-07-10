@@ -64,6 +64,10 @@ public class CouponController {
     @ResponseBody
     public ResponseVO insert(@RequestBody Coupon coupon) {
         ResponseVO vo = new ResponseVO();
+        if (coupon.getType().equals(CouponConstant.TYPE_CODE)) {
+            String code = couponService.generateCode();
+            coupon.setCode(code);
+        }
         vo = couponService.insertCoupon(coupon);
         return vo;
     }

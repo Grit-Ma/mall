@@ -2,12 +2,12 @@ package com.cskaoyan.mapper;
 
 import com.cskaoyan.bean.Comment;
 import com.cskaoyan.bean.CommentExample;
+import com.cskaoyan.bean.vo.CommentVo;
+import com.cskaoyan.bean.vo.GoodsCommentVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
 import java.util.List;
-
-import com.cskaoyan.bean.vo.GoodsCommentVo;
-import org.apache.ibatis.annotations.Param;
 
 public interface CommentMapper {
     long countByExample(CommentExample example);
@@ -34,5 +34,7 @@ public interface CommentMapper {
 
     HashMap<String, Object> getCommentCount(int valueId, int type);
 
-    List<GoodsCommentVo> selectCommentByValueIdAndTypeAndShowType(int valueId, int type,int hasPic);
+    List<GoodsCommentVo> selectCommentByValueIdAndTypeAndShowType(int valueId, int type, int hasPic);
+
+    CommentVo selectCommentVoByValueId(int valueId);
 }
