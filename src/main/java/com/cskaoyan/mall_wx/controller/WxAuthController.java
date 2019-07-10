@@ -55,6 +55,9 @@ public class WxAuthController {
 			user = userList.get(0);
 		}
 
+		user.setLastLoginTime(new Date());
+		user.setLastLoginIp(request.getLocalAddr());
+
 		//BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		if (/*!encoder.matches(password, user.getPassword())*/
 		!password.equals(user.getPassword())) {
@@ -136,6 +139,7 @@ public class WxAuthController {
 		user.setStatus((byte) 0);
 		user.setLastLoginTime(new Date());
 		user.setLastLoginIp(request.getLocalAddr());
+		user.setAddTime(new Date());
 		user.setDeleted(false);
 		wxUserService.add(user);
 		Map<Object, Object> result = getResult(user);

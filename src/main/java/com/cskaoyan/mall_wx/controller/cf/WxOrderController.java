@@ -44,7 +44,7 @@ public class WxOrderController {
     @PostMapping("order/prepay")
     public HashMap orderPrePay(HttpServletRequest request, @RequestBody SubmitResponse submitResponse){
         return wxOrderService.prePay(request, submitResponse);
-//        return WrapTool.setResponseFailure(ORDER_PAY_FAIL, "订单不能支付");
+       // return WrapTool.setResponseFailure(ORDER_PAY_FAIL, "订单不能支付");
     }
 
     @PostMapping("order/cancel")

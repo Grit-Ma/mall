@@ -2,6 +2,7 @@ spring:
   profiles:
     active: cf
 
+---
 myoss:
    bucket: project-mall
    endpoint: oss-cn-beijing.aliyuncs.com
