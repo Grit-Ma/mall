@@ -210,7 +210,10 @@ public class CartController {
             BigDecimal grouponPrice = cartService.GrouponPrice(grouponRulesId);
             //商品总价格，list--checkedGoodsList--goodsTotalPrice
             CartTotalVO cartTotalVO = cartService.getCartTotal(cart,check);
-            BigDecimal goodsPrice = cartTotalVO.getCheckedGoodsAmount().subtract(grouponPrice);
+            BigDecimal goodsPrice = cartTotalVO.getCheckedGoodsAmount();
+            if (grouponPrice != null){
+                goodsPrice = goodsPrice.subtract(grouponPrice);
+            }
             //当前使用的地址的信息
             AddressPackage address = wxAddressService.query(userId, addressId);
             //优惠券金额-couponPrice
@@ -230,8 +233,8 @@ public class CartController {
             //计算邮费,(goodsPrice)满设定值包邮
             BigDecimal freightPrice = cartService.freightPrice(goodsPrice);
             //实付价格与订单价格actualPrice与orderTotalPrice
-            BigDecimal orderPrice = cartTotalVO.getCheckedGoodsAmount().add(freightPrice).subtract(couponPrice);
-            BigDecimal actualPrice = orderPrice.subtract(grouponPrice);
+            BigDecimal orderPrice = goodsPrice.add(freightPrice).subtract(couponPrice);
+            BigDecimal actualPrice = orderPrice;
 
             data.put("actualPrice",actualPrice);  //订单总价：订单价格-团购优惠
             data.put("addressId",check.get("addressId"));  //收货地址id
@@ -257,7 +260,10 @@ public class CartController {
             BigDecimal grouponPrice = cartService.GrouponPrice(grouponRulesId);
             //商品总价格，list--checkedGoodsList--goodsTotalPrice
             CartTotalVO cartTotalVO = cartService.getCurrentCartTotal(cartId,check);
-            BigDecimal goodsPrice = cartTotalVO.getCheckedGoodsAmount().subtract(grouponPrice);
+            BigDecimal goodsPrice = cartTotalVO.getCheckedGoodsAmount();
+            if (grouponPrice != null){
+                goodsPrice = goodsPrice.subtract(grouponPrice);
+            }
             //当前使用的地址的信息
             AddressPackage address = wxAddressService.query(userId, addressId);
             //优惠券金额-couponPrice
@@ -266,7 +272,7 @@ public class CartController {
             List<CouponUser> couponUserList = wxCouponService.queryAll(userId);
             List<Coupon> availableCouponList = new ArrayList<>(couponUserList.size());
             for (CouponUser couponUser : couponUserList) {
-                Coupon coupon = couponVerifyService.checkCoupon(userId, couponUser.getCouponId(), goodsPrice.subtract(grouponPrice));
+                Coupon coupon = couponVerifyService.checkCoupon(userId, couponUser.getCouponId(), goodsPrice);
                 if (coupon == null) {
                     continue;
                 }
@@ -276,8 +282,8 @@ public class CartController {
             //计算邮费,(goodsPrice)满设定值包邮
             BigDecimal freightPrice = cartService.freightPrice(goodsPrice);
             //实付价格与订单价格actualPrice与orderTotalPrice
-            BigDecimal orderPrice = cartTotalVO.getCheckedGoodsAmount().add(freightPrice).subtract(couponPrice);
-            BigDecimal actualPrice = orderPrice.subtract(grouponPrice);
+            BigDecimal orderPrice = goodsPrice.add(freightPrice).subtract(couponPrice);
+            BigDecimal actualPrice = orderPrice;
 
             data.put("actualPrice",actualPrice);  //订单总价：订单价格-团购优惠
             data.put("addressId",check.get("addressId"));  //收货地址id
