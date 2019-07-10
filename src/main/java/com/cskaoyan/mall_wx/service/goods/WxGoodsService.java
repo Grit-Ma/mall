@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface WxGoodsService {
 
-    GoodsListVo getWxListData(Integer categoryId, Integer page, Integer size, String keyword, String sort, String order, Integer userId, Integer brandId);
+    GoodsListVo getWxListData(Integer categoryId, int page, int size, String keyword, String sort, String order, Integer userId, Integer brandId);
 
     CategoryVo getCategory(int id);
 

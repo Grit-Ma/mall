@@ -13,13 +13,19 @@ public class AddressPackage {
 
     private String provinceName;
 
+    private String province;
+
     private Integer cityId;
 
     private String cityName;
 
+    private String city;
+
     private Integer areaId;
 
     private String areaName;
+
+    private String area;
 
     private String address;
 
@@ -151,5 +157,29 @@ public class AddressPackage {
 
     public void setAreaName(String areaName) {
         this.areaName = areaName;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 }

@@ -41,12 +41,14 @@ public class WxGoodsServiceImpl implements WxGoodsService {
 
 
     @Override
-    public GoodsListVo getWxListData(Integer categoryId, Integer page, Integer size, String keyword, String sort, String order, Integer userId, Integer brandId) {
+    public GoodsListVo getWxListData(Integer categoryId, int page, int size, String keyword, String sort, String order, Integer userId, Integer brandId) {
         GoodsListVo vo = new GoodsListVo();
-        if(brandId != null){
+        PageHelper.startPage(page,size);
+        if(brandId != null){// 专题页面
+            vo = goodsMapper.selectGoodsListByBrandId(brandId);
+            vo.setCount(vo.getGoodsList().size());
             return vo;
         }
-        PageHelper.startPage(page,size);
         List<WxGoodsVo> goodsList = null;
         List<Category> categories = null;
         if(keyword != null && !keyword.isEmpty()){
@@ -64,7 +66,6 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         return vo;
 
     }
-
 
 
     @Override
@@ -109,12 +110,10 @@ public class WxGoodsServiceImpl implements WxGoodsService {
         if(!brands.isEmpty()){
             detail.setBrand(brands.get(0));
         }
-        CommentVo commentVo = new CommentVo();
-        CommentExample commentExample = new CommentExample();
-        commentExample.createCriteria().andValueIdEqualTo(goodsId).andDeletedEqualTo(false);
-        List<Comment> comments = commentMapper.selectByExample(commentExample);
-        commentVo.setData(comments);
-        commentVo.setCount(comments.size());
+        CommentVo commentVo = commentMapper.selectCommentVoByValueId(goodsId);
+        if(commentVo != null){
+            commentVo.setCount(commentVo.getData().size());
+        }
         detail.setComment(commentVo);
         IssueExample issueExample = new IssueExample();
         issueExample.createCriteria().andDeletedEqualTo(false);

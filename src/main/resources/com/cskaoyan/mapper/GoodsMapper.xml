@@ -545,7 +545,7 @@
     <result column="retail_price" jdbcType="DECIMAL" property="retailPrice" />
   </resultMap>
 <select id="selectWxGoodsByCategoryId" parameterType="int" resultMap="WxGoodsVoResultMap">
-  select * from cskaoyan_mall_goods where category_id = #{id} and deleted = false
+  select * from cskaoyan_mall_goods where category_id = #{categoryId} and deleted = false
 </select>
   <resultMap id="GoodsList" type="com.cskaoyan.bean.vo.GoodsListVo">
     <result column="count" property="count"/>
@@ -589,4 +589,41 @@
     </foreach>
   </select>
 
+  <resultMap id="GoodsListVo" type="com.cskaoyan.bean.vo.GoodsListVo">
+    <result column="ze" property="count"/>
+    <collection property="filterCategoryList" ofType="com.cskaoyan.bean.Category">
+      <result column="cid" jdbcType="INTEGER" property="id" />
+      <result column="cname" jdbcType="VARCHAR" property="name" />
+      <result column="keywords" jdbcType="VARCHAR" property="keywords" />
+      <result column="desc" jdbcType="VARCHAR" property="desc" />
+      <result column="pid" jdbcType="INTEGER" property="pid" />
+      <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
+      <result column="cpic" jdbcType="VARCHAR" property="picUrl" />
+      <result column="level" jdbcType="VARCHAR" property="level" />
+      <result column="sort_order" jdbcType="TINYINT" property="sortOrder" />
+      <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+      <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+      <result column="deleted" jdbcType="BIT" property="deleted" />
+    </collection>
+    <collection property="goodsList" ofType="com.cskaoyan.bean.vo.WxGoodsVo">
+      <result column="gid" jdbcType="INTEGER" property="id" />
+      <result column="gname" jdbcType="VARCHAR" property="name" />
+      <result column="brief" jdbcType="VARCHAR" property="brief" />
+      <result column="is_new" jdbcType="BIT" property="isNew" />
+      <result column="is_hot" jdbcType="BIT" property="isHot" />
+      <result column="counter_price" jdbcType="DECIMAL" property="counterPrice" />
+      <result column="retail_price" jdbcType="DECIMAL" property="retailPrice" />
+      <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+    </collection>
+  </resultMap>
+<select id="selectGoodsListByBrandId" resultMap="GoodsListVo">
+    select 0 as ze,
+     g.id as gid, g.`name` as gname, g.brief, g.is_new, g.is_hot, g.counter_price,g.retail_price,g.pic_url,
+c.id as cid,c.`name` as cname ,c.keywords,c.`desc`,c.pid,c.icon_url,c.pic_url as cpic,
+c.`level`,c.sort_order,c.add_time,c.update_time,c.deleted
+     from cskaoyan_mall_goods g
+    LEFT JOIN cskaoyan_mall_category c
+    ON g.category_id = c.id
+    where g.brand_id = #{brandId}
+</select>
 </mapper>

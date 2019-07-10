@@ -6,6 +6,7 @@ import com.cskaoyan.bean.UserToken;
 import com.cskaoyan.bean.vo.ResponseVO;
 import com.cskaoyan.mall_wx.service.cdy.WxUserService;
 import com.cskaoyan.mall_wx.util.UserTokenManager;
+import com.cskaoyan.tool.MD5Util;
 import com.cskaoyan.tool.RegexUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class WxAuthController {
 		ResponseVO vo = new ResponseVO();
 		String username = (String) data.get("username");
 		String password = (String) data.get("password");
-
+		password = MD5Util.getMD5(password);
 		if (username == null || password == null) {
 			return vo.errParm(vo);
 		}
@@ -124,7 +125,8 @@ public class WxAuthController {
 
 		User user = new User();
 		user.setUsername(username);
-		user.setPassword(password);
+		String securityPassword = MD5Util.getMD5(password);
+		user.setPassword(securityPassword);
 		user.setMobile(mobile);
 		user.setWeixinOpenid("");
 		user.setAvatar("");
@@ -165,6 +167,7 @@ public class WxAuthController {
 			return ResponseUtil.unlogin();
 		}*/
 		String password = (String) body.get("password");
+		password = MD5Util.getMD5(password);
 		String mobile = (String) body.get("mobile");
 
 		if (mobile == null || password == null) {
