@@ -29,7 +29,7 @@ public class OrderStatusConstant {
             case 102:
                 return "已取消（用户）";
             case 103:
-                return "已取消（系统）";
+                return "支付超时，已取消（系统）";
             case 202:
                 return "订单取消，退款中";
             case 402:
