@@ -118,11 +118,11 @@
       now(), 0)
   </insert>
   <insert id="insertSelective" parameterType="com.cskaoyan.bean.Comment">
+    <selectKey resultType="int" keyProperty="id" order="AFTER" >
+      select last_insert_id()
+    </selectKey>
     insert into cskaoyan_mall_comment
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="valueId != null">
         value_id,
       </if>
@@ -149,9 +149,6 @@
         deleted,
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="valueId != null">
         #{valueId,jdbcType=INTEGER},
       </if>

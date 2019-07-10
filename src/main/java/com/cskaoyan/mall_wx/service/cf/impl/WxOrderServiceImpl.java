@@ -323,7 +323,7 @@ public class WxOrderServiceImpl implements WxOrderService {
         int status = orderMapper.selectByPrimaryKey(orderId).getOrderStatus().intValue();
         HandleOption handleOption = build(status);
         if (handleOption.getCancel() == true) {
-            return cancelThisOrder(orderId);
+            return cancelThisOrder(orderId,userId);
         }
         return WrapTool.setResponseFailure(ORDER_INVALID_OPERATION, "订单不能被取消");
     }
@@ -491,7 +491,7 @@ public class WxOrderServiceImpl implements WxOrderService {
     }
 
     @Transactional
-    protected HashMap cancelThisOrder(int orderId) {
+    protected HashMap cancelThisOrder(int orderId,int userId) {
         //改变订单表状态
         Order order = orderMapper.selectByPrimaryKey(orderId);
         short s = STATUS_CANCEL;
@@ -513,6 +513,23 @@ public class WxOrderServiceImpl implements WxOrderService {
             goodsProduct.setNumber(remainNumber);
             goodsProductMapper.updateByPrimaryKey(goodsProduct);
         }
+
+//        //会退优惠券
+//        //如果使用了优惠券，更新优惠券用户列表
+//        CouponUserExample couponUserExample = new CouponUserExample();
+//        couponUserExample.createCriteria().andUserIdEqualTo(userId);
+//        List<CouponUser> couponUsers = couponUserMapper.selectByExample(couponUserExample);
+//        if (couponUsers != null && !(couponUsers.size() == 0)) {
+//            CouponUser couponUser = couponUsers.get(0);
+//            couponUser.setOrderId(orderId);
+//            couponUser.setUsedTime(new Date());
+//            couponUser.setStatus(STATUS_USED);
+//            couponUserMapper.updateByPrimaryKeySelective(couponUser);
+//        }
+//
+//        return WrapTool.setResponseSuccess(new SubmitResponse(orderId));
+
+
         return WrapTool.setResponseSuccessWithNoData();
     }
 

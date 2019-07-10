@@ -40,7 +40,7 @@ public class WxAddressServiceImpl implements WxAddressService {
         AddressExample addressExample = new AddressExample();
         addressExample.or().andIdEqualTo(id).andUserIdEqualTo(userId).andDeletedEqualTo(false);
         List<Address> addressList = addressMapper.selectByExample(addressExample);
-        if (addressList != null) {
+        if (addressList.size() != 0) {
             return getAddressPackage(addressList.get(0));
         } else {
             return null;
