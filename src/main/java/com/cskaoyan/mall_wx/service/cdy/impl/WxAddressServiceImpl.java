@@ -39,9 +39,12 @@ public class WxAddressServiceImpl implements WxAddressService {
     public AddressPackage query(Integer userId, Integer id) {
         AddressExample addressExample = new AddressExample();
         addressExample.or().andIdEqualTo(id).andUserIdEqualTo(userId).andDeletedEqualTo(false);
-        Address address = addressMapper.selectByExample(addressExample).get(0);
-
-        return getAddressPackage(address);
+        List<Address> addressList = addressMapper.selectByExample(addressExample);
+        if (addressList != null) {
+            return getAddressPackage(addressList.get(0));
+        } else {
+            return null;
+        }
     }
 
     private AddressPackage getAddressPackage(Address address) {
