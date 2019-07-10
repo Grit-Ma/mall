@@ -9,8 +9,9 @@ import com.cskaoyan.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import static com.cskaoyan.bean.coupon.CouponConstant.TIME_TYPE_DAYS;
 
 @Service
 public class WxHomeServiceImpl implements WxHomeService {
@@ -109,6 +110,17 @@ public class WxHomeServiceImpl implements WxHomeService {
 
     private List<Coupon> getCouponList() {
         List<Coupon> couponList = couponMapper.selectByExample(new CouponExample());
+        for (Coupon coupon : couponList) {
+            Date date = new Date();
+            if (coupon.getTimeType() == TIME_TYPE_DAYS) {
+                coupon.setStartTime(coupon.getAddTime());
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(coupon.getAddTime());
+                calendar.add(Calendar.DATE, coupon.getDays());
+                date = calendar.getTime();
+                coupon.setEndTime(date);
+            }
+        }
         return couponList;
     }
 
