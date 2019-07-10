@@ -17,10 +17,9 @@ import org.springframework.util.StringUtils;
 
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
+import static com.cskaoyan.bean.coupon.CouponConstant.TIME_TYPE_DAYS;
 
 /**
  * created by ZengWei
@@ -41,6 +40,7 @@ public class WxCouponServiceImpl implements WxCouponService {
 
     @Override
     public CouponPageData couponList(int page, int size, Short status, Integer userId){
+        Date date = new Date();
         PageHelper.startPage(page,size);
         CouponUserExample couponUserExample = new CouponUserExample();
         CouponUserExample.Criteria criteria = couponUserExample.createCriteria();
@@ -50,13 +50,21 @@ public class WxCouponServiceImpl implements WxCouponService {
         List<Coupon> list2 = new ArrayList<>();
         for (CouponUser couponUser : list1) {
             Coupon coupon = couponMapper.selectByPrimaryKey(couponUser.getCouponId());
+            if(coupon.getTimeType() == TIME_TYPE_DAYS) {
+                coupon.setStartTime(coupon.getAddTime());
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(coupon.getAddTime());
+                calendar.add(Calendar.DATE,coupon.getDays());
+                date=calendar.getTime();
+                coupon.setEndTime(date);
+            }
             list2.add(coupon);
         }
         PageInfo pageInfo = new PageInfo(list2);
         return new CouponPageData(pageInfo.getList(),pageInfo.getTotal());
     }
 
-    @Override
+/*    @Override
     public List<Coupon> selectList(int cartId, int grouponRulesId) {
         Cart cart = cartMapper.selectByPrimaryKey(cartId);
         Integer userId = cart.getUserId();
@@ -73,7 +81,7 @@ public class WxCouponServiceImpl implements WxCouponService {
             list2.add(coupon);
         }
         return list2;
-    }
+    }*/
 
     @Override
     public List<CouponUser> queryExpired() {
