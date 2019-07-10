@@ -55,6 +55,8 @@ public class WxOrderServiceImpl implements WxOrderService {
     @Autowired
     CouponUserMapper couponUserMapper;
     @Autowired
+    GrouponMapper grouponMapper;
+    @Autowired
     CouponService couponService;
     @Autowired
     CouponVerifyService couponVerifyService;
@@ -125,8 +127,8 @@ public class WxOrderServiceImpl implements WxOrderService {
         //检验优惠券,优惠券减免;这里参数有限，后期如果有更多规则，需要增添逻辑
         BigDecimal couponDiscount = new BigDecimal(0.00);
         Coupon coupon = couponVerifyService.checkCoupon(userId, couponId, goodsPrice);
-        if(coupon!=null)
-        couponDiscount = coupon.getDiscount();
+        if (coupon != null)
+            couponDiscount = coupon.getDiscount();
 
 
         //计算邮费,(goodsPrice)满设定值包邮
@@ -184,7 +186,7 @@ public class WxOrderServiceImpl implements WxOrderService {
             orderGoodsMapper.insert(orderGoods);
         }
 
-        //清空购物车操作（如果购物车里面userid对应条目为空，清空购物车）；这里提醒马致远修改。。。deleted ，新增一条
+        //清空购物车操作（如果购物车里面userid对应条目为空，清空购物车）；
         cartService.clearCart(userId);
 
         //商品数量减少
@@ -206,7 +208,25 @@ public class WxOrderServiceImpl implements WxOrderService {
         }
 
         //如果使用了团购，添加团购信息表
-
+        if (grouponRulesId > 0) {
+            Groupon groupon = new Groupon();
+            groupon.setOrderId(orderId);
+            groupon.setPayed(false);
+            groupon.setUserId(userId);
+            groupon.setRulesId(grouponRulesId);
+            if (groupLinkId > 0) {
+                Groupon baseGroupon = grouponMapper.selectByPrimaryKey(grouponRulesId);
+                groupon.setCreatorUserId(baseGroupon.getCreatorUserId());
+                groupon.setGrouponId(grouponRulesId);
+                groupon.setShareUrl(baseGroupon.getShareUrl());
+            } else {
+                groupon.setCreatorUserId(userId);
+                groupon.setGrouponId(0);
+            }
+            groupon.setAddTime(new Date());
+            groupon.setUpdateTime(new Date());
+            grouponMapper.insertSelective(groupon);
+        }
 
         //如果使用了优惠券，更新优惠券用户列表
         CouponUserExample couponUserExample = new CouponUserExample();
@@ -227,7 +247,8 @@ public class WxOrderServiceImpl implements WxOrderService {
         获取订单列表
      */
     @Override
-    public HashMap showOrderList(int showTpe, int page, int size, String sort, String order, HttpServletRequest request) {
+    public HashMap showOrderList(int showTpe, int page, int size, String sort, String order, HttpServletRequest
+            request) {
         //判user信息空
         String tokenKey = request.getHeader("X-Litemall-Token");
         if (tokenKey == null || "".equals(tokenKey.trim()))
@@ -242,13 +263,13 @@ public class WxOrderServiceImpl implements WxOrderService {
             case 0:
                 return WrapTool.setResponseSuccess(showOrdersByStatus((short) 1, page, size, sort, order, userId));
             case 1:
-                return WrapTool.setResponseSuccess(showOrdersByStatus((short) STATUS_CREATE, page, size, sort, order, userId));
+                return WrapTool.setResponseSuccess(showOrdersByStatus(STATUS_CREATE, page, size, sort, order, userId));
             case 2:
-                return WrapTool.setResponseSuccess(showOrdersByStatus((short) STATUS_PAY, page, size, sort, order, userId));
+                return WrapTool.setResponseSuccess(showOrdersByStatus(STATUS_PAY, page, size, sort, order, userId));
             case 3:
-                return WrapTool.setResponseSuccess(showOrdersByStatus((short) STATUS_SHIP, page, size, sort, order, userId));
+                return WrapTool.setResponseSuccess(showOrdersByStatus(STATUS_SHIP, page, size, sort, order, userId));
             case 4:
-                return WrapTool.setResponseSuccess(showOrdersByStatus((short) STATUS_CONFIRM, page, size, sort, order, userId));
+                return WrapTool.setResponseSuccess(showOrdersByStatus(STATUS_CONFIRM, page, size, sort, order, userId));
         }
         return WrapTool.setResponseSuccess(new OrderListPageData());
     }
@@ -324,7 +345,7 @@ public class WxOrderServiceImpl implements WxOrderService {
         int status = orderMapper.selectByPrimaryKey(orderId).getOrderStatus().intValue();
         HandleOption handleOption = build(status);
         if (handleOption.getCancel() == true) {
-            return cancelThisOrder(orderId,userId);
+            return cancelThisOrder(orderId, userId);
         }
         return WrapTool.setResponseFailure(ORDER_INVALID_OPERATION, "订单不能被取消");
     }
@@ -441,7 +462,7 @@ public class WxOrderServiceImpl implements WxOrderService {
         HandleOption handleOption = build(status);
 
         if (handleOption.getRefund()) {
-            return refundOrder(orderId,userId);
+            return refundOrder(orderId, userId);
         }
         return WrapTool.setResponseFailure(ORDER_INVALID_OPERATION, "订单不能取消");
     }
@@ -493,7 +514,7 @@ public class WxOrderServiceImpl implements WxOrderService {
 
     //申请退款
     @Transactional
-    public HashMap refundOrder(int orderId,int userId) {
+    public HashMap refundOrder(int orderId, int userId) {
         Order order = orderMapper.selectByPrimaryKey(orderId);
         order.setOrderStatus(STATUS_REFUND_CONFIRM);
         order.setUpdateTime(new Date());
@@ -516,7 +537,7 @@ public class WxOrderServiceImpl implements WxOrderService {
 
         //回退优惠券
         //如果使用了优惠券，更新优惠券用户列表
-        if(order.getCouponPrice().compareTo(new BigDecimal(0))>0) {
+        if (order.getCouponPrice().compareTo(new BigDecimal(0)) > 0) {
             CouponUserExample couponUserExample = new CouponUserExample();
             couponUserExample.createCriteria().andUserIdEqualTo(userId).andOrderIdEqualTo(orderId);
             List<CouponUser> couponUsers = couponUserMapper.selectByExample(couponUserExample);
@@ -530,13 +551,12 @@ public class WxOrderServiceImpl implements WxOrderService {
             }
         }
 
-
         return WrapTool.setResponseSuccessWithNoData();
     }
 
     //取消订单方法
     @Transactional
-    protected HashMap cancelThisOrder(int orderId,int userId) {
+    protected HashMap cancelThisOrder(int orderId, int userId) {
         //改变订单表状态
         Order order = orderMapper.selectByPrimaryKey(orderId);
         short s = STATUS_CANCEL;
@@ -561,9 +581,9 @@ public class WxOrderServiceImpl implements WxOrderService {
 
         //回退优惠券
         //如果使用了优惠券，更新优惠券用户列表
-        if(order.getCouponPrice().compareTo(new BigDecimal(0))>0) {
+        if (order.getCouponPrice().compareTo(new BigDecimal(0)) > 0) {
             CouponUserExample couponUserExample = new CouponUserExample();
-            couponUserExample.createCriteria().andUserIdEqualTo(userId).andUsedTimeEqualTo(order.getAddTime());
+            couponUserExample.createCriteria().andUserIdEqualTo(userId).andOrderIdEqualTo(orderId);
             List<CouponUser> couponUsers = couponUserMapper.selectByExample(couponUserExample);
             if (couponUsers != null && !(couponUsers.size() == 0)) {
                 CouponUser couponUser = couponUsers.get(0);
@@ -579,7 +599,8 @@ public class WxOrderServiceImpl implements WxOrderService {
 
 
     //封装订单页面信息
-    private OrderListPageData showOrdersByStatus(short orderStatus, int page, int size, String sort, String order, int userId) {
+    private OrderListPageData showOrdersByStatus(short orderStatus, int page, int size, String sort, String order,
+                                                 int userId) {
         List<WxOrder> orders = orderMapper.showOrdersByStatus(orderStatus, sort, order, userId);
         for (WxOrder o : orders) {
             o.setOrderStatusText(getStatusText(o.getOrder_status()));
@@ -628,15 +649,20 @@ public class WxOrderServiceImpl implements WxOrderService {
     }
 
     //检验所有该用户未付款的订单是否超时
-    public void checkUnPayedOrder(int userId){
+    public void checkUnPayedOrder(int userId) {
         OrderExample orderExample = new OrderExample();
         orderExample.createCriteria().andUserIdEqualTo(userId).andDeletedEqualTo(false).andOrderStatusEqualTo(STATUS_CREATE);
         List<Order> orders = orderMapper.selectByExample(orderExample);
-        for(Order order:orders){
-            if(new Date().getTime()-order.getAddTime().getTime()>30L*60*1000) {
+        for (Order order : orders) {
+            if (new Date().getTime() - order.getAddTime().getTime() > 30L * 60 * 1000) {
                 order.setOrderStatus(STATUS_AUTO_CANCEL);
                 orderMapper.updateByPrimaryKey(order);
             }
         }
+    }
+
+    //回退优惠券的通用更新
+    public void returnCoupon() {
+
     }
 }

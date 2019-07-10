@@ -1,6 +1,7 @@
 package com.cskaoyan.mall_admin.controller.sys;
 
 import com.cskaoyan.bean.sys.Admin;
+import com.cskaoyan.bean.sys.ChangePassword;
 import com.cskaoyan.bean.vo.PageData;
 import com.cskaoyan.mall_admin.service.sys.AdminService;
 import com.cskaoyan.mall_admin.service.sys.RoleService;
@@ -8,12 +9,15 @@ import com.cskaoyan.tool.RegexUtil;
 import com.cskaoyan.tool.WrapTool;
 import io.swagger.annotations.Api;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import static com.cskaoyan.bean.ResponseFailureCode.*;
@@ -47,7 +51,7 @@ public class AdminController {
     @PostMapping("admin/create")
     public HashMap createAdmin(@Validated @RequestBody Admin admin) {
         //先进行验证
-        HashMap notValid = validateAdmin(admin);
+        HashMap notValid = validateAdmin(admin,1);
         if (!notValid.isEmpty()) {
             return notValid;
         }
@@ -68,7 +72,7 @@ public class AdminController {
     @RequiresPermissions(value = "admin:admin:update")
     @PostMapping("admin/update")
     public HashMap updateAdmin(@Validated @RequestBody Admin admin) {
-        HashMap notValid = validateAdmin(admin);
+        HashMap notValid = validateAdmin(admin,0);
         if (!notValid.isEmpty()) {
             return notValid;
         }
@@ -94,10 +98,23 @@ public class AdminController {
         return WrapTool.setResponseSuccessWithNoData();
     }
 
-
+    @RequiresAuthentication
+    @PostMapping("/profile/password")
+    public HashMap deleteAdmin(@RequestBody ChangePassword changePassword, HttpServletRequest request){
+        String oldPassword =changePassword.getOldPassword();
+        String newPassword = changePassword.getNewPassword();
+        Subject subject = SecurityUtils.getSubject();
+        Admin admin = (Admin) subject.getPrincipal();
+        if(admin.getPassword().equals(oldPassword)) {
+            admin.setPassword(newPassword);
+            adminService.updateByPrimaryKey(admin);
+            return WrapTool.setResponseSuccessWithNoData();
+        }
+        return WrapTool.setResponseFailure(ADMIN_INVALID_PASSWORD,"输入原密码不正确！");
+    }
 
     //在创建和更新账户之前先完成验证
-    public HashMap validateAdmin(Admin admin) {
+    public HashMap validateAdmin(Admin admin,int status) {
         String name = admin.getUsername();
         if (StringUtils.isEmpty(name) || !RegexUtil.isUsername(name)) {
             return WrapTool.setResponseFailure(ADMIN_INVALID_NAME, "管理员名称不符合规定");
@@ -106,7 +123,7 @@ public class AdminController {
         if (StringUtils.isEmpty(password) || password.length() < 6) {
             return WrapTool.setResponseFailure(ADMIN_INVALID_PASSWORD, "管理员密码长度不能小于6");
         }
-        if (!adminService.adminNotExist(admin)) {
+        if (!adminService.adminNotExist(admin)&&status!=0) {
             return WrapTool.setResponseFailure(ADMIN_NAME_EXIST, "管理员已经存在");
         } else return new HashMap();
     }
