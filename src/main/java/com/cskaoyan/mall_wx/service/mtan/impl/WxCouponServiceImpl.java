@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -158,5 +159,18 @@ public class WxCouponServiceImpl implements WxCouponService {
         couponUser.setAddTime(new Date());
         couponUser.setUpdateTime(new Date());
         couponUserMapper.insertSelective(couponUser);
+    }
+
+
+    //传入couponId,获取couponPrice By cart
+    @Override
+    public BigDecimal couponPriceBycouponId(int couponId) {
+        Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
+        if (coupon == null){
+            return new BigDecimal(0);
+        }else {
+            return coupon.getDiscount();
+        }
+
     }
 }

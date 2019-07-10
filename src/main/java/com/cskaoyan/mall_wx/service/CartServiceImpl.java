@@ -80,11 +80,11 @@ public class CartServiceImpl implements CartService{
         CartExample example2 = new CartExample();
         CartExample.Criteria criteria2 = example2.createCriteria();
         criteria2.andUserIdEqualTo(cart.getUserId()).andCheckedEqualTo(true).andDeletedEqualTo(false);
-        if (cartMapper.sumAllChecked(cart.getUserId()) == null){  //选中商品总价格
+        BigDecimal sumAllChecked = cartMapper.sumAllChecked(cart.getUserId());
+        if (sumAllChecked == null){  //选中商品总价格
             cartTotal.setCheckedGoodsAmount(new BigDecimal(0));
         }else {
-            BigDecimal d = cartMapper.sumAllChecked(cart.getUserId());
-            cartTotal.setCheckedGoodsAmount(d);
+            cartTotal.setCheckedGoodsAmount(sumAllChecked);
         }
         List<Cart> carts2 = cartMapper.selectByExample(example2);
         int num2 = 0;
