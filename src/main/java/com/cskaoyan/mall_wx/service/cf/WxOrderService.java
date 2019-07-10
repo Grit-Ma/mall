@@ -21,5 +21,18 @@ public interface WxOrderService {
     @Transactional
     HashMap cancelOrder(HttpServletRequest request, SubmitResponse submitResponse);
 
+    /*
+        删除订单
+     */
+    HashMap deleteOrder(HttpServletRequest request, SubmitResponse submitResponse);
+
     Map<String, Integer> orderInfo(Integer userId);
+
+    @Transactional
+    HashMap prePay(HttpServletRequest request, SubmitResponse submitResponse);
+
+    @Transactional
+    HashMap refundOrder(HttpServletRequest request, SubmitResponse submitResponse);
+
+    HashMap comfirmOrder(HttpServletRequest request, SubmitResponse submitResponse);
 }

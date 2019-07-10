@@ -3,6 +3,7 @@ package com.cskaoyan.mall_wx.controller.cf;
 import com.cskaoyan.bean.wx.order.SubmitInfo;
 import com.cskaoyan.bean.wx.order.SubmitResponse;
 import com.cskaoyan.mall_wx.service.cf.WxOrderService;
+import com.cskaoyan.mall_wx.util.UserTokenManager;
 import com.cskaoyan.tool.WrapTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
-import static com.cskaoyan.mall_wx.util.WxResponseCode.ORDER_PAY_FAIL;
 
 @RestController
 @RequestMapping("wx")
@@ -40,8 +40,8 @@ public class WxOrderController {
     }
 
     @PostMapping("order/prepay")
-    public HashMap orderPrePay(){
-        return WrapTool.setResponseFailure(ORDER_PAY_FAIL,"订单不能支付");
+    public HashMap orderPrePay(HttpServletRequest request, @RequestBody SubmitResponse submitResponse){
+        return wxOrderService.prePay(request, submitResponse);
     }
 
     @PostMapping("order/cancel")
@@ -49,5 +49,19 @@ public class WxOrderController {
         return wxOrderService.cancelOrder(request,submitResponse);
     }
 
+    @PostMapping("order/delete")
+    public HashMap orderDelete(HttpServletRequest request, @RequestBody SubmitResponse submitResponse){
+        return wxOrderService.deleteOrder(request,submitResponse);
+    }
+
+    @PostMapping("order/refund")
+    public HashMap orderRefund(HttpServletRequest request, @RequestBody SubmitResponse submitResponse){
+        return wxOrderService.refundOrder(request,submitResponse);
+    }
+
+    @PostMapping("order/confirm")
+    public HashMap orderConfirm(HttpServletRequest request, @RequestBody SubmitResponse submitResponse){
+        return wxOrderService.comfirmOrder(request,submitResponse);
+    }
 
 }

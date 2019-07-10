@@ -24,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static com.cskaoyan.bean.coupon.CouponUserConstant.STATUS_USED;
+import static com.cskaoyan.mall_wx.util.OrderStatusConstant.*;
 import static com.cskaoyan.mall_wx.util.WxResponseCode.*;
 
 @Service
@@ -71,7 +72,7 @@ public class WxOrderServiceImpl implements WxOrderService {
         Integer userId = UserTokenManager.getUserId(tokenKey);
 
         //获取参数为空
-        if (submitInfo == null) return WrapTool.setResponseFailure(401, "参数不对");
+        if (submitInfo == null) return WrapTool.setResponseFailure(STATUS_CONFIRM, "参数不对");
         int addressId, couponId, groupLinkId, grouponRulesId;
         String message;
         try {
@@ -81,19 +82,19 @@ public class WxOrderServiceImpl implements WxOrderService {
             grouponRulesId = submitInfo.getGrouponRulesId().intValue();
             message = submitInfo.getMessage();
         } catch (Exception e) {
-            return WrapTool.setResponseFailure(401, "参数不对");
+            return WrapTool.setResponseFailure(STATUS_CONFIRM, "参数不对");
         }
 
         //检验购物车
         List<Cart> carts = cartService.getCheckedCartGood(userId);
-        if (carts == null) return WrapTool.setResponseFailure(401, "参数不对");
+        if (carts == null) return WrapTool.setResponseFailure(STATUS_CONFIRM, "参数不对");
 
 
         //检验收货地址
         Address address = addressMapper.selectByPrimaryKey(addressId);
-        if (address == null) return WrapTool.setResponseFailure(401, "参数不对");
+        if (address == null) return WrapTool.setResponseFailure(STATUS_CONFIRM, "参数不对");
         String address1 = address.getAddress();
-        if (address1 == null) return WrapTool.setResponseFailure(401, "参数不对");
+        if (address1 == null) return WrapTool.setResponseFailure(STATUS_CONFIRM, "参数不对");
 
 
         //检验团购优惠,方便计算商品总价格；团购优惠价减免
@@ -152,8 +153,8 @@ public class WxOrderServiceImpl implements WxOrderService {
 
 
         //添加订单表里的一条信息，回显id
-        //这里创建订单默认是未支付，状态码101
-        short s = 101, s1 = 0;
+        //这里创建订单默认是未支付，状态码STATUS_CREATE
+        short s = STATUS_CREATE, s1 = 0;
         String addressInfo = regionMapper.selectByPrimaryKey(address.getProvinceId()).getName() +
                 regionMapper.selectByPrimaryKey(address.getCityId()).getName() +
                 regionMapper.selectByPrimaryKey(address.getAreaId()).getName() +
@@ -219,7 +220,7 @@ public class WxOrderServiceImpl implements WxOrderService {
             couponUserMapper.updateByPrimaryKeySelective(couponUser);
         }
 
-        return WrapTool.setResponseSuccess(orderId);
+        return WrapTool.setResponseSuccess(new SubmitResponse(orderId));
     }
 
     /*
@@ -239,18 +240,20 @@ public class WxOrderServiceImpl implements WxOrderService {
             case 0:
                 return WrapTool.setResponseSuccess(showOrdersByStatus((short) 1, page, size, sort, order,userId));
             case 1:
-                return WrapTool.setResponseSuccess(showOrdersByStatus((short) 101, page, size, sort, order,userId));
+                return WrapTool.setResponseSuccess(showOrdersByStatus((short) STATUS_CREATE, page, size, sort, order,userId));
             case 2:
-                return WrapTool.setResponseSuccess(showOrdersByStatus((short) 201, page, size, sort, order,userId));
+                return WrapTool.setResponseSuccess(showOrdersByStatus((short) STATUS_PAY, page, size, sort, order,userId));
             case 3:
-                return WrapTool.setResponseSuccess(showOrdersByStatus((short) 301, page, size, sort, order,userId));
+                return WrapTool.setResponseSuccess(showOrdersByStatus((short) STATUS_SHIP, page, size, sort, order,userId));
             case 4:
-                return WrapTool.setResponseSuccess(showOrdersByStatus((short) 401, page, size, sort, order,userId));
+                return WrapTool.setResponseSuccess(showOrdersByStatus((short) STATUS_CONFIRM, page, size, sort, order,userId));
         }
         return WrapTool.setResponseSuccess(new OrderListPageData());
     }
 
-    //获取订单详情
+    /*
+        获取订单详情
+     */
     @Override
     public HashMap detail(HttpServletRequest request, Integer orderId) {
         //判user信息空
@@ -280,7 +283,7 @@ public class WxOrderServiceImpl implements WxOrderService {
         orderInfo.put("couponPrice", order.getCouponPrice());
         orderInfo.put("freightPrice", order.getFreightPrice());
         orderInfo.put("actualPrice", order.getActualPrice());
-        orderInfo.put("orderStatusText", getStatusText(order.getOrderStatus()));
+        orderInfo.put("orderStatusText",getStatusText(order.getOrderStatus()));
         orderInfo.put("handleOption", build(order.getOrderStatus()));
         orderInfo.put("expCode", order.getShipChannel());
         orderInfo.put("expNo", order.getShipSn());
@@ -296,7 +299,9 @@ public class WxOrderServiceImpl implements WxOrderService {
 
     }
 
-    //取消订单
+    /*
+        取消订单
+     */
     @Override
     @Transactional
     public HashMap cancelOrder(HttpServletRequest request, SubmitResponse submitResponse) {
@@ -309,20 +314,47 @@ public class WxOrderServiceImpl implements WxOrderService {
         Integer userId = UserTokenManager.getUserId(tokenKey);
 
 
-        if(submitResponse==null)return WrapTool.setResponseFailure(401,"参数错误");
-        if(submitResponse.getOrderId()==null)return WrapTool.setResponseFailure(401,"参数错误");
+        if(submitResponse==null)return WrapTool.setResponseFailure(STATUS_CONFIRM,"参数错误");
+        if(submitResponse.getOrderId()==null)return WrapTool.setResponseFailure(STATUS_CONFIRM,"参数错误");
 
         int orderId = submitResponse.getOrderId();
         int status= orderMapper.selectByPrimaryKey(orderId).getOrderStatus().intValue();
         HandleOption handleOption = build(status);
-        if(handleOption.getCancel()) {
+        if(handleOption.getCancel()==true) {
            return cancelThisOrder(orderId);
         }
         return WrapTool.setResponseFailure(ORDER_INVALID_OPERATION,"订单不能被取消");
     }
 
+    /*
+        删除订单
+     */
+    @Override
+    public HashMap deleteOrder(HttpServletRequest request, SubmitResponse submitResponse) {
+        //判user信息空
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        if (tokenKey == null || "".equals(tokenKey.trim()))
+            return WrapTool.unlogin();
+        //获取userId
+        Integer userId = UserTokenManager.getUserId(tokenKey);
 
-    //获取订单的几个不同状态的计数（用在首页）
+        if (submitResponse == null) return WrapTool.setResponseFailure(STATUS_CONFIRM, "参数错误");
+        if (submitResponse.getOrderId() == null) return WrapTool.setResponseFailure(STATUS_CONFIRM, "参数错误");
+
+        int orderId = submitResponse.getOrderId();
+
+        int status = orderMapper.selectByPrimaryKey(orderId).getOrderStatus().intValue();
+        HandleOption handleOption = build(status);
+        if (handleOption.getDelete()) {
+            return deleteThisOrder(orderId);
+        }
+        return WrapTool.setResponseFailure(ORDER_INVALID_OPERATION, "订单不能删除");
+
+    }
+
+    /*
+        获取订单的几个不同状态的计数（用在首页）
+     */
     @Override
     public Map<String, Integer> orderInfo(Integer userId) {
         OrderExample orderExample = new OrderExample();
@@ -337,13 +369,13 @@ public class WxOrderServiceImpl implements WxOrderService {
         } else {
             Map<String, Integer> map = new HashMap<>();
             for (Order order : orders) {
-                if (order.getOrderStatus() == 101) {
+                if (order.getOrderStatus().equals(STATUS_CREATE) ){
                     unpaid++;
-                } else if (order.getOrderStatus() == 201) {
+                } else if (order.getOrderStatus().equals(STATUS_PAY)) {
                     unship++;
-                } else if (order.getOrderStatus() == 301) {
+                } else if (order.getOrderStatus().equals(STATUS_SHIP) ){
                     unrecv++;
-                } else if (order.getOrderStatus() == 401) {
+                } else if (order.getOrderStatus().equals(STATUS_CONFIRM)) {
                     uncomment++;
                 }
             }
@@ -356,6 +388,78 @@ public class WxOrderServiceImpl implements WxOrderService {
         }
     }
 
+    /*
+        预支；这里没有实现具体的转账，只是模拟
+     */
+    @Override
+    @Transactional
+    public HashMap prePay(HttpServletRequest request, SubmitResponse submitResponse) {
+        //判user信息空
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        if (tokenKey == null || "".equals(tokenKey.trim()))
+            return WrapTool.unlogin();
+        //获取userId
+        Integer userId = UserTokenManager.getUserId(tokenKey);
+
+        if (submitResponse == null) return WrapTool.setResponseFailure(STATUS_CONFIRM, "参数错误");
+        if (submitResponse.getOrderId() == null) return WrapTool.setResponseFailure(STATUS_CONFIRM, "参数错误");
+
+        int orderId = submitResponse.getOrderId();
+
+        int status = orderMapper.selectByPrimaryKey(orderId).getOrderStatus().intValue();
+        HandleOption handleOption = build(status);
+
+        if (handleOption.getPay()) {
+            return payOrder(orderId);
+        }
+        return WrapTool.setResponseFailure(ORDER_PAY_FAIL,"订单不能支付");
+    }
+
+    /*
+        申请退款
+     */
+    @Override
+    @Transactional
+    public HashMap refundOrder(HttpServletRequest request, SubmitResponse submitResponse) {
+        //判user信息空
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        if (tokenKey == null || "".equals(tokenKey.trim()))
+            return WrapTool.unlogin();
+        //获取userId
+        Integer userId = UserTokenManager.getUserId(tokenKey);
+        if (submitResponse == null) return WrapTool.setResponseFailure(STATUS_CONFIRM, "参数错误");
+        if (submitResponse.getOrderId() == null) return WrapTool.setResponseFailure(STATUS_CONFIRM, "参数错误");
+        int orderId = submitResponse.getOrderId();
+        int status = orderMapper.selectByPrimaryKey(orderId).getOrderStatus().intValue();
+        HandleOption handleOption = build(status);
+
+        if (handleOption.getRefund()) {
+            return refundOrder(orderId);
+        }
+        return WrapTool.setResponseFailure(ORDER_INVALID_OPERATION,"订单不能取消");
+    }
+
+    /*
+        确认订单
+     */
+    @Override
+    public HashMap comfirmOrder(HttpServletRequest request, SubmitResponse submitResponse) {
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        if (tokenKey == null || "".equals(tokenKey.trim()))
+            return WrapTool.unlogin();
+        //获取userId
+        Integer userId = UserTokenManager.getUserId(tokenKey);
+        if (submitResponse == null) return WrapTool.setResponseFailure(STATUS_CONFIRM, "参数错误");
+        if (submitResponse.getOrderId() == null) return WrapTool.setResponseFailure(STATUS_CONFIRM, "参数错误");
+        int orderId = submitResponse.getOrderId();
+        int status = orderMapper.selectByPrimaryKey(orderId).getOrderStatus().intValue();
+        HandleOption handleOption = build(status);
+
+        if (handleOption.getConfirm()) {
+            return comfirmOrder(orderId);
+        }
+        return WrapTool.setResponseFailure(ORDER_INVALID_OPERATION,"订单不能确认收货");
+    }
 
 
     /*
@@ -384,7 +488,7 @@ public class WxOrderServiceImpl implements WxOrderService {
     protected HashMap cancelThisOrder(int orderId) {
         //改变订单表状态
         Order order = orderMapper.selectByPrimaryKey(orderId);
-        short s=102;
+        short s=STATUS_CANCEL;
         order.setOrderStatus(s);
         order.setEndTime(new Date());
         orderMapper.updateByPrimaryKey(order);
@@ -426,59 +530,42 @@ public class WxOrderServiceImpl implements WxOrderService {
         return goods;
     }
 
-    private String getStatusText(short orderStatus) {
-        switch (orderStatus) {
-            case 101:
-                return "未付款";
-            case 201:
-                return "未发货";
-            case 301:
-                return "待收货";
-            case 401:
-                return "待评价";
-            case 102:
-                return "已取消（用户）";
-            case 103:
-                return "已取消（系统）";
-            case 402:
-                return "已收货";
-            default:
-                return "未知状态";
-        }
+
+    //删除订单
+    private HashMap deleteThisOrder(int orderId) {
+        Order order =orderMapper.selectByPrimaryKey(orderId);
+        order.setDeleted(true);
+        orderMapper.updateByPrimaryKey(order);
+        return WrapTool.setResponseSuccessWithNoData();
     }
 
-    //获取订单中每件商品的可操作信息
-    public static HandleOption build(int status) {
-        HandleOption handleOption = new HandleOption();
+    //支付订单
+    private HashMap payOrder(int orderId) {
+        Order order =orderMapper.selectByPrimaryKey(orderId);
+        order.setPayTime(new Date());
+        order.setUpdateTime(new Date());
+        order.setPayId("11111111"); //随便写的
+        order.setOrderStatus(STATUS_PAY);
+        orderMapper.updateByPrimaryKey(order);
+        return WrapTool.setResponseSuccessWithNoData();
+    }
 
-        if (status == 101) {
-            // 如果订单没有被取消，且没有支付，则可支付，可取消
-            handleOption.setCancel(true);
-            handleOption.setPay(true);
-        } else if (status == 102 || status == 103) {
-            // 如果订单已经取消或是已完成，则可删除
-            handleOption.setDelete(true);
-        } else if (status == 201) {
-            // 如果订单已付款，没有发货，则可退款
-            handleOption.setRefund(true);
-        } else if (status == 202) {
-            // 如果订单申请退款中，没有相关操作
-        } else if (status == 203) {
-            // 如果订单已经退款，则可删除
-            handleOption.setDelete(true);
-        } else if (status == 301) {
-            // 如果订单已经发货，没有收货，则可收货操作,
-            // 此时不能取消订单
-            handleOption.setConfirm(true);
-        } else if (status == 401 || status == 402) {
-            // 如果订单已经支付，且已经收货，则可删除、去评论和再次购买
-            handleOption.setDelete(true);
-            handleOption.setComment(true);
-            handleOption.setRebuy(true);
-        } else {
-            throw new IllegalStateException("status不支持");
-        }
-        return handleOption;
+    //申请退款
+    private HashMap refundOrder(int orderId) {
+        Order order =orderMapper.selectByPrimaryKey(orderId);
+        order.setOrderStatus(STATUS_REFUND_CONFIRM);
+        order.setUpdateTime(new Date());
+        orderMapper.updateByPrimaryKey(order);
+        return WrapTool.setResponseSuccessWithNoData();
+    }
+
+    //确认订单
+    private HashMap comfirmOrder(int orderId) {
+        Order order =orderMapper.selectByPrimaryKey(orderId);
+        order.setOrderStatus(STATUS_CONFIRM);
+        order.setUpdateTime(new Date());
+        orderMapper.updateByPrimaryKey(order);
+        return WrapTool.setResponseSuccessWithNoData();
     }
 
 }
