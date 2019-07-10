@@ -35,6 +35,7 @@ public class WxFootprintServiceImpl implements WxFootprintService {
         ArrayList<Goods> goodsArrayList = new ArrayList<>();
         for (Footprint fp : footprints) {
             Goods goods = goodsMapper.selectByPrimaryKey(fp.getGoodsId());
+            goods.setAddTime(fp.getAddTime());
             goodsArrayList.add(goods);
         }
         FootprintList footprintList = new FootprintList();
