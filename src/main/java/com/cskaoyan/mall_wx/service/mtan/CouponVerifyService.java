@@ -41,7 +41,7 @@ public class CouponVerifyService {
         }
         else if(timeType.equals(CouponConstant.TIME_TYPE_DAYS)) {
             Calendar calendar = new GregorianCalendar();
-            calendar.setTime(couponUser.getAddTime());
+            calendar.setTime(coupon.getAddTime());
             calendar.add(Calendar.DATE,days);//把日期往后增加
             Date date1 = calendar.getTime();
             if (date.compareTo(date1) > 0) {
