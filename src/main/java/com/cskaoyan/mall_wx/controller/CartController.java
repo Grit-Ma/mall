@@ -72,9 +72,21 @@ public class CartController {
 
 
 
-    //立即购买商品，商品详情页面点击立即购买。
+    /*//立即购买商品，商品详情页面点击立即购买。
     //@RequestMapping("fastadd")
     //@ResponseBody
+    public ResponseVO fastadd(@RequestBody Cart cart, HttpServletRequest request){
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        Integer userId = UserTokenManager.getUserId(tokenKey);
+        cart.setUserId(userId);
+        //添加进cart
+        cartService.addToCart(cart);
+
+        ResponseVO vo = new ResponseVO();
+        vo.setData(data);
+        vo.setErrmsg("成功");
+        return vo;
+    }*/
 
 
     //更新购物车的商品，购物车内编辑，增加或者减少已有商品的数量

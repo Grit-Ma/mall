@@ -8,22 +8,18 @@ import com.cskaoyan.mall_admin.service.promotion.CouponService;
 import com.cskaoyan.mall_wx.service.CartService;
 import com.cskaoyan.mall_wx.service.cf.WxOrderService;
 import com.cskaoyan.mall_wx.util.CharUtil;
-import com.cskaoyan.mall_wx.util.OrderStatusConstant;
 import com.cskaoyan.mall_wx.util.UserTokenManager;
-import com.cskaoyan.mall_wx.util.WxResponseCode;
 import com.cskaoyan.mapper.*;
 import com.cskaoyan.mapper.config.SystemMapper;
 import com.cskaoyan.tool.WrapTool;
-import io.swagger.models.auth.In;
-import org.apache.tomcat.util.http.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -177,7 +173,7 @@ public class WxOrderServiceImpl implements WxOrderService {
             orderGoods.setPicUrl(orderGood.getPicUrl());
             orderGoods.setPrice(orderGood.getPrice());
             orderGoods.setNumber(orderGood.getNumber());
-            orderGoods.setSpecifications("" + orderGood.getSpecifications());
+            orderGoods.setSpecifications("" + orderGood.getSpecifications().toString());
             orderGoods.setAddTime(new Date());
             orderGoods.setUpdateTime(new Date());
             orderGoods.setDeleted(false);
@@ -380,6 +376,41 @@ public class WxOrderServiceImpl implements WxOrderService {
         //物流信息？？？？
 
         return WrapTool.setResponseSuccess(result);
+
+    }
+
+    //取消订单
+    @Override
+    public HashMap cancelOrder(HttpServletRequest request, SubmitResponse submitResponse) {
+
+        //判user信息空
+        String tokenKey = request.getHeader("X-Litemall-Token");
+        if (tokenKey == null || "".equals(tokenKey.trim()))
+            return WrapTool.unlogin();
+        //获取userId
+        Integer userId = UserTokenManager.getUserId(tokenKey);
+
+
+        if(submitResponse==null)return WrapTool.setResponseFailure(401,"参数错误");
+        if(submitResponse.getOrderId()==null)return WrapTool.setResponseFailure(401,"参数错误");
+
+        int orderId = submitResponse.getOrderId();
+        int status= orderMapper.selectByPrimaryKey(orderId).getOrderStatus().intValue();
+        HandleOption handleOption = build(status);
+        if(handleOption.getCancel())
+            cancelThisOrder(orderId);
+        return null;
+    }
+
+    @Transactional
+    protected void cancelThisOrder(int orderId) {
+        //改变订单表状态
+        Order order = orderMapper.selectByPrimaryKey(orderId);
+        short s=102;
+        order.setOrderStatus(s);
+        orderMapper.updateByPrimaryKey(order);
+
+        //
 
     }
 

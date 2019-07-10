@@ -353,18 +353,13 @@
   </update>
 
   <select id="sumAll" resultType="Integer">
-    select sum(price*number) from cskaoyan_mall_cart where user_id = #{userId}
+    select sum(price*number) from cskaoyan_mall_cart where user_id = #{userId} and deleted = false
   </select>
   
-  <delete id="deleteChecked" parameterType="java.util.List">
-    delete from cskaoyan_mall_cart where user_id = #{userId} and product_id in
-      <foreach collection="list" open="(" separator="," close=")" item="productId">
-        #{productId}
-      </foreach>
-  </delete>
+
 
   <select id="sumAllChecked" resultType="Integer">
-    select sum(price*number) from cskaoyan_mall_cart where user_id = #{userId} and checked = 1
+    select sum(price*number) from cskaoyan_mall_cart where user_id = #{userId} and checked = 1 and deleted = false
   </select>
 
 </mapper>
