@@ -1,6 +1,7 @@
 spring:
   profiles:
-    active: cdy
+    active: mtan
+
 ---
 myoss:
    bucket: project-mall

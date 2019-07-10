@@ -20,6 +20,8 @@ public interface CartService {
     //获取购物车数据
     CartTotalVO getCartTotal(Cart cart,Map checked);
 
+    //立即购买，获取当前商品cart
+    CartTotalVO getCurrentCartTotal(int cartId,Map checked);
 
     //添加商品进购物车
     Map addToCart(Cart cart, int flag);
