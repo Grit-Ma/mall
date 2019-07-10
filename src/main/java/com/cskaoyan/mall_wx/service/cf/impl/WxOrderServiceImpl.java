@@ -526,6 +526,7 @@ public class WxOrderServiceImpl implements WxOrderService {
                 couponUser.setStatus(STATUS_USABLE);
                 couponUser.setUsedTime(null);
                 couponUser.setUpdateTime(new Date());
+                couponUser.setOrderId(null);
                 couponUserMapper.updateByPrimaryKey(couponUser);
             }
         }
@@ -596,8 +597,10 @@ public class WxOrderServiceImpl implements WxOrderService {
         orderExample.createCriteria().andUserIdEqualTo(userId).andDeletedEqualTo(false).andOrderStatusEqualTo(STATUS_CREATE);
         List<Order> orders = orderMapper.selectByExample(orderExample);
         for(Order order:orders){
-            if(new Date().compareTo(order.getAddTime())>30L*60*1000)
+            if(new Date().getTime()-order.getAddTime().getTime()>30L*60*1000) {
                 order.setOrderStatus(STATUS_AUTO_CANCEL);
+                orderMapper.updateByPrimaryKey(order);
+            }
         }
     }
 }

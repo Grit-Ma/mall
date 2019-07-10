@@ -39,9 +39,10 @@ public interface CartService {
 
     void clearCart(int userId);
 
-
     //计算邮费
     BigDecimal freightPrice(BigDecimal goodsPrice);
 
+    //计算团购
+    BigDecimal GrouponPrice(int grouponRulesId);
 
 }
