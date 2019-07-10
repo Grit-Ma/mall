@@ -125,6 +125,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.cskaoyan.bean.Order">
+    <selectKey resultType="_int" order="AFTER" keyProperty="id">
+      select last_insert_id()
+    </selectKey>
     insert into cskaoyan_mall_order (id, user_id, order_sn, 
       order_status, consignee, mobile, 
       address, message, goods_price, 
@@ -608,7 +611,7 @@
   <resultMap id="OderdersByStatus" type="com.cskaoyan.bean.wx.order.WxOrder">
     <result column="id" jdbcType="INTEGER" property="id" />
     <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
-    <result column="order_status" jdbcType="SMALLINT" property="orderStatus" />
+    <result column="order_status" jdbcType="SMALLINT" property="order_status" />
     <result column="actual_price" jdbcType="DECIMAL" property="actualPrice" />
   </resultMap>
 
@@ -617,7 +620,7 @@
     actual_price,id,order_sn,order_status
     from cskaoyan_mall_order
     where 1=1
-    <if test="order_status!=1">
+    <if test="orderStatus!=1">
       and order_status = #{orderStatus}
     </if>
     <if test="sort!=null and sort!=''">

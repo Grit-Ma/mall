@@ -31,7 +31,6 @@ public class CartServiceImpl implements CartService{
         CartExample example = new CartExample();
         CartExample.Criteria criteria = example.createCriteria();
         criteria.andUserIdEqualTo(cart.getUserId()).andDeletedEqualTo(true);
-
         List<Cart> carts = cartMapper.selectByExample(example);
         return carts;
     }
@@ -94,7 +93,7 @@ public class CartServiceImpl implements CartService{
         //判断是否已存在
         CartExample example = new CartExample();
         CartExample.Criteria criteria = example.createCriteria();
-        criteria.andUserIdEqualTo(userId).andGoodsIdEqualTo(goodsId).andProductIdEqualTo(productId);
+        criteria.andUserIdEqualTo(userId).andGoodsIdEqualTo(goodsId).andProductIdEqualTo(productId).andDeletedEqualTo(false);
         List<Cart> carts = cartMapper.selectByExample(example);
 
 
@@ -172,8 +171,17 @@ public class CartServiceImpl implements CartService{
     @Override
     public List<Cart> getCheckedCartGood(int userId){
         CartExample cartExample =new CartExample();
-        cartExample.createCriteria().andUserIdEqualTo(userId).andCheckedEqualTo(true);
+        cartExample.createCriteria().andUserIdEqualTo(userId).andCheckedEqualTo(true).andDeletedEqualTo(false);
         return cartMapper.selectByExample(cartExample);
+    }
+
+    @Override
+    public void clearCart(int userId){
+        List<Cart> checkedCartGood = getCheckedCartGood(userId);
+        for(Cart c:checkedCartGood) {
+            c.setDeleted(true);
+            cartMapper.updateByPrimaryKeySelective(c);
+        }
     }
 
     //订单确认

@@ -35,6 +35,8 @@ public interface CartService {
 
     List<Cart> getCheckedCartGood(int userId);
 
+    void clearCart(int userId);
+
     //订单确认
     Map checkout(Cart cart);
 
