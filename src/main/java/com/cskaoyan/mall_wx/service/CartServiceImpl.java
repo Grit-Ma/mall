@@ -96,7 +96,7 @@ public class CartServiceImpl implements CartService{
     //添加商品进购物车,分别用goodsid，productid取对应数据，填满cart
     //先判断是否已有此商品
     @Override
-    public long addToCart(Cart cart) {
+    public Map addToCart(Cart cart,int flag) {
         int userId = cart.getUserId();
         int goodsId = cart.getGoodsId();
         int productId = cart.getProductId();
@@ -129,10 +129,18 @@ public class CartServiceImpl implements CartService{
         }else if (carts.get(0).getDeleted().equals(true)){    //存在且逻辑已删除
             carts.get(0).setNumber((short) (number));
             cartMapper.updateByExampleSelective(carts.get(0),example);
-        }else {    //存在且逻辑尚未删除就找出num，加上number。
-            int cartNumber = carts.get(0).getNumber();
-            carts.get(0).setNumber((short) (cartNumber+number));
-            cartMapper.updateByExampleSelective(carts.get(0),example);
+        }else {    //存在且逻辑尚未删除就判断，是添加进购物车还是立即购买，
+                   //进购物车就是找出num，加上number。
+                   //立即购买则是更新number
+            if (flag == 0) {
+                int cartNumber = carts.get(0).getNumber();
+                carts.get(0).setNumber((short) (cartNumber+number));
+                cartMapper.updateByExampleSelective(carts.get(0),example);
+            }else if (flag == 1){
+                carts.get(0).setNumber((short) (number));
+                cartMapper.updateByExampleSelective(carts.get(0),example);
+            }
+
         }
         //购物车商品总数量
         CartExample example1 = new CartExample();
@@ -143,7 +151,11 @@ public class CartServiceImpl implements CartService{
         for (Cart cart1 : carts1) {
             num += cart1.getNumber();
         }
-        return num;
+        //返回购物车商品总数量和当前添加的cartId
+        Map map = new HashMap();
+        map.put("num",num);
+        map.put("currentCartId", cartMapper.selectByExample(example).get(0).getId());
+        return map;
     }
 
 

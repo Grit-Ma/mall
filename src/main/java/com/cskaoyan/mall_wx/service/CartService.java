@@ -22,7 +22,7 @@ public interface CartService {
 
 
     //添加商品进购物车
-    long addToCart(Cart cart);
+    Map addToCart(Cart cart, int flag);
 
     //更新购物车商品
     void updateCart(Cart cart);
