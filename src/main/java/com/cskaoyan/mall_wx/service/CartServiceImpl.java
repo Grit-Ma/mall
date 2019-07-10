@@ -265,8 +265,12 @@ public class CartServiceImpl implements CartService{
     @Override
     public BigDecimal GrouponPrice(int grouponRulesId) {
         GrouponRules grouponRules = grouponRulesMapper.selectByPrimaryKey(grouponRulesId);
-        BigDecimal disCount = grouponRules.getDiscount();
-        return disCount;
+        if (grouponRules == null){
+            return null;
+        }else {
+            BigDecimal disCount = grouponRules.getDiscount();
+            return disCount;
+        }
     }
 
 
